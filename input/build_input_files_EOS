@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeFilesOne()
+{
+	subdir="$1"
+	eos_dir="$2"
+	run_sel="$3"
+
+	echo "* $subdir"
+
+	buffer=""
+	for file in `eos ls $eos_dir|grep ${run_sel}|grep _reco_|grep .root`
+	do
+		if [ -n "$buffer" ]
+		then
+			buffer="$buffer,\n"
+		fi
+		buffer="$buffer\t\t\"root://eostotem.cern.ch//$eos_dir/$file\""
+
+	done
+
+	mkdir -p "$subdir"
+
+	cat "input_files_template.h" | sed "\
+			s|\$FILES|$buffer|;\
+		" > "$subdir/input_files.h"
+
+	echo "#include \"../parameters.h\"" > "$subdir/parameters.h"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeFiles()
+{
+	local fill="$1"
+	local run_sel="$2"
+
+	MakeFilesOne "../DS-fill${fill}/Totem1" "$eos_dir_base/Totem1/version1" "$run_sel"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+eos_dir_base="/eos/totem/data/offline/2018/450GeV/beta11"
+
+MakeFiles "7301" "324575\|324576"
+MakeFiles "7302" "324578\|324579\|324580\|324581"
