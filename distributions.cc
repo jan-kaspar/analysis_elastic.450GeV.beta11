@@ -795,6 +795,7 @@ int main(int argc, char **argv)
 	unsigned int N_el_raw=0;
 
 	map<unsigned int, pair<unsigned int, unsigned int> > runTimestampBoundaries;
+	map<pair<unsigned int, unsigned int>, pair<unsigned int, unsigned int> > lumiSectionBoundaries;
 
 	unsigned int lumi_section_min = 100000, lumi_section_max = 0;
 
@@ -803,8 +804,18 @@ int main(int argc, char **argv)
 	{
 		ch_in->GetEntry(ev_idx);
 
+		// update lumisection info
 		lumi_section_min = min(lumi_section_min, ev.lumi_section);
 		lumi_section_max = max(lumi_section_max, ev.lumi_section);
+
+		auto lsbit = lumiSectionBoundaries.find({ev.run_num, ev.lumi_section});
+		if (lsbit == lumiSectionBoundaries.end())
+		{
+			lumiSectionBoundaries.insert({{ev.run_num, ev.lumi_section}, {ev.timestamp, ev.timestamp}});
+		} else {
+			lsbit->second.first = min(lsbit->second.first, ev.timestamp);
+			lsbit->second.second = max(lsbit->second.second, ev.timestamp);
+		}
 
 		// remove troublesome runs
 		if (SkipRun(ev.run_num))
@@ -1468,6 +1479,13 @@ int main(int argc, char **argv)
 
 	printf("\nlumi sections: min = %u, max = %u\n", lumi_section_min, lumi_section_max);
 
+	printf("\n");
+	for (auto &p : lumiSectionBoundaries)
+	{
+		printf("run = %u, LS = %u: from %u to %u\n", p.first.first, p.first.second, p.second.first, p.second.second);
+	}
+
+	printf("\n");
 	for (auto &p : runTimestampBoundaries)
 	{
 		printf("run %u: from %u to %u\n", p.first, p.second.first, p.second.second);
