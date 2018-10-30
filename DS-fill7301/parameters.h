@@ -1,12 +1,14 @@
 #include "parameters_global.h"
 
-unsigned int timestamp_min = 56448;
-unsigned int timestamp_max = 59057;
+unsigned int timestamp_min = 58711;
+unsigned int timestamp_max = 62660;
 
 void Init_base()
 {
 	// load global settings
 	Init_global();
+
+	anal.alignment_t0 = timestamp_min;
 
 	//env.UseMatchedOptics();
 }

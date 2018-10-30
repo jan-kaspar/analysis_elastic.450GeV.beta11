@@ -19,19 +19,42 @@ void AddRun(string ds, int r, real f, real t, pen p = yellow)
 	colors.push(p);
 }
 
-//AddRun("DS-323880", 323880, 44998, 51215);
-//AddRun("DS-323892", 323892, 54686, 56376);
-AddRun("DS-323893", 323893, 56448, 59057);
-AddRun("DS-323899", 323899, 62655, 64763);
-AddRun("DS-323907", 323907, 67805, 70714);
-AddRun("DS-323919", 323919, 72030, 74553);
-AddRun("DS-323932", 323932, 78947, 79490);
-AddRun("DS-323933", 323933, 79730, 83781);
-AddRun("DS-323934", 323934, 84355, 85178);
+AddRun("7301", 324575, 58711, 60559);
+AddRun("7301", 324576, 61090, 62660);
+
+AddRun("7302", 324578, 69013, 73405);
+AddRun("7302", 324579, 73563, 75862);
+AddRun("7302", 324580, 75983, 76430);
+AddRun("7302", 324581, 76491, 76799);
 
 // in hours
 real time_min = 0;
 real time_max = 5;
+
+//----------------------------------------------------------------------------------------------------
+
+void DrawFillBands(string ds_filter="", real y_min=0, real y_max=0, bool details=true)
+{
+	real x_min = 1e100, x_max = -1e100;
+
+	for (int i : runs.keys)
+	{
+		if (run_datasets[i] == ds_filter)
+		{
+			x_min = min(x_min, ts_from[i]/3600);
+			x_max = max(x_max, ts_to[i]/3600);
+		}
+	}
+
+	pen p = yellow+opacity(0.3);
+
+	filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p, nullpen);
+
+	if (details)
+	{
+		label(ds_filter, ((x_min + x_max)/2, y_max), S);
+	}
+}
 
 //----------------------------------------------------------------------------------------------------
 
