@@ -73,12 +73,12 @@ void Init_global()
 #endif
 
 	anal.alignment_t0 = 0.;		// beginning of the first time-slice
-	anal.alignment_ts = 60.*60.;	// time-slice in s
+	anal.alignment_ts = 30.*60.;	// time-slice in s
 	
-	anal.alignmentYRanges["L_2_F"] = Analysis::AlignmentYRange(-12.5, -4.5, +5.0, +12.5);
-	anal.alignmentYRanges["L_1_F"] = Analysis::AlignmentYRange(-12.5, -4.5, +4.7, +12.0);
-	anal.alignmentYRanges["R_1_F"] = Analysis::AlignmentYRange(-11.0, -4.5, +4.3, +10.4);
-	anal.alignmentYRanges["R_2_F"] = Analysis::AlignmentYRange(-10.5, -4.5, +4.5, +10.5);
+	anal.alignmentYRanges["L_2_F"] = Analysis::AlignmentYRange(-11.5, -7.0, +6.5, +11.0);
+	anal.alignmentYRanges["L_1_F"] = Analysis::AlignmentYRange(-11.5, -7.0, +6.5, +11.0);
+	anal.alignmentYRanges["R_1_F"] = Analysis::AlignmentYRange(-9.5, -5.0, +5.0, +9.5);
+	anal.alignmentYRanges["R_2_F"] = Analysis::AlignmentYRange(-9.5, -5.0, +5.0, +9.5);
 
 #if 0
 	// TODO
