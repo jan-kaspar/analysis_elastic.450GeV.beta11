@@ -1069,7 +1069,7 @@ int main(int argc, char **argv)
 		// data for alignment
 		// (SHOULD use hit positions WITHOUT alignment corrections, i.e. ev.h)
 		signed int period = int((ev.timestamp - anal.alignment_t0) / anal.alignment_ts);
-		if (detailsLevel >= 2)
+		if (detailsLevel >= 0)
 		{
 			if (g_w_vs_timestamp_sel.find(period) == g_w_vs_timestamp_sel.end())
 			{
