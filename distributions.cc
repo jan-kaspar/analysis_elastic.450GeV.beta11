@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 	string cutSelectionString;
 	string outputDir = ".";
 	string inputDir = ".";
-	double input_n_si = 3.0;
+	double input_n_si = 4.0;
 	int time_group_divisor = 0;
 	int time_group_remainder = 0;
 	int event_group_divisor = 0;
@@ -436,7 +436,7 @@ int main(int argc, char **argv)
 		double q_max = 0.;
 
 		if (i == 1) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1000E-6; y_max = 1000E-6; q_max = 500E-6; }
-		if (i == 2) { x_min = 500E-6; x_max = +1000E-6; y_min = 500E-6; y_max = 1000E-6; q_max = 300E-6; }
+		if (i == 2) { x_min = 0E-6; x_max = +1000E-6; y_min = 0E-6; y_max = 1000E-6; q_max = 300E-6; }
 
 		if (i == 3) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
 		if (i == 4) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
@@ -527,9 +527,9 @@ int main(int argc, char **argv)
 	TProfile *p_th_x_L_vs_th_y_L = new TProfile("p_th_x_L_vs_th_y_L", ";#theta_{y}^{L};#theta_{x}^{L}", 100, -500E-6, +500E-6);
 	TProfile *p_th_x_R_vs_th_y_R = new TProfile("p_th_x_R_vs_th_y_R", ";#theta_{y}^{R};#theta_{x}^{R}", 100, -500E-6, +500E-6);
 
-	TH2D *h_th_y_L_vs_th_x_L = new TH2D("h_th_y_L_vs_th_x_L", ";#theta_{x}^{L};#theta_{y}^{L}", 100, 0, 0, 100, 0, 0);
-	TH2D *h_th_y_R_vs_th_x_R = new TH2D("h_th_y_R_vs_th_x_R", ";#theta_{x}^{R};#theta_{y}^{R}", 100, 0, 0, 100, 0, 0);
-	TH2D *h_th_y_vs_th_x = new TH2D("h_th_y_vs_th_x", ";#theta_{x};#theta_{y}", 100, -600E-6, +600E-6, 100, -600E-6, +600E-6);
+	TH2D *h_th_y_L_vs_th_x_L = new TH2D("h_th_y_L_vs_th_x_L", ";#theta_{x}^{L};#theta_{y}^{L}", 100, -1000E-6, +1000E-6, 100, -1000E-6, +1000E-6);
+	TH2D *h_th_y_R_vs_th_x_R = new TH2D("h_th_y_R_vs_th_x_R", ";#theta_{x}^{R};#theta_{y}^{R}", 100, -1000E-6, +1000E-6, 100, -1000E-6, +1000E-6);
+	TH2D *h_th_y_vs_th_x = new TH2D("h_th_y_vs_th_x", ";#theta_{x};#theta_{y}", 100, -1000E-6, +1000E-6, 100, -1000E-6, +1000E-6);
 	
 	TGraph *g_th_y_L_vs_th_x_L = new TGraph(); g_th_y_L_vs_th_x_L->SetName("g_th_y_L_vs_th_x_L"); g_th_y_L_vs_th_x_L->SetTitle(";#theta_{x}^{L};#theta_{y}^{L}");
 	TGraph *g_th_y_R_vs_th_x_R = new TGraph(); g_th_y_R_vs_th_x_R->SetName("g_th_y_R_vs_th_x_R"); g_th_y_R_vs_th_x_R->SetTitle(";#theta_{x}^{R};#theta_{y}^{R}");
@@ -609,8 +609,8 @@ int main(int argc, char **argv)
 	TProfile *p_vtx_x_diffLR_vs_th_x = new TProfile("p_vtx_x_diffLR_vs_th_x", ";#theta_{x};x^{*,R} - x^{*,L}", 100, -600E-6, +600E-6);
 	TProfile *p_vtx_y_diffLR_vs_th_y = new TProfile("p_vtx_y_diffLR_vs_th_y", ";#theta_{y};y^{*,R} - y^{*,L}", 200, -600E-6, +600E-6);
 	
-	TH2D *h_vtx_x_diffLR_vs_vtx_x_R = new TH2D("h_vtx_x_diffLR_vs_vtx_x_R", ";x^{*,R};x^{*,R} - x^{*,L}", 100, -0.5, +0.5, 100, -0.5, +0.5);
-	TH2D *h_vtx_y_diffLR_vs_vtx_y_R = new TH2D("h_vtx_y_diffLR_vs_vtx_y_R", ";y^{*,R};y^{*,R} - y^{*,L}", 100, -0.5, +0.5, 100, -0.5, +0.5);
+	TH2D *h_vtx_x_diffLR_vs_vtx_x = new TH2D("h_vtx_x_diffLR_vs_vtx_x", ";x^{*};x^{*,R} - x^{*,L}", 100, -0.5, +0.5, 100, -0.5, +0.5);
+	TH2D *h_vtx_y_diffLR_vs_vtx_y = new TH2D("h_vtx_y_diffLR_vs_vtx_y", ";y^{*};y^{*,R} - y^{*,L}", 100, -0.5, +0.5, 100, -0.5, +0.5);
 	
 	/*
 	TProfile *p_x_L_F_vs_th_x = new TProfile("p_x_L_F_vs_th_x", ";#theta_{x};x^{L,F}", 100, 0., 0.);
@@ -672,6 +672,15 @@ int main(int argc, char **argv)
 	
 	TProfile *p_vtx_x_vs_time = new TProfile("p_vtx_x_vs_time", ";timestamp;mean of x^{*}", 31, timestamp_min, timestamp_max);
 	TGraphErrors *gRMS_vtx_x_vs_time = new TGraphErrors; gRMS_vtx_x_vs_time->SetName("gRMS_vtx_x_vs_time"); gRMS_vtx_x_vs_time->SetTitle(";timestamp;RMS of x^{*}");
+	
+	TProfile *p_vtx_y_vs_time = new TProfile("p_vtx_y_vs_time", ";timestamp;mean of y^{*}", 31, timestamp_min, timestamp_max);
+	TGraphErrors *gRMS_vtx_y_vs_time = new TGraphErrors; gRMS_vtx_y_vs_time->SetName("gRMS_vtx_y_vs_time"); gRMS_vtx_y_vs_time->SetTitle(";timestamp;RMS of y^{*}");
+	
+	TProfile *p_diffLR_vtx_x_vs_time = new TProfile("p_diffLR_vtx_x_vs_time", ";timestamp;mean of #Delta^{R-L}x^{*}", 31, timestamp_min, timestamp_max);
+	TGraphErrors *gRMS_diffLR_vtx_x_vs_time = new TGraphErrors; gRMS_diffLR_vtx_x_vs_time->SetName("gRMS_diffLR_vtx_x_vs_time"); gRMS_diffLR_vtx_x_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}x^{*}");
+	
+	TProfile *p_diffLR_vtx_y_vs_time = new TProfile("p_diffLR_vtx_y_vs_time", ";timestamp;mean of #Delta^{R-L}y^{*}", 31, timestamp_min, timestamp_max);
+	TGraphErrors *gRMS_diffLR_vtx_y_vs_time = new TGraphErrors; gRMS_diffLR_vtx_y_vs_time->SetName("gRMS_diffLR_vtx_y_vs_time"); gRMS_diffLR_vtx_y_vs_time->SetTitle(";timestamp;RMS of #Delta^{R-L}y^{*}");
 
 	TProfile *p_th_x_R_vs_time = new TProfile("p_th_x_R_vs_time", ";timestamp;#theta_{x}^{R}", 100, timestamp_min, timestamp_max);
 	TProfile *p_th_y_R_vs_time = new TProfile("p_th_y_R_vs_time", ";timestamp;#theta_{y}^{R}", 100, timestamp_min, timestamp_max);
@@ -703,8 +712,8 @@ int main(int argc, char **argv)
 		bp_t_full_corr[bi] = new TProfile("p_t_full_corr", ";t", N_bins, bin_edges, "s");
 	}
 
-	TH2D *h_th_y_vs_th_x_before = new TH2D("h_th_y_vs_th_x_before", ";#theta_{x};#theta_{y}", 150, -500E-6, +500E-6, 150, -500E-6, +500E-6); h_th_y_vs_th_x_before->Sumw2();
-	TH2D *h_th_y_vs_th_x_after = new TH2D("h_th_y_vs_th_x_after", ";#theta_{x};#theta_{y}", 150, -500E-6, +500E-6, 150, -500E-6, +500E-6); h_th_y_vs_th_x_after->Sumw2();
+	TH2D *h_th_y_vs_th_x_before = new TH2D("h_th_y_vs_th_x_before", ";#theta_{x};#theta_{y}", 100, -1000E-6, +1000E-6, 100, -1000E-6, +1000E-6); h_th_y_vs_th_x_before->Sumw2();
+	TH2D *h_th_y_vs_th_x_after = new TH2D("h_th_y_vs_th_x_after", ";#theta_{x};#theta_{y}", 100, -1000E-6, +1000E-6, 100, -1000E-6, +1000E-6); h_th_y_vs_th_x_after->Sumw2();
 	TH2D *h_th_vs_phi_after = new TH2D("h_th_vs_phi_after", ";#phi;#theta", 50, -M_PI, +M_PI, 50, 150E-6, 550E-6); h_th_vs_phi_after->Sumw2();
 	
 	TGraph *g_weight_vs_th_y = new TGraph(); g_weight_vs_th_y->SetName("g_weight_vs_th_y"); g_weight_vs_th_y->SetTitle(";#theta_{y};weight");
@@ -788,8 +797,7 @@ int main(int argc, char **argv)
 	double th_min = 1E100;
 	double th_y_L_min = +1E100, th_y_R_min = +1E100;
 
-	unsigned int N_anal=0, N_anal_zeroBias=0;
-	unsigned int N_zeroBias_el=0, N_zeroBias_el_RP_trig=0;
+	unsigned int N_anal=0;
 	unsigned int N_4outof4=0, N_el=0, N_el_RP_trig=0;
 	unsigned int N_el_T2trig=0, N_4outof4_T2trig=0;
 	unsigned int N_el_raw=0;
@@ -847,25 +855,9 @@ int main(int argc, char **argv)
 		if (ev.lumi_section < anal.lumi_section_min || ev.lumi_section > anal.lumi_section_max)
 			continue;
 
-		// diagonal cut
-		bool allDiagonalRPs = ev.h.L_1_F.v && ev.h.L_2_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
-
-		h_timestamp_input->Fill(ev.timestamp);
-
-		if (!allDiagonalRPs)
-			continue;
-
 		// select the elastic-trigger bunch(es) only
 		if (SkipBunch(ev.run_num, ev.bunch_num))
 			continue;
-
-		// zero bias event?
-		bool zero_bias_event = false;
-		//bool zero_bias_event = IsZeroBias(ev.trigger_bits, ev.run_num, ev.event_num);
-
-		N_anal++;
-		if (zero_bias_event)
-			N_anal_zeroBias++;
 
 		// apply fine alignment
 		HitData h_al = ev.h;
@@ -874,6 +866,24 @@ int main(int argc, char **argv)
 			AlignmentData alData = alignmentSources[i].Eval(ev.timestamp);
 			h_al = h_al.ApplyAlignment(alData);
 		}
+
+		// fill pre-selection histograms
+		h_y_L_2_F_vs_x_L_2_F_al_nosel->Fill(h_al.L_2_F.x, h_al.L_2_F.y);
+		h_y_L_1_F_vs_x_L_1_F_al_nosel->Fill(h_al.L_1_F.x, h_al.L_1_F.y);
+		h_y_R_1_F_vs_x_R_1_F_al_nosel->Fill(h_al.R_1_F.x, h_al.R_1_F.y);
+		h_y_R_2_F_vs_x_R_2_F_al_nosel->Fill(h_al.R_2_F.x, h_al.R_2_F.y);
+
+		g_bunch_num_vs_timestamp->SetPoint(g_bunch_num_vs_timestamp->GetN(), ev.timestamp, ev.bunch_num);
+
+		// diagonal cut
+		bool allDiagonalRPs = ev.h.L_1_F.v && ev.h.L_2_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v;
+
+		h_timestamp_input->Fill(ev.timestamp);
+
+		if (!allDiagonalRPs)
+			continue;
+
+		N_anal++;
 
 		// hit-map cuts
 		bool skip_due_to_y = false;
@@ -886,7 +896,6 @@ int main(int argc, char **argv)
 		if (skip_due_to_y)
 			continue;
 		
-		h_timestamp_dgn->Fill(ev.timestamp);
 		//g_timestamp_vs_ev_idx_dgn->SetPoint(g_timestamp_vs_ev_idx_dgn->GetN(), ev_idx, ev.timestamp);
 
 		/*
@@ -894,11 +903,7 @@ int main(int argc, char **argv)
 			continue;
 		*/
 
-		// fill pre-selection histograms
-		h_y_L_2_F_vs_x_L_2_F_al_nosel->Fill(h_al.L_2_F.x, h_al.L_2_F.y);
-		h_y_L_1_F_vs_x_L_1_F_al_nosel->Fill(h_al.L_1_F.x, h_al.L_1_F.y);
-		h_y_R_1_F_vs_x_R_1_F_al_nosel->Fill(h_al.R_1_F.x, h_al.R_1_F.y);
-		h_y_R_2_F_vs_x_R_2_F_al_nosel->Fill(h_al.R_2_F.x, h_al.R_2_F.y);
+		h_timestamp_dgn->Fill(ev.timestamp);
 
 		if (detailsLevel >= 2)
 		{
@@ -1069,7 +1074,7 @@ int main(int argc, char **argv)
 		// data for alignment
 		// (SHOULD use hit positions WITHOUT alignment corrections, i.e. ev.h)
 		signed int period = int((ev.timestamp - anal.alignment_t0) / anal.alignment_ts);
-		if (detailsLevel >= 0)
+		if (detailsLevel >= 2)
 		{
 			if (g_w_vs_timestamp_sel.find(period) == g_w_vs_timestamp_sel.end())
 			{
@@ -1191,10 +1196,8 @@ int main(int argc, char **argv)
 
 		p_th_x_diffLR_vs_vtx_x->Fill(k.vtx_x, k.th_x_R - k.th_x_L);
 		
-		//double safe_th_y_min = (anal.th_y_lcut_L + anal.th_y_lcut_R)/2. + 5E-6;
-		//double safe_th_y_max = (anal.th_y_hcut_L + anal.th_y_hcut_R)/2. - 5E-6;
-		double safe_th_y_min = 0E-6;
-		double safe_th_y_max = 1000E-6;
+		double safe_th_y_min = (anal.th_y_lcut_L + anal.th_y_lcut_R)/2. + 5E-6;
+		double safe_th_y_max = (anal.th_y_hcut_L + anal.th_y_hcut_R)/2. - 5E-6;
 		bool safe = fabs(k.th_y) > safe_th_y_min && fabs(k.th_y) < safe_th_y_max;
 
 		if (safe)
@@ -1264,8 +1267,8 @@ int main(int argc, char **argv)
 		p_vtx_x_diffLR_vs_th_x->Fill(k.th_x, k.vtx_x_R - k.vtx_x_L);
 		p_vtx_y_diffLR_vs_th_y->Fill(k.th_y, k.vtx_y_R - k.vtx_y_L);
 
-		h_vtx_x_diffLR_vs_vtx_x_R->Fill(k.vtx_x_R, k.vtx_x_R - k.vtx_x_L);
-		h_vtx_y_diffLR_vs_vtx_y_R->Fill(k.vtx_y_R, k.vtx_y_R - k.vtx_y_L);
+		h_vtx_x_diffLR_vs_vtx_x->Fill(k.vtx_x, k.vtx_x_R - k.vtx_x_L);
+		h_vtx_y_diffLR_vs_vtx_y->Fill(k.vtx_y, k.vtx_y_R - k.vtx_y_L);
 
 		if (safe)
 		{
@@ -1388,6 +1391,10 @@ int main(int argc, char **argv)
 			//p_diffNF_th_y_R_vs_time->Fill(ev.timestamp, k.th_y_R_F - k.th_y_R_N);
 
 			p_vtx_x_vs_time->Fill(ev.timestamp, k.vtx_x);
+			p_vtx_y_vs_time->Fill(ev.timestamp, k.vtx_y);
+
+			p_diffLR_vtx_x_vs_time->Fill(ev.timestamp, k.vtx_x_R - k.vtx_x_L);
+			p_diffLR_vtx_y_vs_time->Fill(ev.timestamp, k.vtx_y_R - k.vtx_y_L);
 
 			if (detailsLevel >= 2)
 			{
@@ -1497,9 +1504,6 @@ int main(int argc, char **argv)
 
 	printf("\n");
 	printf("N_anal = %u\n", N_anal);
-	printf("N_anal_zeroBias = %u\n", N_anal_zeroBias);
-	printf("N_zeroBias_el = %u\n", N_zeroBias_el);
-	printf("N_zeroBias_el_RP_trig = %u\n", N_zeroBias_el_RP_trig);
 
 	printf("N_4outof4 = %u\n", N_4outof4);
 	printf("N_el = %u\n", N_el);
@@ -1707,7 +1711,7 @@ int main(int argc, char **argv)
 	TCanvas *c;
 	
 	gDirectory = outF->mkdir("metadata");
-	if (detailsLevel >= 0)
+	if (detailsLevel >= 2)
 	{
 		h_timestamp_input->SetLineColor(1);
 		h_timestamp_dgn->SetLineColor(2);
@@ -2075,8 +2079,8 @@ int main(int argc, char **argv)
 	p_vtx_x_diffLR_vs_th_x->Write();
 	p_vtx_y_diffLR_vs_th_y->Write();
 	
-	h_vtx_x_diffLR_vs_vtx_x_R->Write();
-	h_vtx_y_diffLR_vs_vtx_y_R->Write();
+	h_vtx_x_diffLR_vs_vtx_x->Write();
+	h_vtx_y_diffLR_vs_vtx_y->Write();
 	
 	/*
 	p_x_L_F_vs_th_x->Write();
@@ -2154,6 +2158,18 @@ int main(int argc, char **argv)
 	ProfileToRMSGraph(p_vtx_x_vs_time, gRMS_vtx_x_vs_time);
 	gRMS_vtx_x_vs_time->Write();
 
+	p_vtx_y_vs_time->Write();
+	ProfileToRMSGraph(p_vtx_y_vs_time, gRMS_vtx_y_vs_time);
+	gRMS_vtx_y_vs_time->Write();
+
+	p_diffLR_vtx_x_vs_time->Write();
+	ProfileToRMSGraph(p_diffLR_vtx_x_vs_time, gRMS_diffLR_vtx_x_vs_time);
+	gRMS_diffLR_vtx_x_vs_time->Write();
+
+	p_diffLR_vtx_y_vs_time->Write();
+	ProfileToRMSGraph(p_diffLR_vtx_y_vs_time, gRMS_diffLR_vtx_y_vs_time);
+	gRMS_diffLR_vtx_y_vs_time->Write();
+
 	TGraphErrors *g_beam_div_x_vs_time = new TGraphErrors; g_beam_div_x_vs_time->SetName("g_beam_div_x_vs_time"); g_beam_div_x_vs_time->SetTitle(";timestamp;beam divergence in x");
 	TGraphErrors *g_sensor_res_x_vs_time = new TGraphErrors; g_sensor_res_x_vs_time->SetName("g_sensor_res_x_vs_time"); g_sensor_res_x_vs_time->SetTitle(";timestamp;sensor resolution in x");
 	for (int i = 0; i <= gRMS_vtx_x_vs_time->GetN(); ++i)
@@ -2162,8 +2178,9 @@ int main(int argc, char **argv)
 		gRMS_vtx_x_vs_time->GetPoint(i, time, si_vtx);
 		gRMS_diffLR_th_x_vs_time->GetPoint(i, time, si_diff);
 
-		double si_bdx = si_vtx * sqrt(2.) / 90. * 1E-3;	// in rad
-		double si_srx = sqrt(si_diff*si_diff/2. - si_bdx*si_bdx);
+		const double beta_st_x = 11.; // m
+		const double si_bdx = si_vtx * sqrt(2.) / beta_st_x * 1E-3;	// in rad
+		const double si_srx = sqrt(si_diff*si_diff/2. - si_bdx*si_bdx);
 
 		g_beam_div_x_vs_time->SetPoint(i, time, si_bdx);
 		g_sensor_res_x_vs_time->SetPoint(i, time, si_srx);
@@ -2222,6 +2239,11 @@ int main(int argc, char **argv)
 	{
 		gDirectory = normDir->mkdir(binnings[bi].c_str());
 		bh_t_normalized[bi]->Write();
+
+		TH1D *h_t_normalized_no_L = new TH1D(* bh_t_normalized[bi]);
+		h_t_normalized_no_L->Scale(anal.L_int);
+		h_t_normalized_no_L->Write("h_t_normalized_no_L");
+
 		bh_t_normalized_rel_diff[bi]->Write();
 	}
 

@@ -6,7 +6,8 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
-	"DS-fill7279",
+	"DS-fill7301/Totem1",
+	"DS-fill7302/Totem1",
 };
 
 string dgns[] = {
@@ -15,7 +16,7 @@ string dgns[] = {
 };
 
 int cuts[] = { 1, 2, 5, 6, 7, 8, 9, 10 };
-int cuts[] = { 8, 9, 10 };
+int cuts[] = { 2 };
 
 real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6, 1, 1 };
 real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0, 1, 1 };
@@ -30,7 +31,7 @@ real lim_x_high[] = { +1000, -1, +1000, +1000, -1, -1, +750, +200, +15, +15 };
 real lim_y_low[] = { -1000, +1, -0.8, -0.8, +1, +1, -10, -100, -5, -5 };
 real lim_y_high[] = { +1000, -1, +0.8, +0.8, -1, -1, +10, +100, +5, +5 };
 
-real lim_q[] = { 250., 50, 10., 10., 1., 1., 2.5, 10., 2, 2 };
+real lim_q[] = { 250., 250, 10., 10., 1., 1., 2.5, 5., 2, 2 };
 
 for (int ci : cuts.keys)
 {

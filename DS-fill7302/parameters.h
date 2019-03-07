@@ -3,12 +3,15 @@
 unsigned int timestamp_min = 69013;
 unsigned int timestamp_max = 76799;
 
+string timberDir = "2018_10_14_fill7302";
+
 void Init_base()
 {
 	// load global settings
 	Init_global();
 
 	anal.alignment_t0 = timestamp_min;
+	anal.alignment_ts = (timestamp_max - timestamp_min) / 2.;
 
 	//env.UseMatchedOptics();
 }
