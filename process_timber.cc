@@ -19,6 +19,8 @@ const map<string, double> m_beta_st = {
 	{ "v", 11. },
 };
 
+const unsigned int time_margin = 1800.; // s
+
 //----------------------------------------------------------------------------------------------------
 
 void ProcessOne(TGraph *g_em, const string &beam, const string &proj)
@@ -37,6 +39,9 @@ void ProcessOne(TGraph *g_em, const string &beam, const string &proj)
 		const double emit = g_em->GetY()[i] * 1E-6;
 
 		time -= timestamp0;
+
+		if (time < timestamp_min - time_margin || time > timestamp_max + time_margin)
+			continue;
 
 		const double bd = sqrt(emit / ga / beta_st);
 		const double vtx = sqrt(emit / ga * beta_st);
@@ -74,6 +79,9 @@ void ProcessCombined(TGraph *g_em_b1, TGraph *g_em_b2, const string &beam, const
 			continue;
 
 		time -= timestamp0;
+
+		if (time < timestamp_min - time_margin || time > timestamp_max + time_margin)
+			continue;
 
 		const double bd1 = sqrt(emit1 / ga / beta_st);
 		const double bd2 = sqrt(emit2 / ga / beta_st);
