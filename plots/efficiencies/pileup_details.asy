@@ -5,10 +5,9 @@ include "../run_info.asy";
 
 string topDir = "../../";
 
-string datasets[];
-// TODO: wrong - should be ZeroBias data
-datasets.push("DS-fill7301/Totem1");
-datasets.push("DS-fill7302/Totem1");
+string fills[], f_datasets[];
+fills.push("7301"); f_datasets.push("DS-fill7301/ZeroBias");
+fills.push("7302"); f_datasets.push("DS-fill7302/ZeroBias");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
@@ -31,9 +30,9 @@ xSizeDef = 15cm;
 
 TGraph_errorBar = None;
 
-for (int dsi : datasets.keys)
+for (int dsi : f_datasets.keys)
 {
-	string f = topDir + datasets[dsi]+"/pileup_combined.root";
+	string f = topDir + f_datasets[dsi]+"/pileup_combined.root";
 
 	for (int di : diagonals.keys)
 	{
@@ -42,7 +41,7 @@ for (int dsi : datasets.keys)
 		NewPage();
 
 		NewPad(false, -1, -1);
-		label("\vbox{\SetFontSizesXX\hbox{"+datasets[dsi]+"}\hbox{"+dgn_labels[di]+"}}");
+		label("\vbox{\SetFontSizesXX\hbox{"+f_datasets[dsi]+"}\hbox{"+dgn_labels[di]+"}}");
 	
 		for (int ri : row_captions.keys)
 		{
@@ -66,10 +65,10 @@ for (int dsi : datasets.keys)
 				if (template == "")
 					continue;
 
-				real y_max = 0.5;
+				real y_max = 0.2;
 		
 				NewPad("time$\ung{h}$", "destructive pile-up probability", c, r);
-				DrawRunBands(datasets[dsi], 0, y_max);
+				DrawBands(fills[dsi], bands="run", labels="ds", 0., y_max);
 		
 				for (int ci : criteria.keys)
 				{

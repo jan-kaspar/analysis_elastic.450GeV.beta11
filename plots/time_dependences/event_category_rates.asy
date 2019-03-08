@@ -8,13 +8,8 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[], ds_labels[];
-datasets.push("DS-323893"); ds_labels.push("DS-323893");
-datasets.push("DS-323899"); ds_labels.push("DS-323899");
-datasets.push("DS-323907"); ds_labels.push("DS-323907");
-datasets.push("DS-323919"); ds_labels.push("DS-323919");
-datasets.push("DS-323932"); ds_labels.push("DS-323932");
-datasets.push("DS-323933"); ds_labels.push("DS-323933");
-datasets.push("DS-323934"); ds_labels.push("DS-323934");
+datasets.push("DS-fill7301/Totem1"); ds_labels.push("7301");
+datasets.push("DS-fill7302/Totem1"); ds_labels.push("7302");
 
 string rows[];
 rows.push("top");
@@ -48,7 +43,7 @@ void PlotRate(RootObject obj, pen p, string label)
 		real l = 2. * x_unc;
 		real r = y / l;
 		real r_unc = y_unc / l;
-		
+
 		real sc = 1./3600;
 
 		draw(((x-x_unc)*sc, r)--((x+x_unc)*sc, r), p);
@@ -76,7 +71,7 @@ for (int dsi : datasets.keys)
 
 	NewPadLabel(ds_labels[dsi] + ":");
 
-	string f = topDir + datasets[dsi] + "/block0/pileup_combined.root";
+	string f = topDir + datasets[dsi] + "/pileup_combined.root";
 
 	for (int ri : rows.keys)
 	{
@@ -84,13 +79,14 @@ for (int dsi : datasets.keys)
 
 		NewPad(false);
 		NewPadLabel(rows[ri]);
-		
+
 		for (int rpi : rps.keys)
 		{
 			NewPad("time $\ung{h}$", "prescaled rate$\ung{Hz}$");
 			scale(Linear, Linear(true));
 
-			//DrawRunBands(ds_labels[dsi], 0., 1., true);
+			real y_max = 1000;
+			DrawBands(ds_labels[dsi], bands="run", labels="ds", 0., y_max);
 
 			string row = rows[ri];
 			string rp = rps[rpi];
@@ -99,19 +95,18 @@ for (int dsi : datasets.keys)
 			bool arm56 = (find(rp, "R") == 0);
 
 			string diagonal = "";
-			if ((arm45 && row == "bottom") || (arm56 && row == "top")) diagonal = "45b";
-			if ((arm45 && row == "top") || (arm56 && row == "bottom")) diagonal = "45t";
+			if ((arm45 && row == "bottom") || (arm56 && row == "top")) diagonal = "45b_56t";
+			if ((arm45 && row == "top") || (arm56 && row == "bottom")) diagonal = "45t_56b";
 
 			//write(row + ", " + rp + " -> " + diagonal);
 
-			write();
+			write("");
 			write("* " + ds_labels[dsi] + ", " + rp_lhc_labels[rpi] + ", " + row);
 
 			PlotRate(RootGetObject(f, diagonal + "/" + rps[rpi] + "/tr/val"), blue, "single track");
 			PlotRate(RootGetObject(f, diagonal + "/" + rps[rpi] + "/pat_suff/val"), red, "track(s) + showers");
 
-			// TODO
-			//ylimits(0, 1., Crop);
+			ylimits(0, y_max, Crop);
 		}
 	}
 
@@ -121,4 +116,4 @@ for (int dsi : datasets.keys)
 	attach(f_legend);
 }
 
-GShipout(vSkip=1mm);
+GShipout("event_category_rates", vSkip=1mm);

@@ -7,9 +7,11 @@ string topDir = "../../";
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
-string datasets[];
-datasets.push("DS-fill7301/Totem1");
-datasets.push("DS-fill7302/Totem1");
+string fills[], f_datasets[];
+fills.push("7301"); f_datasets.push("DS-fill7301/Totem1");
+fills.push("7301"); f_datasets.push("DS-fill7301/ZeroBias");
+fills.push("7302"); f_datasets.push("DS-fill7302/Totem1");
+fills.push("7302"); f_datasets.push("DS-fill7302/ZeroBias");
 
 string diagonals[], dgn_labels[];
 diagonals.push("45b_56t"); dgn_labels.push("45 bot -- 56 top");
@@ -35,13 +37,13 @@ for (int rpi : rps.keys)
 	NewPadLabel(rp_labels[rpi]);
 }
 
-for (int dsi : datasets.keys)
+for (int dsi : f_datasets.keys)
 {
 	NewRow();
 
-	NewPadLabel(datasets[dsi] + ":");
+	NewPadLabel(f_datasets[dsi] + ":");
 
-	string f = topDir + datasets[dsi] + "/pileup_combined.root";
+	string f = topDir + f_datasets[dsi] + "/pileup_combined.root";
 
 	for (int dgni : diagonals.keys)
 	{
@@ -54,7 +56,7 @@ for (int dsi : datasets.keys)
 		{
 			NewPad("time $\ung{h}$", "event fraction");
 
-			DrawRunBands(datasets[dsi], 0., 1., true);
+			DrawBands(fills[dsi], bands="run", labels="ds", 0., 1.);
 
 			draw(scale(1./3600, 1.), RootGetObject(f, diagonals[dgni] + "/" + rps[rpi] + "/pl_suff/rel"), "p", cyan+1pt, mCi+2pt+cyan, "pl\_suff");
 			draw(scale(1./3600, 1.), RootGetObject(f, diagonals[dgni] + "/" + rps[rpi] + "/pat_suff/rel"), "p", blue+1pt, mCi+2pt+blue, "pat\_suff");

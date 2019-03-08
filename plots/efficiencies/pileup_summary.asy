@@ -22,27 +22,21 @@ TGraph_errorBar = None;
 
 //----------------------------------------------------------------------------------------------------
 
-frame fr_leg;
-
-NewPad(false);
 for (int di : diagonals.keys)
-	NewPadLabel(dgn_labels[di]);
-
-for (int dsi : f_datasets.keys)
 {
 	NewRow();
 
-	NewPadLabel(f_datasets[dsi]);
+	NewPadLabel(dgn_labels[di]);
+	
+	real y_max = 0.3;
+		
+	NewPad("time$\ung{h}$", "destructive pile-up probability");
 
-	string f = topDir + f_datasets[dsi]+"/pileup_combined.root";
-
-	for (int di : diagonals.keys)
+	for (int dsi : f_datasets.keys)
 	{
+		string f = topDir + f_datasets[dsi]+"/pileup_combined.root";
 		string dgn = diagonals[di];
 
-		real y_max = 0.3;
-		
-		NewPad("time$\ung{h}$", "destructive pile-up probability");
 		DrawBands(fills[dsi], bands="run", labels="ds", 0, y_max);
 		
 		for (int ci : criteria.keys)
@@ -55,14 +49,15 @@ for (int dsi : f_datasets.keys)
 				draw(swToHours, obj, "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
 		}
 		
-		ylimits(0, y_max, Crop);
-		//limits((2, 0), (3.6, y_max), Crop);
-		
-		fr_leg = BuildLegend();
 	}
+	
+	ylimits(0, y_max, Crop);
 }
 
 NewPad(false);
-attach(fr_leg);
+for (int ci : criteria.keys)
+	AddToLegend(replace(criteria[ci], "_", "\_"), StdPen(ci));
 
-GShipout("pileup_final", hSkip=1mm, vSkip=0mm);
+AttachLegend();
+
+GShipout("pileup_summary", hSkip=1mm, vSkip=0mm);
