@@ -21,13 +21,21 @@ function MakeFilesOne()
 
 	done
 
+	if [ "$buffer" == "" ]
+	then
+		return
+	fi
+
 	mkdir -p "$subdir"
 
 	cat "input_files_template.h" | sed "\
 			s|\$FILES|$buffer|;\
 		" > "$subdir/input_files.h"
 
-	echo "#include \"../parameters.h\"" > "$subdir/parameters.h"
+	if [ ! -f "$subdir/parameters.h" ]
+	then
+		echo "#include \"../parameters.h\"" > "$subdir/parameters.h"
+	fi
 }
 
 #----------------------------------------------------------------------------------------------------
