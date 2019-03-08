@@ -6,17 +6,11 @@ include "../run_info.asy";
 string topDir = "../../";
 
 string datasets[];
-//datasets.push("DS-323893/ZeroBias");
-datasets.push("DS-323899/ZeroBias");
-/*
-datasets.push("DS-323907/ZeroBias");
-datasets.push("DS-323919/ZeroBias");
-datasets.push("DS-323932/ZeroBias");
-datasets.push("DS-323933/ZeroBias");
-datasets.push("DS-323934/ZeroBias");
-*/
+// TODO: wrong - should be ZeroBias data
+datasets.push("DS-fill7301/Totem1");
+datasets.push("DS-fill7302/Totem1");
 
-string diagonals[] = { "45b", "45t" };
+string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
 
 string elements[][] = {
@@ -100,4 +94,4 @@ for (int dsi : datasets.keys)
 	}
 }
 
-GShipout(hSkip=1mm, vSkip=0mm);
+GShipout("pileup_details", hSkip=1mm, vSkip=0mm);

@@ -8,17 +8,12 @@ string topDir = "../../";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[];
-datasets.push("DS-323893/Totem1");
-datasets.push("DS-323899/Totem1");
-datasets.push("DS-323907/Totem1");
-datasets.push("DS-323919/Totem1");
-datasets.push("DS-323932/Totem1");
-datasets.push("DS-323933/Totem1");
-datasets.push("DS-323934/Totem1");
+datasets.push("DS-fill7301/Totem1");
+datasets.push("DS-fill7302/Totem1");
 
 string diagonals[], dgn_labels[];
-diagonals.push("45b"); dgn_labels.push("45 bot -- 56 top");
-diagonals.push("45t"); dgn_labels.push("45 top -- 56 bot");
+diagonals.push("45b_56t"); dgn_labels.push("45 bot -- 56 top");
+diagonals.push("45t_56b"); dgn_labels.push("45 top -- 56 bot");
 
 string rps[], rp_labels[];
 rps.push("L_2_F"); rp_labels.push("45-220-fr");
@@ -78,4 +73,4 @@ for (int dsi : datasets.keys)
 	attach(f_legend);
 }
 
-GShipout(vSkip=1mm);
+GShipout("event_category_fractions", vSkip=1mm);
