@@ -1,0 +1,24 @@
+#!/bin/bash
+
+base_dir="/afs/cern.ch/user/j/jkaspar/public/900GeV/beta11"
+
+datasets=(
+	"DS-fill7301"
+	"DS-fill7302"
+)
+
+diagonals=(
+	"45b_56t"
+	"45t_56b"
+)
+
+for dataset in ${datasets[*]}
+do
+	dir="$base_dir/$dataset"
+	mkdir -p "$dir"
+
+	for diagonal in ${diagonals[*]}
+	do
+		cp "$dataset/Totem1/distributions_${diagonal}.root" "$dir/"
+	done
+done
