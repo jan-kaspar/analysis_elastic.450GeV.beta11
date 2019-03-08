@@ -33,62 +33,80 @@ real time_max = 5;
 
 //----------------------------------------------------------------------------------------------------
 
-void DrawFillBands(string ds_filter="", real y_min=0, real y_max=0, bool details=true)
+void DrawBands(string filter="", string bands="ds", string labels="ds", real y_min=0, real y_max=0)
 {
+	// determine min and max of x for the selection
 	real x_min = 1e100, x_max = -1e100;
-
 	for (int i : runs.keys)
 	{
-		if (run_datasets[i] == ds_filter)
+		if (run_datasets[i] == filter)
 		{
 			x_min = min(x_min, ts_from[i]/3600);
 			x_max = max(x_max, ts_to[i]/3600);
 		}
 	}
 
+	// draw bands
 	pen p = yellow+opacity(0.3);
 
-	filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p, nullpen);
-
-	if (details)
+	if (bands == "ds")
 	{
-		label(ds_filter, ((x_min + x_max)/2, y_max), S);
+		filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p, nullpen);
 	}
-}
 
-//----------------------------------------------------------------------------------------------------
-
-void DrawRunBands(string ds_filter="", real y_min=0, real y_max=0, bool details=true)
-{
-	for (int i : runs.keys)
+	if (bands == "run")
 	{
-		if (ds_filter != "")
-			if (run_datasets[i] != ds_filter)
+		for (int i : runs.keys)
+		{
+			if (run_datasets[i] != filter)
 				continue;
 
-		//yaxis(XEquals(ts_from[i]/3600, false), dashed);
-		//yaxis(XEquals(ts_to[i]/3600, false), dashed);
-		real x_min = ts_from[i]/3600, x_max = ts_to[i]/3600;
+			real x_min = ts_from[i]/3600, x_max = ts_to[i]/3600;
+			filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p, nullpen);
+		}
+	}
 
-		pen p = (details) ? colors[i]+opacity(0.3) : yellow+opacity(0.3);
-		filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p, nullpen);
+	// draw labels
+	if (labels == "ds")
+	{
+		label("{\SmallerFonts " + filter + "}", ((x_min + x_max)/2, y_max), S);
+	}
 
-		if (details)
+	if (labels == "run")
+	{
+		for (int i : runs.keys)
 		{
+			if (run_datasets[i] != filter)
+				continue;
+
+			real x_min = ts_from[i]/3600, x_max = ts_to[i]/3600;
 			label(format("{\SmallerFonts %u}", runs[i]), ((x_min + x_max)/2, y_max), S);
-			//label(run_datasets[i], ((x_min + x_max)/2, y_max), S);
 		}
 	}
 }
 
 //----------------------------------------------------------------------------------------------------
 
-void DrawRunBoundaries(string ds_filter="")
+void DrawFillBands(string filter="", real y_min=0, real y_max=0, bool details=true)
+{
+	DrawBands(filter, bands="ds", labels=(details) ? "ds" : "", y_min, y_max);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void DrawRunBands(string filter="", real y_min=0, real y_max=0, bool details=true)
+{
+	DrawBands(filter, bands="run", labels=(details) ? "run" : "", y_min, y_max);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void DrawRunBoundaries(string filter="")
 {
 	for (int i : runs.keys)
 	{
-		if (ds_filter != "")
-			if (run_datasets[i] != ds_filter)
+		if (filter != "")
+			if (run_datasets[i] != filter)
 				continue;
 
 		yaxis(XEquals(ts_from[i]/3600, false), dashed);
