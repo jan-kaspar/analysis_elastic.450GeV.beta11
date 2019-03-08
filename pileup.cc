@@ -29,7 +29,8 @@
 
 #include "DataFormats/CTPPSReco/interface/TotemRPRecHit.h"
 #include "DataFormats/CTPPSReco/interface/TotemRPUVPattern.h"
-#include "DataFormats/CTPPSReco/interface/TotemRPLocalTrack.h"
+//#include "DataFormats/CTPPSReco/interface/TotemRPLocalTrack.h"
+#include "DataFormats/CTPPSReco/interface/CTPPSLocalTrackLite.h"
 
 using namespace std;
 using namespace edm;
@@ -63,8 +64,11 @@ void EvaluateFlags(const fwlite::ChainEvent &event, map<unsigned int, RPFlags> &
 	fwlite::Handle< DetSetVector<TotemRPUVPattern> > hPatterns;
 	hPatterns.getByLabel(event, "totemRPUVPatternFinder");
 
-	fwlite::Handle< DetSetVector<TotemRPLocalTrack> > hTracks;
-	hTracks.getByLabel(event, "totemRPLocalTrackFitter");
+	//fwlite::Handle< DetSetVector<TotemRPLocalTrack> > hTracks;
+	//hTracks.getByLabel(event, "totemRPLocalTrackFitter");
+
+	fwlite::Handle< vector<CTPPSLocalTrackLite> > hTracksLite;
+	hTracksLite.getByLabel(event, "ctppsLocalTrackLiteProducer");
 
 	// process rec hits
 	for (const auto &ds : *hRecHits)
@@ -102,6 +106,7 @@ void EvaluateFlags(const fwlite::ChainEvent &event, map<unsigned int, RPFlags> &
 	}
 
 	// process tracks
+	/*
 	for (const auto &ds : *hTracks)
 	{
 		TotemRPDetId rpId(ds.detId());
@@ -115,6 +120,15 @@ void EvaluateFlags(const fwlite::ChainEvent &event, map<unsigned int, RPFlags> &
 				break;
 			}
 		}
+	}
+	*/
+
+	for (const auto &tr : *hTracksLite)
+	{
+		CTPPSDetId rpId(tr.getRPId());
+		unsigned int rpDecId = 100*rpId.arm() + 10*rpId.station() + 1*rpId.rp();
+
+		flags[rpDecId].tr = true;
 	}
 
 	// apply logic
@@ -276,6 +290,8 @@ struct Period
 	unsigned int run;
 	signed int idx;
 	time_t ts_first, ts_last;
+
+	unsigned int arrayIndexBeforeSort;
 	
 	static const time_t width = 300;	// s
 
@@ -298,6 +314,15 @@ struct Period
 			return false;
 
 		return true;
+	}
+
+	bool operator< (const Period &other)
+	{
+		if (run < other.run) return true;
+		if (run > other.run) return false;
+
+		if (idx < other.idx) return true;
+		return false;
 	}
 };
 
@@ -377,15 +402,20 @@ int main(int argc, char **argv)
 		//	break;
 
 		const unsigned int ev_run = event.id().run();
+		const unsigned int ev_bunch = event.bunchCrossing();
 		const unsigned int ev_timestamp = event.time().unixTime() - timestamp0;
 		const unsigned int periodIdx = FillPeriod(ev_run, ev_timestamp);
+
+		// select bunches
+		if (SkipBunch(ev_run, ev_bunch))
+			continue;
 
 		// run analysis
 		map<unsigned int, RPFlags> flags;
 		EvaluateFlags(event, flags);
 		
-		UpdateCounters(flags, 25, 5, 104, 124, counters["45b"], periodIdx);
-		UpdateCounters(flags, 24, 4, 105, 125, counters["45t"], periodIdx);
+		UpdateCounters(flags, 25, 5, 104, 124, counters["45b_56t"], periodIdx);
+		UpdateCounters(flags, 24, 4, 105, 125, counters["45t_56b"], periodIdx);
 	}
 
 	if (interrupt_loop)
@@ -393,39 +423,57 @@ int main(int argc, char **argv)
 
 	printf("* events processed: %u\n", ev_count);
 
+	// sort periods
+	for (unsigned int i = 0; i < periods.size(); ++i)
+		periods[i].arrayIndexBeforeSort = i;
+
+	sort(periods.begin(), periods.end());
+
 	// save results
 	for (map<string, CounterMap>::iterator dgni = counters.begin(); dgni != counters.end(); ++dgni)
 	{
 		TDirectory *dgnDir = outF->mkdir(dgni->first.c_str());
 		
-		for (map<string, map<string, map<unsigned int, unsigned long> > >::iterator oi = dgni->second.begin(); oi != dgni->second.end(); ++oi)
+		for (auto oi = dgni->second.begin(); oi != dgni->second.end(); ++oi)
 		{
 			TDirectory *objDir = dgnDir->mkdir(oi->first.c_str());
 
-			for (map<string, map<unsigned int, unsigned long> >::iterator qi = oi->second.begin(); qi != oi->second.end(); ++qi)
+			for (auto qi = oi->second.begin(); qi != oi->second.end(); ++qi)
 			{
 				TDirectory *qDir = objDir->mkdir(qi->first.c_str());
 				gDirectory = qDir;
 
 				TGraphErrors *g_v = new TGraphErrors(); g_v->SetName("val");
 				TGraphErrors *g_r = new TGraphErrors(); g_r->SetName("rel");
+				TGraphErrors *g_rate = new TGraphErrors(); g_rate->SetName("rate");
 				TGraphErrors *g_run = new TGraphErrors(); g_run->SetName("runs");
-				
-				for (map<unsigned int, unsigned long>::iterator pi = qi->second.begin(); pi != qi->second.end(); ++pi)
+
+				for (const auto &p : periods)
 				{
-					const Period &p = periods[pi->first];
+					unsigned int pi = p.arrayIndexBeforeSort;
+
+					auto it = qi->second.find(pi);
+					if (it == qi->second.end())
+						continue;
+
+					auto v = it->second;
+
 					double t_l = p.ts_first, t_h = p.ts_last;
 					double t = (t_h + t_l) / 2.;
 					double te = (t_h - t_l) / 2.;
+					double tw = t_h - t_l;
 
-					double tot = dgni->second["total"]["total"][pi->first];
+					double tot = dgni->second["total"]["total"][pi];
 
 					int idx = g_v->GetN();
-					g_v->SetPoint(idx, t, pi->second);
-					g_v->SetPointError(idx, te, sqrt(pi->second));
+					g_v->SetPoint(idx, t, v);
+					g_v->SetPointError(idx, te, sqrt(v));
 					
-					g_r->SetPoint(idx, t, pi->second / tot);
-					g_r->SetPointError(idx, te, sqrt(pi->second) / tot);
+					g_r->SetPoint(idx, t, v / tot);
+					g_r->SetPointError(idx, te, sqrt(v) / tot);
+
+					g_rate->SetPoint(idx, t, v / tw);
+					g_rate->SetPointError(idx, te, sqrt(v) / tw);
 
 					g_run->SetPoint(idx, t, p.run);
 					g_run->SetPointError(idx, te, 0.);
@@ -433,6 +481,7 @@ int main(int argc, char **argv)
 
 				g_v->Write();
 				g_r->Write();
+				g_rate->Write();
 				g_run->Write();
 			}
 		}
