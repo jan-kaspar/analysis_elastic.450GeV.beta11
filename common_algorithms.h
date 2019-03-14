@@ -3,6 +3,8 @@
 
 #include "TMath.h"
 
+#include <deque>
+
 #include "common_definitions.h"
 
 double cut_y_min = 0.;
@@ -461,6 +463,130 @@ HitData ProtonTransport(const Kinematics & k, const Environment & env)
 	h.R_2_F.y = +env.L_y_R_2_F*k.th_y_R + env.v_y_R_2_F*k.vtx_y;
 
 	return h;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+double *th_x_binning_edges_1d=NULL, *th_y_binning_edges_1d=NULL;
+double *th_x_binning_edges_2d=NULL, *th_y_binning_edges_2d=NULL;
+double *th_x_binning_edges_2d_coarse=NULL, *th_y_binning_edges_2d_coarse=NULL;
+
+int th_x_binning_n_1d=0, th_y_binning_n_1d=0;
+int th_x_binning_n_2d=0, th_y_binning_n_2d=0;
+int th_x_binning_n_2d_coarse=0, th_y_binning_n_2d_coarse=0;
+
+void BuildThBinning()
+{
+	deque<double> edges;
+
+	// ----- th_x, 1D -----
+	edges.clear();
+	for (double x = 0E-6; ; )
+	{
+		edges.push_back(x);
+		if (x != 0E-6)
+			edges.push_front(-x);
+
+		if (x > 800E-6)
+			break;
+
+		//x += 5.000000E-06 + -1.071429E-02 * x + 3.214286E+03 * x*x;
+		x += 20E-6;
+	}
+
+	th_x_binning_edges_1d = new double[edges.size()];
+	th_x_binning_n_1d = edges.size() - 1;
+	for (unsigned int i = 0; i < edges.size(); i++)
+		th_x_binning_edges_1d[i] = edges[i];
+
+	// ----- th_y, 1D -----
+	edges.clear();
+	for (double y = 150E-6; ; )
+	{
+		edges.push_back(y);
+		if (y > 650E-6)
+			break;
+
+		//y += 2.000000E-06 + 4.166667E-03 * y + 4.427083E+07 * y*y*y;
+		y += 10E-6;
+	}
+
+	th_y_binning_edges_1d = new double[edges.size()];
+	th_y_binning_n_1d = edges.size() - 1;
+	for (unsigned int i = 0; i < edges.size(); i++)
+		th_y_binning_edges_1d[i] = edges[i];
+
+	// ----- th_x, 2D -----
+	edges.clear();
+	for (double x = 0E-6; ; )
+	{
+		edges.push_back(x);
+		if (x != 0E-6)
+			edges.push_front(-x);
+
+		if (x > 800E-6)
+			break;
+
+		//x += 5.000000E-06 + -1.071429E-02 * x + 3.214286E+03 * x*x;
+		//x += 5.000000E-06 + -4.761905E-04 * x + 3.476190E+03 * x*x;
+		//x += 5.000000E-06 + 5.155844E-02 * x + 2.467532E+03 * x*x;
+		x += 50E-6;
+	}
+
+	th_x_binning_edges_2d = new double[edges.size()];
+	th_x_binning_n_2d = edges.size() - 1;
+	for (unsigned int i = 0; i < edges.size(); i++)
+	{
+		th_x_binning_edges_2d[i] = edges[i];
+		printf("  %i --> edge x = %E\n", i, edges[i]);
+	}
+
+	// ----- th_y, 2D -----
+	edges.clear();
+	for (double y = 150E-6; ; )
+	{
+		edges.push_back(y);
+		if (y > 650E-6)
+			break;
+
+		//y += 2.000000E-06 + 4.166667E-03 * y + 4.427083E+07 * y*y*y;
+		//y += 2.000000E-06 + 2.083333E-02 * y + 4.166667E+07 * y*y*y;
+		y += 20E-6;
+	}
+
+	printf("\n");
+
+	th_y_binning_edges_2d = new double[edges.size()];
+	th_y_binning_n_2d = edges.size() - 1;
+	for (unsigned int i = 0; i < edges.size(); i++)
+	{
+		th_y_binning_edges_2d[i] = edges[i];
+		printf("  %i --> edge y = %E\n", i, edges[i]);
+	}
+
+	// ----- th_x, 2D, coarse -----
+	edges = { -800E-6, -500E-6, -300E-6, -150E-6, -50E-6, 0E-6, 50E-6, 150E-6, 300E-6, 500E-6, 800E-6 };
+
+	th_x_binning_edges_2d_coarse = new double[edges.size()];
+	th_x_binning_n_2d_coarse = edges.size() - 1;
+	for (unsigned int i = 0; i < edges.size(); i++)
+		th_x_binning_edges_2d_coarse[i] = edges[i];
+
+	// ----- th_y, 2D, coarse -----
+	edges = { 200E-6, 250E-6, 350E-6, 500E-6, 700E-6 };
+
+	th_y_binning_edges_2d_coarse = new double[edges.size()];
+	th_y_binning_n_2d_coarse = edges.size() - 1;
+	for (unsigned int i = 0; i < edges.size(); i++)
+		th_y_binning_edges_2d_coarse[i] = edges[i];
+
+	printf(">> BuildThBinning\n");
+	printf("\n1D, th_x: %i, %p\n", th_x_binning_n_1d, th_x_binning_edges_1d);
+	printf("\n1D, th_y: %i, %p\n", th_y_binning_n_1d, th_y_binning_edges_1d);
+	printf("\n2D, th_x: %i, %p\n", th_x_binning_n_2d, th_x_binning_edges_2d);
+	printf("\n2D, th_y: %i, %p\n", th_y_binning_n_2d, th_y_binning_edges_2d);
+	printf("\n2D coarse, th_x: %i, %p\n", th_x_binning_n_2d_coarse, th_x_binning_edges_2d_coarse);
+	printf("\n2D coarse, th_y: %i, %p\n", th_y_binning_n_2d_coarse, th_y_binning_edges_2d_coarse);
 }
 
 #endif
