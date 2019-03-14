@@ -147,9 +147,15 @@ int main(int argc, char **argv)
 			}
 		}
 
-		// accept event ?
-		//bool accept = (ev.h.L_2_F.v && ev.h.L_1_F.v && ev.h.R_1_F.v && ev.h.R_2_F.v);
-		bool accept = (ev.h.L_2_F.v && ev.h.R_2_F.v);
+		unsigned N_L = 0;
+		if (ev.h.L_1_F.v) N_L++;
+		if (ev.h.L_2_F.v) N_L++;
+
+		unsigned N_R = 0;
+		if (ev.h.R_1_F.v) N_R++;
+		if (ev.h.R_2_F.v) N_R++;
+
+		bool accept = (N_L >= 1 && N_R >= 1);
 
 		if (!accept)
 			continue;
