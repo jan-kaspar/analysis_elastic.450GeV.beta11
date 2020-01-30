@@ -88,11 +88,11 @@ function RunOneDiagonal()
 			0)
 				echo "$label > done"
 				;;
-	
+
 			$rcIncompatibleDiagonal)
 				rm "$log"
 				;;
-	
+
 			*)
 				echo "$label > run error ($errCode)"
 				if [ "$par_more" -eq 1 ]; then tail -n 5 "$log"; fi
@@ -118,9 +118,9 @@ function RunOneDir()
 	cp "$input" "$dir/$src_file"
 	cd "$dir"
 
-	
+
 	echo "$tag @ $dir > compiling"
-	g++ -O3 -Wall -Wextra -Wno-attributes --std=c++11\
+	g++ -O3 -Wall -Wextra -Wno-attributes --std=c++11 -g\
 			-I"$top_dir" \
 			`root-config --libs` -lMinuit -lMinuit2 `root-config --cflags` \
 			-I"$CMSSW_BASE/src" \
@@ -131,6 +131,7 @@ function RunOneDir()
 			-lDataFormatsCommon \
 			-lDataFormatsCTPPSDetId \
 			-lDataFormatsCTPPSReco \
+			-I$GSL_DIR/include -L$GSL_DIR/lib -lgsl -lgslcblas -lm \
 			"$src_file" -o "$exe_file" &> "$tag.log_compile"
 
 	# compilation error?
@@ -158,7 +159,7 @@ function RunOneDir()
 	then
 		RunOneDiagonal "$tag" "$dir" "$par_more" "45t_56b" "$options" &
 	fi
-	
+
 	if [ "$diag_combined" == "y" ]
 	then
 		RunOneDiagonal "$tag" "$dir" "$par_more" "combined" "$options" &
@@ -200,13 +201,13 @@ do
 			diag_45b_56b="n"
 			diag_45t_56t="n"
 			;;
-		
+
 		"-d45b_56t" | "-d45b")
 			diag_45b_56t="y"
 			diag_45t_56b="n"
 			diag_combined="n"
 			;;
-		
+
 		"-d45t_56b" | "-d45t")
 			diag_45b_56t="n"
 			diag_45t_56b="y"

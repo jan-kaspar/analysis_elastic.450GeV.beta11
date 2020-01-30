@@ -7,8 +7,6 @@
 
 #include "common_definitions.h"
 
-double cut_y_min = 0.;
-
 //----------------------------------------------------------------------------------------------------
 
 Kinematics DoReconstruction(const HitData &h, const Environment & env)
@@ -20,7 +18,7 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
 	k.th_x_L_1_F = - h.L_1_F.x / env.L_x_L_1_F;
   	k.th_x_L_2_F = - h.L_2_F.x / env.L_x_L_2_F;
   	//k.th_x_L = (k.th_x_L_1_F + k.th_x_L_2_F) / 2.;
-  	
+
 	k.th_x_R_1_F = + h.R_1_F.x / env.L_x_R_1_F;
   	k.th_x_R_2_F = + h.R_2_F.x / env.L_x_R_2_F;
   	//k.th_x_R = (k.th_x_R_1_F + k.th_x_R_2_F) / 2.;
@@ -36,11 +34,11 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
 	k.th_y_L_1_F = - h.L_1_F.y / env.L_y_L_1_F;
   	k.th_y_L_2_F = - h.L_2_F.y / env.L_y_L_2_F;
   	//k.th_y_L = (k.th_y_L_1_F + k.th_y_L_2_F) / 2.;
-  	
+
 	k.th_y_R_1_F = + h.R_1_F.y / env.L_y_R_1_F;
   	k.th_y_R_2_F = + h.R_2_F.y / env.L_y_R_2_F;
   	//k.th_y_R = (k.th_y_R_1_F + k.th_y_R_2_F) / 2.;
-	
+
 	const double D_y_L = - env.v_y_L_1_F * env.L_y_L_2_F + env.v_y_L_2_F * env.L_y_L_1_F;
 	k.th_y_L = (env.v_y_L_1_F * h.L_2_F.y - env.v_y_L_2_F * h.L_1_F.y) / D_y_L;
 	k.vtx_y_L = (- h.L_1_F.y * env.L_y_L_2_F + h.L_2_F.y * env.L_y_L_1_F) / D_y_L;
@@ -50,10 +48,10 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
 	k.vtx_y_R = (+ h.R_1_F.y * env.L_y_R_2_F - h.R_2_F.y * env.L_y_R_1_F) / D_y_R;
 
 	// ----- double-arm kinematics reconstruction -----
-	
+
 	k.th_x = (k.th_x_L + k.th_x_R) / 2.;
 	k.th_y = (k.th_y_L + k.th_y_R) / 2.;
-	
+
 	k.vtx_x = (k.vtx_x_L + k.vtx_x_R) / 2.;
 	k.vtx_y = (k.vtx_y_L + k.vtx_y_R) / 2.;
 
@@ -106,13 +104,13 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 			be.push_back(t);
 		}
 	}
-	
+
 	if (type.compare("eb") == 0)
 	{
 		double w = 0.2E-3;
 		for (; t < 0.6E-3; t += w)
 			be.push_back(t);
-		
+
 		w = 0.2E-3;
 		for (; t < 0.02; t += w)
 			be.push_back(t);
@@ -202,7 +200,7 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 		while (t < anal.t_max)
 		{
 			be.push_back(t);
-			
+
 			double w = 0.01;
 			if (t >= 0.00) w = 2E-4;
 			if (t >= 5E-4) w = 2.68E-3 * 0.2 * sqrt(t);
@@ -219,7 +217,7 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 		while (t < anal.t_max)
 		{
 			be.push_back(t);
-			
+
 			double w = 0.01;
 			if (t >= 0.00) w = 2E-4;
 			if (t >= 5E-4) w = 2.68E-3 * 0.5 * sqrt(t);
@@ -236,7 +234,7 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 		while (t < anal.t_max)
 		{
 			be.push_back(t);
-			
+
 			double w = 0.01;
 			if (t >= 0.00) w = 2E-4;
 			if (t >= 5E-4) w = 2.68E-3 * sqrt(t);
@@ -259,65 +257,45 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 	{
 		binEdges[i] = be[i];
 		if (verbose)
-			printf("\tbi = %u: %.2E\n", i, binEdges[i]);
+			printf("\tbi = %4u: %.4E\n", i, binEdges[i]);
 	}
 }
 
 //----------------------------------------------------------------------------------------------------
 
-bool CalculateAcceptanceCorrections(double th_y_sign,
-		const Kinematics &k, const Analysis &anal,
-		double &phi_corr, double &div_corr)
+bool CalculateAcceptanceCorrectionSmearing(double th_y_sign, const Kinematics &k, const Analysis &anal, double &corr_smear)
 {
-	// ---------- smearing component ----------
+	corr_smear = 0.;
 
-	/*
-	if ((k.th_x_L < anal.th_x_lcut_L) || (k.th_x_R < anal.th_x_lcut_R) || (k.th_x_L > anal.th_x_hcut_L) || (k.th_x_R > anal.th_x_hcut_R))
+	if ((th_y_sign * k.th_y_L < anal.fc_L_l.th_y_0) || (th_y_sign * k.th_y_R < anal.fc_R_l.th_y_0)
+		|| (th_y_sign * k.th_y_L > anal.fc_L_h.th_y_0) || (th_y_sign * k.th_y_R > anal.fc_R_h.th_y_0))
 		return true;
-	*/
 
-	if ((th_y_sign * k.th_y_L < anal.th_y_lcut_L) || (th_y_sign * k.th_y_R < anal.th_y_lcut_R)
-		|| (th_y_sign * k.th_y_L > anal.th_y_hcut_L) || (th_y_sign * k.th_y_R > anal.th_y_hcut_R))
-		return true;
-	
-	/*
-	double LB_x_L = anal.th_x_lcut_L - k.th_x, UB_x_L = anal.th_x_hcut_L - k.th_x;
-	double LB_x_R = anal.th_x_lcut_R - k.th_x, UB_x_R = anal.th_x_hcut_R - k.th_x;
-	double F_x_L = (UB_x_L > LB_x_L) ? ( TMath::Erf(UB_x_L / anal.si_th_x_1arm_L / sqrt(2.)) - TMath::Erf(LB_x_L / anal.si_th_x_1arm_L / sqrt(2.)) ) / 2. : 0.;
-	double F_x_R = (UB_x_R > LB_x_R) ? ( TMath::Erf(UB_x_R / anal.si_th_x_1arm_R / sqrt(2.)) - TMath::Erf(LB_x_R / anal.si_th_x_1arm_R / sqrt(2.)) ) / 2. : 0.;
-	double F_x = F_x_L * F_x_R;
-	*/
-	double F_x = 1.;
+	const double th_y_abs = th_y_sign * k.th_y;
 
-	double th_y_abs = th_y_sign * k.th_y;
+	const double si_th_y_1arm = anal.si_th_y_LRdiff / sqrt(2.);
 
-	double UB_y = min(anal.th_y_hcut_R - th_y_abs, th_y_abs - anal.th_y_lcut_L);
-	double LB_y = max(anal.th_y_lcut_R - th_y_abs, th_y_abs - anal.th_y_hcut_L);
-	double F_y = (UB_y > LB_y) ? ( TMath::Erf(UB_y / anal.si_th_y_1arm) - TMath::Erf(LB_y / anal.si_th_y_1arm) ) / 2. : 0.;
+	double UB_y = min(anal.fc_R_h.th_y_0 - th_y_abs, th_y_abs - anal.fc_L_l.th_y_0);
+	double LB_y = max(anal.fc_R_l.th_y_0 - th_y_abs, th_y_abs - anal.fc_L_h.th_y_0);
+	double F_y = (UB_y > LB_y) ? ( TMath::Erf(UB_y / si_th_y_1arm) - TMath::Erf(LB_y / si_th_y_1arm) ) / 2. : 0.;
 
-	//printf(">> F_x_L = %E, F_x_R = %E, F_y = %E\n", F_x_L, F_x_R, F_y);
+	corr_smear = 1./ F_y;
 
-	div_corr = 1./(F_x * F_y);
+	return false;
+}
 
-	// ---------- phi component ----------
-	
-	// apply safety margins to avoid excessive smearing component
-	//double th_x_lcut = max(anal.th_x_lcut_L, anal.th_x_lcut_R) + 3.0E-6;
-	//double th_x_hcut = min(anal.th_x_hcut_L, anal.th_x_hcut_R) - 3.0E-6;
-	double th_x_lcut = anal.th_x_lcut;
-	double th_x_hcut = anal.th_x_hcut;
+//----------------------------------------------------------------------------------------------------
 
-	//double th_y_lcut = max(anal.th_y_lcut_L, anal.th_y_lcut_R) + 0.2E-6;
-	//double th_y_hcut = min(anal.th_y_hcut_L, anal.th_y_hcut_R) - 1.0E-6;
+bool CalculateAcceptanceCorrectionPhi(double th_y_sign, const Kinematics &k, const Analysis &anal, double &corr_phi)
+{
+	corr_phi = 0.;
 
-	double th_y_lcut = anal.th_y_lcut;
-	double th_y_hcut = anal.th_y_hcut;
+	double th_y_lcut = anal.fc_G_l.th_y_0;
+	double th_y_hcut = anal.fc_G_h.th_y_0;
 
-	//printf("-------------------------\n");
-	//printf("k.th_x=%E, th_x_lcut=%E, th_x_hcut=%E\n", k.th_x, th_x_lcut, th_x_hcut);
-	//printf("k.th_y=%E, th_y_lcut=%E, th_y_hcut=%E\n", k.th_y, th_y_lcut, th_y_hcut);
+	const double th_y_abs = th_y_sign * k.th_y;
 
-	if (k.th_x <= th_x_lcut || k.th_x >= th_x_hcut || th_y_abs <= th_y_lcut || th_y_abs >= th_y_hcut)
+	if (th_y_abs <= th_y_lcut || th_y_abs >= th_y_hcut)
 		return true;
 
 	// get all intersections
@@ -326,37 +304,15 @@ bool CalculateAcceptanceCorrections(double th_y_sign,
 	if (k.th > th_y_lcut)
 	{
 		double phi = asin(th_y_lcut / k.th);
-		double ta_x = k.th * cos(phi);
-		if (th_x_lcut < ta_x && ta_x < th_x_hcut)
-			phis.insert(phi);
-		if (th_x_lcut < -ta_x && -ta_x < th_x_hcut)
-			phis.insert(M_PI - phi);
+		phis.insert(phi);
+		phis.insert(M_PI - phi);
 	}
-	
+
 	if (k.th > th_y_hcut)
 	{
 		double phi = asin(th_y_hcut / k.th);
-		double ta_x = k.th * cos(phi);
-		if (th_x_lcut < ta_x && ta_x < th_x_hcut)
-			phis.insert(phi);
-		if (th_x_lcut < -ta_x && -ta_x < th_x_hcut)
-			phis.insert(M_PI - phi);
-	}
-
-	if (k.th > fabs(th_x_hcut))
-	{
-		double phi = acos(fabs(th_x_hcut) / k.th);
-		double ta_y = k.th * sin(phi);
-		if (th_y_lcut < ta_y && ta_y < th_y_hcut)
-			phis.insert(phi);
-	}
-
-	if (k.th > fabs(th_x_lcut))
-	{
-		double phi = acos(fabs(th_x_lcut) / k.th);
-		double ta_y = k.th * sin(phi);
-		if (th_y_lcut < ta_y && ta_y < th_y_hcut)
-			phis.insert(M_PI - phi);
+		phis.insert(phi);
+		phis.insert(M_PI - phi);
 	}
 
 	// the number of intersections must be even
@@ -379,10 +335,22 @@ bool CalculateAcceptanceCorrections(double th_y_sign,
 
 		phiSum += phi_end - phi_start;
 	}
-	
-	phi_corr = 2. * M_PI / phiSum;
+
+	corr_phi = 2. * M_PI / phiSum;
 
 	return false;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+bool CalculateAcceptanceCorrections(double th_y_sign, const Kinematics &k, const Analysis &anal, double &corr_phi, double &corr_smear)
+{
+	bool skip_smear = CalculateAcceptanceCorrectionSmearing(th_y_sign, k, anal, corr_smear);
+	if (skip_smear)
+		return true;
+
+	bool skip_phi = CalculateAcceptanceCorrectionPhi(th_y_sign, k, anal, corr_phi);
+	return skip_phi;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -394,7 +362,7 @@ bool SkipRun(unsigned int /*run*/)
 
 //----------------------------------------------------------------------------------------------------
 
-// map: run number (8372) --> list of triggered bunches
+// map: run number --> list of bunches
 typedef std::map<unsigned int, std::vector<unsigned int> > BunchMap;
 
 bool keepAllBunches;
@@ -406,7 +374,7 @@ bool SkipBunch(unsigned int run, unsigned bunch)
 		return false;
 
 	const std::vector<unsigned int> &bunches = bunchMap[run];
-	
+
 	return (find(bunches.begin(), bunches.end(), bunch) == bunches.end());
 }
 
@@ -423,7 +391,7 @@ unsigned int NonCollidingBunch(unsigned int /*run*/, unsigned /*bunch*/)
 		if (bunch == 991)
 			return 2;
 	}
-	
+
 	if (run >= 8333 && run <= 8341)
 	{
 		if (bunch == 900)

@@ -33,26 +33,30 @@ void Init_global()
 	// TODO
 	anal.t_min = 0.; anal.t_max = 0.2;
 	anal.t_min_full = 0.; anal.t_max_full = 0.3;
-	
+
 	// approximate (time independent) resolutions
+	// TODO
 	anal.si_th_y_1arm = 15.7E-6;
 	anal.si_th_y_1arm_unc = 0.;
+
+	anal.si_th_y_LRdiff = anal.si_th_y_1arm * sqrt(2.);
+	anal.si_th_y_LRdiff_unc = -999.;
 
 	anal.si_th_y_2arm = 0.;
 	anal.si_th_y_2arm_unc = 0E-6;
 
 	anal.si_th_x_1arm_L = 0E-6;
-	anal.si_th_x_1arm_R = 0E-6;
+	anal.si_th_x_1arm_R = anal.si_th_x_1arm_L;
 	anal.si_th_x_1arm_unc = 0E-6;
+
+	anal.si_th_x_LRdiff = anal.si_th_x_1arm_L * sqrt(2.);
+	anal.si_th_x_LRdiff_unc = -999.;
 
 	anal.si_th_x_2arm = 0E-6;
 	anal.si_th_x_2arm_unc = 0E-6;
 
 	// analysis settings
-	anal.th_x_lcut = -1.;	
-	anal.th_x_hcut = +1.;
-	
-	//anal.use_time_dependent_resolutions = false;
+	anal.use_resolution_fits = true;
 
 	anal.use_3outof4_efficiency_fits = false;
 	anal.use_pileup_efficiency_fits = false;
@@ -62,16 +66,14 @@ void Init_global()
 	anal.inefficiency_trigger = 0.;
 
 	anal.bckg_corr = 1.;
-	
+
 	anal.L_int = 0.;	// mb^-1, diagonal dependent
-	
-	anal.eff_th_y_min = 200E-6; // TODO
-	
+
 	anal.t_min_fit = 0.; // TODO
 
 	anal.alignment_t0 = 0.;		// beginning of the first time-slice
 	anal.alignment_ts = 30.*60.;	// time-slice in s
-	
+
 	anal.alignmentYRanges["L_2_F"] = Analysis::AlignmentYRange(-11.5, -7.0, +6.5, +11.0);
 	anal.alignmentYRanges["L_1_F"] = Analysis::AlignmentYRange(-11.5, -7.0, +6.5, +11.0);
 	anal.alignmentYRanges["R_1_F"] = Analysis::AlignmentYRange(-9.5, -5.0, +5.0, +9.5);
@@ -99,11 +101,11 @@ void Init_global_45b_56t()
 	alSrc.SetAlignmentB(atConstant);
 	alSrc.SetAlignmentC(atConstant);
 
-	alSrc.cnst.a_L_2_F =  -8E-3; alSrc.cnst.b_L_2_F = +300E-3; alSrc.cnst.c_L_2_F =   +0E-3;
-	alSrc.cnst.a_L_1_F = -10E-3; alSrc.cnst.b_L_1_F = +700E-3; alSrc.cnst.c_L_1_F = -200E-3;
+	alSrc.cnst.a_L_2_F =  -8E-3; alSrc.cnst.b_L_2_F = +300E-3; alSrc.cnst.c_L_2_F =   +0E-3 - 350E-3;
+	alSrc.cnst.a_L_1_F = -10E-3; alSrc.cnst.b_L_1_F = +700E-3; alSrc.cnst.c_L_1_F = -200E-3 - 350E-3;
                                                                        
-	alSrc.cnst.a_R_1_F =  -6E-3; alSrc.cnst.b_R_1_F = -300E-3; alSrc.cnst.c_R_1_F = -200E-3;
-	alSrc.cnst.a_R_2_F =  -6E-3; alSrc.cnst.b_R_2_F = +500E-3; alSrc.cnst.c_R_2_F = -100E-3;
+	alSrc.cnst.a_R_1_F =  -6E-3; alSrc.cnst.b_R_1_F = -300E-3; alSrc.cnst.c_R_1_F = -200E-3 - 350E-3;
+	alSrc.cnst.a_R_2_F =  -6E-3; alSrc.cnst.b_R_2_F = +500E-3; alSrc.cnst.c_R_2_F = -100E-3 - 350E-3;
 	
 	alignmentSources.push_back(alSrc);
 
@@ -120,8 +122,14 @@ void Init_global_45b_56t()
 	anal.cut9_a = -0.499; anal.cut9_c = -0.07; anal.cut9_si = 0.2;
 	anal.cut10_a = -0.564; anal.cut10_c = +0.13; anal.cut10_si = 0.25;
 
-	anal.th_y_lcut_L = 210E-6; anal.th_y_lcut_R = 210E-6; anal.th_y_lcut = 230E-6;
-	anal.th_y_hcut_L = 610E-6; anal.th_y_hcut_R = 610E-6; anal.th_y_hcut = 590E-6;
+	anal.fc_L_l = FiducialCut(220E-6, -400E-6, -0.15, +200E-6, +0.15);
+	anal.fc_L_h = FiducialCut(480E-6, -400E-6, +4., +400E-6, -4.);
+
+	anal.fc_R_l = FiducialCut(220E-6, -400E-6, -0.15, +200E-6, +0.15);
+	anal.fc_R_h = FiducialCut(480E-6, -400E-6, +4., +400E-6, -4.);
+
+	anal.fc_G_l = FiducialCut(240E-6, -400E-6, -0.15, +200E-6, +0.15);
+	anal.fc_G_h = FiducialCut(500E-6, -400E-6, +4., +400E-6, -4.);
 
 	// TODO
 	//unsmearing_file = "unfolding_fit_45b_56t_old.root";
@@ -142,12 +150,12 @@ void Init_global_45t_56b()
 	alSrc.SetAlignmentB(atConstant);
 	alSrc.SetAlignmentC(atConstant);
 
-	alSrc.cnst.a_L_2_F =  -8E-3; alSrc.cnst.b_L_2_F = +300E-3; alSrc.cnst.c_L_2_F =   +0E-3;
-	alSrc.cnst.a_L_1_F = -10E-3; alSrc.cnst.b_L_1_F = +700E-3; alSrc.cnst.c_L_1_F = -200E-3;
-                                                                       
-	alSrc.cnst.a_R_1_F =  -6E-3; alSrc.cnst.b_R_1_F = -300E-3; alSrc.cnst.c_R_1_F = -200E-3;
-	alSrc.cnst.a_R_2_F =  -6E-3; alSrc.cnst.b_R_2_F = +500E-3; alSrc.cnst.c_R_2_F = -100E-3;
-	
+	alSrc.cnst.a_L_2_F =  -8E-3; alSrc.cnst.b_L_2_F = +300E-3; alSrc.cnst.c_L_2_F =   +0E-3 - 500E-3;
+	alSrc.cnst.a_L_1_F = -10E-3; alSrc.cnst.b_L_1_F = +700E-3; alSrc.cnst.c_L_1_F = -200E-3 - 500E-3;
+                                                                                                    
+	alSrc.cnst.a_R_1_F =  -6E-3; alSrc.cnst.b_R_1_F = -300E-3; alSrc.cnst.c_R_1_F = -200E-3 - 500E-3;
+	alSrc.cnst.a_R_2_F =  -6E-3; alSrc.cnst.b_R_2_F = +500E-3; alSrc.cnst.c_R_2_F = -100E-3 - 500E-3;
+
 	alignmentSources.push_back(alSrc);
 
 	// analysis settings
@@ -163,8 +171,14 @@ void Init_global_45t_56b()
 	anal.cut9_a = -0.491; anal.cut9_c = -0.05; anal.cut9_si = 0.20;
 	anal.cut10_a = -0.541; anal.cut10_c = +0.12; anal.cut10_si = 0.25;
 
-	anal.th_y_lcut_L = 210E-6; anal.th_y_lcut_R = 210E-6; anal.th_y_lcut = 230E-6;
-	anal.th_y_hcut_L = 610E-6; anal.th_y_hcut_R = 610E-6; anal.th_y_hcut = 590E-6;
+	anal.fc_L_l = FiducialCut(200E-6, -400E-6, -0.15, +300E-6, +0.15);
+	anal.fc_L_h = FiducialCut(450E-6, -350E-6, +2.00, +350E-6, -2.00);
+
+	anal.fc_R_l = FiducialCut(200E-6, -400E-6, -0.15, +300E-6, +0.15);
+	anal.fc_R_h = FiducialCut(450E-6, -350E-6, +2.00, +350E-6, -2.00);
+
+	anal.fc_G_l = FiducialCut(220E-6, -400E-6, -0.15, +200E-6, +0.15);
+	anal.fc_G_h = FiducialCut(430E-6, -350E-6, +2.00, +350E-6, -2.00);
 
 	// TODO
 	//unsmearing_file = "unfolding_fit_45b_56t_old.root";

@@ -33,6 +33,7 @@ struct AlignmentData
 	//	c: y shift in mm
 	double a_L_2_F, b_L_2_F, c_L_2_F;
 	double a_L_1_F, b_L_1_F, c_L_1_F;
+
 	double a_R_1_F, b_R_1_F, c_R_1_F;
 	double a_R_2_F, b_R_2_F, c_R_2_F;
 
@@ -40,6 +41,7 @@ struct AlignmentData
 	{
 		a_L_2_F = b_L_2_F = c_L_2_F = 0.;
 		a_L_1_F = b_L_1_F = c_L_1_F = 0.;
+
 		a_R_1_F = b_R_1_F = c_R_1_F = 0.;
 		a_R_2_F = b_R_2_F = c_R_2_F = 0.;
 	}
@@ -51,10 +53,10 @@ struct AlignmentData
 
 		r.a_L_F = a_L_N + (a_L_F - a_L_N)/(s_F - s_N) * (s_FH - s_N); r.a_L_N = a_L_N + (a_L_F - a_L_N)/(s_F - s_N) * (s_NH - s_N);
 		r.a_R_F = a_R_N + (a_R_F - a_R_N)/(s_F - s_N) * (s_FH - s_N); r.a_R_N = a_R_N + (a_R_F - a_R_N)/(s_F - s_N) * (s_NH - s_N);
-                                                                          
+
 		r.b_L_F = b_L_N + (b_L_F - b_L_N)/(s_F - s_N) * (s_FH - s_N); r.b_L_N = b_L_N + (b_L_F - b_L_N)/(s_F - s_N) * (s_NH - s_N);
 		r.b_R_F = b_R_N + (b_R_F - b_R_N)/(s_F - s_N) * (s_FH - s_N); r.b_R_N = b_R_N + (b_R_F - b_R_N)/(s_F - s_N) * (s_NH - s_N);
-                                                                          
+
 		r.c_L_F = c_L_N + (c_L_F - c_L_N)/(s_F - s_N) * (s_FH - s_N); r.c_L_N = c_L_N + (c_L_F - c_L_N)/(s_F - s_N) * (s_NH - s_N);
 		r.c_R_F = c_R_N + (c_R_F - c_R_N)/(s_F - s_N) * (s_FH - s_N); r.c_R_N = c_R_N + (c_R_F - c_R_N)/(s_F - s_N) * (s_NH - s_N);
 
@@ -72,7 +74,9 @@ struct AlignmentSource
 	struct GraphSet
 	{
 		TGraph *L_2_F, *L_1_F, *R_1_F, *R_2_F;
-		GraphSet() : L_2_F(NULL), L_1_F(NULL), R_1_F(NULL), R_2_F(NULL) {}
+		GraphSet() : L_2_F(NULL), L_1_F(NULL), R_1_F(NULL), R_2_F(NULL)
+		{
+		}
 	} gs_a, gs_b, gs_c;
 
 	AlignmentData cnst;
@@ -116,15 +120,17 @@ struct AlignmentSource
 				delete alF;
 				return;
 			}
-			
+
 			TGraph *g_L_2_F = (TGraph *) alF->Get(( string("L_2_F/") + obj).c_str() );
 			TGraph *g_L_1_F = (TGraph *) alF->Get(( string("L_1_F/") + obj).c_str() );
+
 			TGraph *g_R_1_F = (TGraph *) alF->Get(( string("R_1_F/") + obj).c_str() );
 			TGraph *g_R_2_F = (TGraph *) alF->Get(( string("R_2_F/") + obj).c_str() );
 
 			if (g_L_2_F && g_L_1_F && g_R_1_F && g_R_2_F)
+			{
 				printf("\talignment graphs successfully loaded\n");
-			else {
+			} else {
 				printf("\tERROR: unable to load some alignment graphs\n");
 				delete alF;
 				return;
@@ -132,6 +138,7 @@ struct AlignmentSource
 
 			gs.L_2_F = new TGraph(*g_L_2_F);
 			gs.L_1_F = new TGraph(*g_L_1_F);
+
 			gs.R_1_F = new TGraph(*g_R_1_F);
 			gs.R_2_F = new TGraph(*g_R_2_F);
 
@@ -151,49 +158,88 @@ struct AlignmentSource
 	{
 		AlignmentData d;
 
+		// a
 		if (type_a == atNone)
 		{
-			d.a_L_2_F = 0.; d.a_L_1_F = 0.; d.a_R_1_F = 0.; d.a_R_2_F = 0.;
+			d.a_L_2_F = 0.;
+			d.a_L_1_F = 0.;
+
+			d.a_R_1_F = 0.;
+			d.a_R_2_F = 0.;
 		}
 
 		if (type_a == atConstant)
 		{
-			d.a_L_2_F = cnst.a_L_2_F; d.a_L_1_F = cnst.a_L_1_F; d.a_R_1_F = cnst.a_R_1_F; d.a_R_2_F = cnst.a_R_2_F;
+			d.a_L_2_F = cnst.a_L_2_F;
+			d.a_L_1_F = cnst.a_L_1_F;
+
+			d.a_R_1_F = cnst.a_R_1_F;
+			d.a_R_2_F = cnst.a_R_2_F;
 		}
 
 		if (type_a == atTimeDependent)
 		{
-			d.a_L_2_F = gs_a.L_2_F->Eval(timestamp)*1E-3; d.a_L_1_F = gs_a.L_1_F->Eval(timestamp)*1E-3; d.a_R_1_F = gs_a.R_1_F->Eval(timestamp)*1E-3; d.a_R_2_F = gs_a.R_2_F->Eval(timestamp)*1E-3;
+			d.a_L_2_F = gs_a.L_2_F->Eval(timestamp)*1E-3;
+			d.a_L_1_F = gs_a.L_1_F->Eval(timestamp)*1E-3;
+
+			d.a_R_1_F = gs_a.R_1_F->Eval(timestamp)*1E-3;
+			d.a_R_2_F = gs_a.R_2_F->Eval(timestamp)*1E-3;
 		}
 
+		// b
 		if (type_b == atNone)
 		{
-			d.b_L_2_F = 0.; d.b_L_1_F = 0.; d.b_R_1_F = 0.; d.b_R_2_F = 0.;
+			d.b_L_2_F = 0.;
+			d.b_L_1_F = 0.;
+
+			d.b_R_1_F = 0.;
+			d.b_R_2_F = 0.;
 		}
 
 		if (type_b == atConstant)
 		{
-			d.b_L_2_F = cnst.b_L_2_F; d.b_L_1_F = cnst.b_L_1_F; d.b_R_1_F = cnst.b_R_1_F; d.b_R_2_F = cnst.b_R_2_F;
+			d.b_L_2_F = cnst.b_L_2_F;
+			d.b_L_1_F = cnst.b_L_1_F;
+
+			d.b_R_1_F = cnst.b_R_1_F;
+			d.b_R_2_F = cnst.b_R_2_F;
 		}
 
 		if (type_b == atTimeDependent)
 		{
-			d.b_L_2_F = gs_b.L_2_F->Eval(timestamp)*1E-3; d.b_L_1_F = gs_b.L_1_F->Eval(timestamp)*1E-3; d.b_R_1_F = gs_b.R_1_F->Eval(timestamp)*1E-3; d.b_R_2_F = gs_b.R_2_F->Eval(timestamp)*1E-3;
+			d.b_L_2_F = gs_b.L_2_F->Eval(timestamp)*1E-3;
+			d.b_L_1_F = gs_b.L_1_F->Eval(timestamp)*1E-3;
+
+			d.b_R_1_F = gs_b.R_1_F->Eval(timestamp)*1E-3;
+			d.b_R_2_F = gs_b.R_2_F->Eval(timestamp)*1E-3;
 		}
-		
+
+		// c
 		if (type_c == atNone)
 		{
-			d.c_L_2_F = 0.; d.c_L_1_F = 0.; d.c_R_1_F = 0.; d.c_R_2_F = 0.;
+			d.c_L_2_F = 0.;
+			d.c_L_1_F = 0.;
+
+			d.c_R_1_F = 0.;
+			d.c_R_2_F = 0.;
 		}
 
 		if (type_c == atConstant)
 		{
-			d.c_L_2_F = cnst.c_L_2_F; d.c_L_1_F = cnst.c_L_1_F; d.c_R_1_F = cnst.c_R_1_F; d.c_R_2_F = cnst.c_R_2_F;
+			d.c_L_2_F = cnst.c_L_2_F;
+			d.c_L_1_F = cnst.c_L_1_F;
+
+			d.c_R_1_F = cnst.c_R_1_F;
+			d.c_R_2_F = cnst.c_R_2_F;
 		}
 
 		if (type_c == atTimeDependent)
 		{
-			d.c_L_2_F = gs_c.L_2_F->Eval(timestamp)*1E-3; d.c_L_1_F = gs_c.L_1_F->Eval(timestamp)*1E-3; d.c_R_1_F = gs_c.R_1_F->Eval(timestamp)*1E-3; d.c_R_2_F = gs_c.R_2_F->Eval(timestamp)*1E-3;
+			d.c_L_2_F = gs_c.L_2_F->Eval(timestamp)*1E-3;
+			d.c_L_1_F = gs_c.L_1_F->Eval(timestamp)*1E-3;
+
+			d.c_R_1_F = gs_c.R_1_F->Eval(timestamp)*1E-3;
+			d.c_R_2_F = gs_c.R_2_F->Eval(timestamp)*1E-3;
 		}
 
 		return d;
@@ -242,6 +288,7 @@ struct HitData
 
 		r.L_2_F.x = L_2_F.x - al.a_L_2_F * L_2_F.y - al.b_L_2_F; r.L_2_F.y = L_2_F.y - al.c_L_2_F;
 		r.L_1_F.x = L_1_F.x - al.a_L_1_F * L_1_F.y - al.b_L_1_F; r.L_1_F.y = L_1_F.y - al.c_L_1_F;
+
 		r.R_1_F.x = R_1_F.x - al.a_R_1_F * R_1_F.y - al.b_R_1_F; r.R_1_F.y = R_1_F.y - al.c_R_1_F;
 		r.R_2_F.x = R_2_F.x - al.a_R_2_F * R_2_F.y - al.b_R_2_F; r.R_2_F.y = R_2_F.y - al.c_R_2_F;
 
@@ -284,7 +331,7 @@ struct Environment
 
 	// beam momentum uncertainty
 	double si_de_p;
-	
+
 	// beam divergence
 	double si_th_x_L, si_th_y_L;		// rad
 	double si_th_x_R, si_th_y_R;		// rad
@@ -366,7 +413,7 @@ struct Environment
 	}
 
 	void ApplyRandomOpticsPerturbations(TVectorD &de);
-	
+
 	void ApplyRandomOpticsPerturbations()
 	{
 		TVectorD de(16);
@@ -384,13 +431,15 @@ struct Environment
 
 void Environment::ApplyRandomOpticsPerturbations(TVectorD & /*de*/)
 {
+	printf("Environment::ApplyRandomOpticsPerturbations: not yet implemented\n");
+
 	/*
 	TVectorD r(16);
 
 	for (unsigned int i = 0; i < 16; i++)
 		r(i) = gRandom->Gaus();
 	de = opt_per_gen * r;
-	
+
 	v_x_L_N += de(0) * 1E0;
 	L_x_L_N += de(1) * 1E3;
 	v_y_L_N += de(2) * 1E0;
@@ -415,6 +464,8 @@ void Environment::ApplyRandomOpticsPerturbations(TVectorD & /*de*/)
 
 void Environment::ApplyOpticsPerturbationMode(int /*mode*/, double /*coef*/)
 {
+	printf("Environment::ApplyOpticsPerturbationMode: not yet implemented\n");
+
 	/*
 	printf(">> Environment::ApplyOpticsPerturbationMode\n");
 
@@ -470,6 +521,8 @@ void Environment::ApplyOpticsPerturbationMode(int /*mode*/, double /*coef*/)
 
 void Environment::ApplyEffectiveLengthPerturbationMode(int /*mode*/, double /*coef*/)
 {
+	printf("Environment::ApplyEffectiveLengthPerturbationMode: not yet implemented\n");
+
 	/*
 
 	printf(">> Environment::ApplyEffectiveLengthPerturbationMode\n");
@@ -586,6 +639,96 @@ struct CutData
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
+struct FiducialCut
+{
+	double th_y_0;			// rad
+	double th_x_m, th_x_p;	// rad
+	double al_m, al_p; 		// slope th_y vs. th_x, 1
+
+	FiducialCut(double _ty0=0., double _txm=0., double _alm=0., double _txp=0., double _alp=0.) :
+		th_y_0(_ty0), th_x_m(_txm), th_x_p(_txp), al_m(_alm), al_p(_alp)
+	{
+	}
+
+	double GetThYLimit(double th_x) const
+	{
+		if (th_x < th_x_m)
+			return th_y_0 + al_m * (th_x - th_x_m);
+
+		if (th_x > th_x_p)
+			return th_y_0 + al_p * (th_x - th_x_p);
+
+		return th_y_0;
+	}
+
+	void Print() const
+	{
+		printf("th_y_0=%E, th_x_m=%E, th_x_p=%E, al_m=%E, al_p=%E\n", th_y_0, th_x_m, th_x_p, al_m, al_p);
+	}
+
+	vector<double> GetIntersectionPhis(double th) const
+	{
+		vector<double> phis;
+
+		double A, B, C, D, p, phi;
+
+		// th_x > th_x_p
+		A = 1. + al_p * al_p;
+		B = 2. * th_x_p + 2. * th_y_0 * al_p;
+		C = th_x_p * th_x_p + th_y_0 * th_y_0 - th * th;
+		D = B*B - 4.*A*C;
+		if (D > 0.)
+		{
+			p = (-B + sqrt(D)) / 2. / A;
+			phi = atan2(th_y_0 + al_p * p, th_x_p + p);
+			if (p > 0.)
+				phis.push_back(phi);
+
+			p = (-B - sqrt(D)) / 2. / A;
+			phi = atan2(th_y_0 + al_p * p, th_x_p + p);
+			if (p > 0.)
+				phis.push_back(phi);
+		}
+
+		// th_x_m < th_x < th_x_p
+		{
+			double phi0 = asin(th_y_0 / th);
+
+			double phi = phi0;
+			double th_x = th * cos(phi);
+			if (th_x_m < th_x && th_x < th_x_p)
+				phis.push_back(phi);
+
+			phi = M_PI - phi0;
+			th_x = th * cos(phi);
+			if (th_x_m < th_x && th_x < th_x_p)
+				phis.push_back(phi);
+		}
+
+		// th_x < th_x_m
+		A = 1. + al_m * al_m;
+		B = 2. * th_x_m + 2. * th_y_0 * al_m;
+		C = th_x_m * th_x_m + th_y_0 * th_y_0 - th * th;
+		D = B*B - 4.*A*C;
+		if (D > 0.)
+		{
+			p = (-B + sqrt(D)) / 2. / A;
+			phi = atan2(th_y_0 + al_m * p, th_x_m + p);
+			if (p < 0.)
+				phis.push_back(phi);
+
+			p = (-B - sqrt(D)) / 2. / A;
+			phi = atan2(th_y_0 + al_m * p, th_x_m + p);
+			if (p < 0.)
+				phis.push_back(phi);
+		}
+
+		return phis;
+	}
+};
+
+//----------------------------------------------------------------------------------------------------
+
 struct Analysis
 {
 	// binning, |t| in GeV^2
@@ -616,12 +759,10 @@ struct Analysis
 	double cca[11], ccb[11], ccc[11], csi[11];
 	std::vector<unsigned int> cuts;	// list of active cuts
 
-	// analysis cuts (rad)
-	double th_y_lcut_L, th_y_lcut_R, th_y_lcut;
-	double th_y_hcut_L, th_y_hcut_R, th_y_hcut;
-	
-	double th_x_lcut;
-	double th_x_hcut;
+	// fiducial cuts
+	FiducialCut fc_L_l, fc_L_h;
+	FiducialCut fc_R_l, fc_R_h;
+	FiducialCut fc_G_l, fc_G_h;
 
 	// (un)-smearing parameters
 	double si_th_x_1arm_L;
@@ -629,13 +770,18 @@ struct Analysis
 	double si_th_x_1arm_unc;
 	double si_th_x_2arm;
 	double si_th_x_2arm_unc;
+	double si_th_x_LRdiff;
+	double si_th_x_LRdiff_unc;
 
 	double si_th_y_1arm;
 	double si_th_y_1arm_unc;
 	double si_th_y_2arm;
 	double si_th_y_2arm_unc;
+	double si_th_y_LRdiff;
+	double si_th_y_LRdiff_unc;
 
 	// efficiency parameters
+	bool use_resolution_fits;				// whether to use time-dependent fits of resolution curves
 	bool use_3outof4_efficiency_fits;		// whether to use time-dependent fits of 3-out-of-4 efficiency
 	bool use_pileup_efficiency_fits;		// whether to use time-dependent fits of pile-up efficiency
 
@@ -659,8 +805,6 @@ struct Analysis
 
 	double alignment_t0;	// beginning of the first time-slice
 	double alignment_ts;	// time-slice in s
-	
-	double eff_th_y_min;
 
 	// y ranges for alignment
 	struct AlignmentYRange
@@ -735,18 +879,28 @@ struct Analysis
 			printf((i == 0) ? "%i" : ", %i", cuts[i]);
 
 		printf("\n");
-		printf("th_x_lcut=%E\n", th_x_lcut);
-		printf("th_x_hcut=%E\n", th_x_hcut);
-		printf("th_y_lcut_L=%E, th_y_lcut_R=%E, th_y_lcut=%E\n", th_y_lcut_L, th_y_lcut_R, th_y_lcut);
-		printf("th_y_hcut_L=%E, th_y_hcut_R=%E, th_y_hcut=%E\n", th_y_hcut_L, th_y_hcut_R, th_y_hcut);
 
 		printf("\n");
+		printf("fiducial cuts:\n");
+		printf("fc_L_l: "); fc_L_l.Print();
+		printf("fc_L_h: "); fc_L_h.Print();
+		printf("fc_R_l: "); fc_R_l.Print();
+		printf("fc_R_h: "); fc_R_h.Print();
+		printf("fc_G_l: "); fc_G_l.Print();
+		printf("fc_G_h: "); fc_G_h.Print();
+
+		printf("\n");
+		printf("smearing parameters:\n");
 		printf("si_th_x_1arm_L=%E, si_th_x_1arm_R=%E, si_th_x_1arm_unc=%E\n", si_th_x_1arm_L, si_th_x_1arm_R, si_th_x_1arm_unc);
 		printf("si_th_x_2arm=%E, si_th_x_2arm_unc=%E\n", si_th_x_2arm, si_th_x_2arm_unc);
+		printf("si_th_x_LRDiff=%E, si_th_x_LRdiff_unc=%E\n", si_th_x_LRdiff, si_th_x_LRdiff_unc);
 		printf("si_th_y_1arm=%E, si_th_y_1arm_unc=%E\n", si_th_y_1arm, si_th_y_1arm_unc);
 		printf("si_th_y_2arm=%E, si_th_y_2arm_unc=%E\n", si_th_y_2arm, si_th_y_2arm_unc);
-	
+		printf("si_th_y_LRDiff=%E, si_th_y_LRdiff_unc=%E\n", si_th_y_LRdiff, si_th_y_LRdiff_unc);
+		printf("use_resolution_fits = %i\n", use_resolution_fits);
+
 		printf("\n");
+		printf("normalisation parameters:\n");
 		printf("use_3outof4_efficiency_fits = %i\n", use_3outof4_efficiency_fits);
 		printf("use_pileup_efficiency_fits= %i\n", use_pileup_efficiency_fits);
 		printf("inefficiency_3outof4 = %.3f\n", inefficiency_3outof4);

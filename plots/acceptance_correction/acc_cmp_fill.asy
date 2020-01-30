@@ -4,8 +4,8 @@ import pad_layout;
 string top_dir = "../../";
 
 string datasets[] = {
-	//"DS-fill7301/Totem1",
-	"DS-fill7302/Totem1",
+	"DS-fill7301/Totem1",
+	//"DS-fill7302/Totem1",
 };
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
