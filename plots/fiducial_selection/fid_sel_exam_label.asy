@@ -3,7 +3,9 @@ import pad_layout;
 
 string top_dir = "../../";
 
-string dataSets[] = { "DS-fill5317" };
+string dataSets[] = {
+	"DS-fill7301/Totem1",
+};
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
@@ -112,7 +114,7 @@ for (int dsi : dataSets.keys)
 	draw((130, -150)--(cut_th_x_low_bot, -160), magenta, EndArrow);
 	*/
 	
-	limits((-200, -200), (200, 200), Crop);
+	limits((-600, -600), (600, 600), Crop);
 	AttachLegend(dataSets[dsi]);
 }
 

@@ -4,10 +4,8 @@ import pad_layout;
 string topDir = "../../";
 
 string datasets[], dataset_fills[];
-datasets.push("DS-fill5313"); dataset_fills.push("5313");
-datasets.push("DS-fill5314"); dataset_fills.push("5314");
-datasets.push("DS-fill5317"); dataset_fills.push("5317");
-datasets.push("DS-fill5321"); dataset_fills.push("5321");
+datasets.push("DS-fill7301/Totem1"); dataset_fills.push("7301");
+datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
 
 string diagonals[], diagonal_labels[];
 pen diagonal_pens[];
@@ -66,7 +64,7 @@ for (int dsi : datasets.keys)
 			label(format("slope = $%.3f$", a) + format("$\pm %.3f$", a_u), (x, -2));
 		}
 
-		limits((-90, -3), (90, 3), Crop);
+		//limits((-90, -3), (90, 3), Crop);
 	}
 	
 	f_legend = BuildLegend();

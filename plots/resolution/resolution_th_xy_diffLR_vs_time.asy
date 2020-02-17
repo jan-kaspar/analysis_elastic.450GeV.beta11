@@ -15,8 +15,8 @@ diagonals.push("45t_56b"); d_labels.push("45t -- 56b"); d_pens.push(blue);
 
 string quantities[], q_timber[], q_labels[];
 real q_maxs[];
-quantities.push("th_x"); q_timber.push("bd_comb_h"); q_labels.push("\th^*_x"); q_maxs.push(60.);
-quantities.push("th_y"); q_timber.push("bd_comb_v"); q_labels.push("\th^*_y"); q_maxs.push(60.);
+quantities.push("th_x"); q_timber.push("bd_comb_h"); q_labels.push("\th^*_x"); q_maxs.push(100.);
+quantities.push("th_y"); q_timber.push("bd_comb_v"); q_labels.push("\th^*_y"); q_maxs.push(100.);
 
 xSizeDef = 40cm;
 ySizeDef = 6cm;

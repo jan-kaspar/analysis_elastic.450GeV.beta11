@@ -5,7 +5,7 @@ string top_dir = "../../";
 
 string datasets[] = {
 	"DS-fill7301/Totem1",
-	//"DS-fill7302/Totem1",
+	"DS-fill7302/Totem1",
 };
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
@@ -13,10 +13,10 @@ TH2_palette = Gradient(blue, heavygreen, yellow, red);
 //----------------------------------------------------------------------------------------------------
 
 real cut_th_x_low_top = -1000, cut_th_x_high_top = 1000;
-real cut_th_y_low_top = 220, cut_th_y_high_top = +590;
+real cut_th_y_low_top = 240, cut_th_y_high_top = +500;
 
 real cut_th_x_low_bot = -1000, cut_th_x_high_bot = 1000;
-real cut_th_y_low_bot = -220, cut_th_y_high_bot = -590;
+real cut_th_y_low_bot = -220, cut_th_y_high_bot = -430;
 
 void DrawAcceptedArcs(real th)
 {
@@ -65,15 +65,17 @@ for (int dsi : datasets.keys)
 
 	NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", ySize/150*150, ySize);
 	currentpad.xTicks = LeftTicks(200., 100.);
-	//scale(Linear, Linear, Log);
+	scale(Linear, Linear, Log);
 	//TH2_zLabel = "(corrected) events per bin";
 	TH2_paletteBarWidth = 0.05;
 	
 	label("$\th^*\!=$", (50, 0), 0.5W, Fill(white+opacity(0.8)));
+	DrawFullArc(100);
 	DrawFullArc(200);
+	DrawFullArc(300);
 	DrawFullArc(400);
-	DrawFullArc(600);
-	label(rotate(-90)*Label("\SmallerFonts $\rm\mu rad$"), (100, 0), (0., 0), Fill(white+opacity(0.8)));
+	DrawFullArc(500);
+	label(rotate(-90)*Label("\SmallerFonts $\rm\mu rad$"), (380, 0), (0., 0), Fill(white+opacity(0.8)));
 
 	// z scale
 	//TH2_z_min = 5.5;
@@ -98,12 +100,14 @@ for (int dsi : datasets.keys)
 	draw((cut_th_x_high_bot, -200)--(cut_th_x_high_bot, 0), magenta+1pt);
 	*/
 	
+	DrawAcceptedArcs(100);
 	DrawAcceptedArcs(200);
+	DrawAcceptedArcs(300);
 	DrawAcceptedArcs(400);
-	DrawAcceptedArcs(600);
+	DrawAcceptedArcs(500);
 
-	limits((-800, -800), (800, 800), Crop);
+	limits((-600, -600), (600, 600), Crop);
 	AttachLegend(datasets[dsi]);
 }
 
-GShipout("acc_cmp_fill", margin=1mm, hSkip=1mm);
+GShipout(margin=1mm, hSkip=1mm);

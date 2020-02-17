@@ -5,6 +5,7 @@ string top_dir = "../../";
 
 string datasets[] = {
 	"DS-fill7301/Totem1",
+	"DS-fill7302/Totem1",
 };
 
 string diagonals[], diagonal_labels[];
@@ -32,16 +33,16 @@ for (int dsi : datasets.keys)
 	{
 		string f = top_dir+"/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
 
-		TH2_x_min = -600e-6;
-		TH2_x_max = +600e-6;
+		TH2_x_min = -800e-6;
+		TH2_x_max = +800e-6;
 
 		if (diagonals[dgni] == "45b_56t")
 		{
-			TH2_y_min = +100e-6;
-			TH2_y_max = +700e-6;
+			TH2_y_min = +30e-6;
+			TH2_y_max = +550e-6;
 		} else {
-			TH2_y_min = -700e-6;
-			TH2_y_max = -100e-6;
+			TH2_y_min = -550e-6;
+			TH2_y_max = -30e-6;
 		}
 
 		//yTicksDef = RightTicks(1., 0.5);
@@ -70,9 +71,6 @@ for (int dsi : datasets.keys)
 				pair alig = (diagonals[dgni] == "45b_56t") ? NW : SE;
 				label(format("%#.3f", y), (0, y), alig, StdPen(ci+1));
 			}
-
-			RootObject obj = RootGetObject(f, "fiducial cuts/fc_"+cuts[ci]+"_h");
-			draw(scale(1e6, 1e6), obj, "l", StdPen(ci+1));
 		}
 
 		limits((TH2_x_min*1e6, TH2_y_min*1e6), (TH2_x_max*1e6, TH2_y_max*1e6), Crop);

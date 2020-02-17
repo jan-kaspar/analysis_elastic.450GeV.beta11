@@ -5,7 +5,7 @@ string top_dir = "../../";
 
 string datasets[] = {
 	"DS-fill7301/Totem1",
-	//"DS-fill7302/Totem1",
+	"DS-fill7302/Totem1",
 };
 
 string diagonals[], diagonal_labels[];
@@ -29,27 +29,25 @@ for (int dsi : datasets.keys)
 
 		string f = top_dir+"/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
 
-		//TH2_x_min = -100e-6;
-		//TH2_x_max = +100e-6;
-		TH2_x_min = -900e-6;
+		TH2_x_min = -800e-6;
 		TH2_x_max = +800e-6;
 
 		if (diagonals[dgni] == "45b_56t")
 		{
-			TH2_y_min = +100e-6;
-			TH2_y_max = +600e-6;
+			TH2_y_min = +30e-6;
+			TH2_y_max = +550e-6;
 		} else {
-			TH2_y_min = -600e-6;
-			TH2_y_max = -100e-6;
+			TH2_y_min = -550e-6;
+			TH2_y_max = -30e-6;
 		}
 
 		//yTicksDef = RightTicks(1., 0.5);
-		xTicksDef = LeftTicks(200., 100.);
+		xTicksDef = LeftTicks(100., 50.);
 
 		// ----- left arm -----
 
 		NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", axesAbove=true);
-		//scale(Linear, Linear, Log);
+		scale(Linear, Linear, Log);
 		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h_th_y_L_vs_th_x_L"), "def");
 
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_L_l"), "l", black+1pt);
@@ -61,7 +59,7 @@ for (int dsi : datasets.keys)
 		// ----- right arm -----
 
 		NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", axesAbove=true);
-		//scale(Linear, Linear, Log);
+		scale(Linear, Linear, Log);
 		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h_th_y_R_vs_th_x_R"), "def");
 
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_R_l"), "l", black+2pt);
@@ -73,7 +71,7 @@ for (int dsi : datasets.keys)
 		// ----- both arms -----
 
 		NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", axesAbove=true);
-		//scale(Linear, Linear, Log);
+		scale(Linear, Linear, Log);
 		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h_th_y_vs_th_x"), "def");
 
 		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_G_l"), "l", black+2pt);

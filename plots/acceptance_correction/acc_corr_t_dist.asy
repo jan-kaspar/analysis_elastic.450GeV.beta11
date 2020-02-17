@@ -5,7 +5,6 @@ string top_dir = "../../";
 
 string datasets[] = {
 	"DS-fill7301/Totem1",
-	//"DS-fill7302/Totem1",
 };
 
 string diagonals[], diagonal_labels[];
@@ -38,13 +37,16 @@ for (int dsi : datasets.keys)
 		string f = top_dir+"/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
 
 		NewPad("$|t|\ung{GeV^2}$", "$\d N/\d t$");
+		currentpad.xTicks = LeftTicks(0.01, 0.005);
 
 		string baseDir = "acceptance correction/" + binning + "/";
 		draw(RootGetObject(f, baseDir+"/h_t_before"), "vl", blue, "before");
 		draw(RootGetObject(f, baseDir+"/h_t_after"), "vl", red, "after");
 
-		xlimits(0, 0.1, Crop);
+		xlimits(0, 0.10, Crop);
+		
+		AttachLegend();
 	}
 }
 
-GShipout(margin=1mm, hSkip=1mm);
+GShipout(margin=1mm, hSkip=1mm, vSkip=1mm);

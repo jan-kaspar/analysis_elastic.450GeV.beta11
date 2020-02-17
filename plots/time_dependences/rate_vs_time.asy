@@ -58,7 +58,7 @@ for (int dsi : datasets.keys)
 
 	for (int dgni : diagonals.keys)
 	{
-		NewPad("time from 14 Oct 2018 $\ung{h}$", "rate$\ung{Hz}$");
+		NewPad("time from TODO $\ung{h}$", "rate$\ung{Hz}$");
 		//currentpad.yTicks = RightTicks(1., 0.2);
 		real y_min = 0, y_max = 300;
 
@@ -66,7 +66,10 @@ for (int dsi : datasets.keys)
 
 		for (int ti : types.keys)
 		{
-			RootObject hist = RootGetObject(topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root", "metadata/rate cmp|h_timestamp_" + types[ti]);
+			RootObject hist = RootGetObject(topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root", "metadata/rate cmp|h_timestamp_" + types[ti], error=false);
+			if (!hist.valid)
+				continue;
+
 			hist.vExec("Rebin", rebin);
 
 			draw(scale(1./3600, 1./rebin), hist, "vl", t_pens[ti]);

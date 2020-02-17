@@ -5,10 +5,8 @@ include "../run_info.asy";
 string topDir = "../../";
 
 string datasets[], dataset_fills[];
-datasets.push("DS-fill5313"); dataset_fills.push("5313");
-datasets.push("DS-fill5314"); dataset_fills.push("5314");
-datasets.push("DS-fill5317"); dataset_fills.push("5317");
-datasets.push("DS-fill5321"); dataset_fills.push("5321");
+datasets.push("DS-fill7301/Totem1"); dataset_fills.push("7301");
+datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
 
 string diagonals[], diagonal_labels[];
 pen diagonal_pens[];
@@ -30,7 +28,7 @@ xTicksDef = LeftTicks(Step=1, step=0.5);
 
 void SetPadWidth()
 {
-	real factorHoursToSize = 4cm / 3;
+	real factorHoursToSize = 8cm / 3;
 
 	real timespan = currentpicture.userMax2().x - currentpicture.userMin2().x;
 	currentpad.xSize = timespan * factorHoursToSize;
@@ -50,8 +48,8 @@ for (int ai : arms.keys)
 	{
 		NewPad("time $\ung{h}$", "mean of $\th_x^*\ung{\mu rad}$");
 
-		currentpad.yTicks = RightTicks(0.5, 0.1);
-		real y_min = -2, y_max = +2;
+		currentpad.yTicks = RightTicks(10., 5.);
+		real y_min = -50, y_max = +50;
 
 		DrawRunBands(dataset_fills[dsi], y_min, y_max);
 
