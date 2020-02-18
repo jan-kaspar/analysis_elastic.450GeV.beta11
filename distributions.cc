@@ -552,7 +552,7 @@ int main(int argc, char **argv)
 		double q_max = 0.;
 
 		if (i == 1) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1000E-6; y_max = 1000E-6; q_max = 500E-6; }
-		if (i == 2) { x_min = 0E-6; x_max = +1000E-6; y_min = 0E-6; y_max = 1000E-6; q_max = 300E-6; }
+		if (i == 2) { x_min = 0E-6; x_max = +1000E-6; y_min = 0E-6; y_max = 1000E-6; q_max = 600E-6; }
 
 		if (i == 3) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
 		if (i == 4) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }

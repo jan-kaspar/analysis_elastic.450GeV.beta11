@@ -216,19 +216,19 @@ int main(int argc, char **argv)
 		double q_max = 0.;
 
 		if (i == 1) { x_min = -1000E-6; x_max = +1000E-6; y_min = -1000E-6; y_max = 1000E-6; q_max = 500E-6; }
-		if (i == 2) { x_min = 0E-6; x_max = +300E-6; y_min = 0E-6; y_max = 300E-6; q_max = 100E-6; }
+		if (i == 2) { x_min = 0E-6; x_max = +1000E-6; y_min = 0E-6; y_max = 1000E-6; q_max = 600E-6; }
 
 		if (i == 3) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
 		if (i == 4) { x_min = -1000E-6; x_max = +1000E-6; y_min = -15.; y_max = 15.; q_max = 5.; }
 
-		if (i == 5) { x_min = +7.; x_max = +37.; y_min = -10.; y_max = +5.; q_max = 0.5; }
-		if (i == 6) { x_min = -37.; x_max = -7.; y_min = -5.; y_max = +5.; q_max = 0.5; }
+		if (i == 5) { x_min = +0.; x_max = +30.; y_min = -10.; y_max = +5.; q_max = 0.5; }
+		if (i == 6) { x_min = -30.; x_max = -0.; y_min = -5.; y_max = +5.; q_max = 0.5; }
 
-		if (i == 7) { x_min = -1000E-6; x_max = +1000E-6; y_min = -10.; y_max = +10.; q_max = 6.; }
-		if (i == 8) { x_min = -200E-6; x_max = +200E-6; y_min = -100.; y_max = +100.; q_max = 20.0; }
-		
-		if (i == 9) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
-		if (i == 10) { x_min = -15.; x_max = +15.; y_min = -5.; y_max = +5.; q_max = 2.0; }
+		if (i == 7) { x_min = -1000E-6; x_max = +1000E-6; y_min = -5.; y_max = +5.; q_max = 2.; }
+		if (i == 8) { x_min = -1000E-6; x_max = +1000E-6; y_min = -5.; y_max = +5.; q_max = 5.; }
+
+		if (i == 9) { x_min = -10.; x_max = +10.; y_min = -5.; y_max = +5.; q_max = 2.0; }
+		if (i == 10) { x_min = -10.; x_max = +10.; y_min = -5.; y_max = +5.; q_max = 2.0; }
 
 		if ((i == 2 || i == 5 || i == 6) && diagonal == d45t_56b)
 		{
