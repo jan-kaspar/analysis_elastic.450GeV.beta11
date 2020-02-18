@@ -2,13 +2,8 @@ import root;
 import pad_layout;
 
 string datasets[];
-//datasets.push("DS-323893/Totem1");
-datasets.push("DS-323899/Totem1");
-//datasets.push("DS-323907/Totem1");
-//datasets.push("DS-323919/Totem1");
-//datasets.push("DS-323932/Totem1");
-//datasets.push("DS-323933/Totem1");
-//datasets.push("DS-323934/Totem1");
+datasets.push("DS-fill7301/Totem1");
+datasets.push("DS-fill7302/Totem1");
 
 string diagonals[] = { "45b_56t", "45t_56b", "anti_45b_56b", "anti_45t_56t" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot", "45 bot -- 56 bot", "45 top -- 56 top" };
@@ -58,7 +53,7 @@ for (int dsi : datasets.keys)
 
 	//MakeComparison("cuts:2,7,5,6", "discriminator 1: $\De\th_x^*$", 1e6, "\mu rad", "cut 1/h_cq1", 80, 3.0, 20, 10);
 	
-	//MakeComparison("cuts:1,7,5,6", "discriminator 2: $\De\th_y^*$", 1e6, "\mu rad", "cut 2/h_cq2", 15, 0.5, 5, 1);
-		
-	MakeComparison("cuts:1,2,5,6,8,9,10", "discriminator 7: $\De x^*$", 1., "\mu m", "cut 7/h_cq7", xlimit=5., sigma=0.5, xStep=1., xstep=0.2);
+	MakeComparison("cuts:1,5,6,7,8,9,10", "discriminator 2: $\De\th_y^*$", 1e6, "\mu rad", "cut 2/h_cq2", xlimit=600, sigma=45., xStep=200, xstep=100);
+	
+	MakeComparison("cuts:1,2,5,6,8,9,10", "discriminator 7: $\De x^*$", 1., "\mu m", "cut 7/h_cq7", xlimit=1.5, sigma=0.12, xStep=0.5, xstep=0.1);
 }

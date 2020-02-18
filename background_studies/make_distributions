@@ -7,7 +7,7 @@ function RunCompilation()
 {
 	cd ".."
 	./run distributions.cc -no-bckg -no-run "$dataset" || exit 1
-	#./run distributions_anti.cc -no-bckg -no-run "$dataset" || exit 2
+	./run distributions_anti.cc -no-bckg -no-run "$dataset" || exit 2
 	cd - > /dev/null
 }
 
@@ -20,6 +20,20 @@ cut_combinations=(
 	"1,2"
 	"1,2,5"
 	"1,2,5,6"
+	"1,2,5,6,7"
+	"1,2,5,6,7,8"
+	"1,2,5,6,7,8,9"
+	"1,2,5,6,7,8,9,10"
+
+	# cut 2 is used as a benchmarking distribution
+	"1,5"
+	"1,5,6"
+	"1,5,6,7"
+	"1,5,6,7,8"
+	"1,5,6,7,8,9"
+	"1,5,6,7,8,9,10"
+
+	# cut 7 is used as a benchmarking distribution
 	"1,2,5,6,8"
 	"1,2,5,6,8,9"
 	"1,2,5,6,8,9,10"
@@ -43,8 +57,8 @@ function RunCutCombinationReconstructions()
 		../../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_45b_56t" &
 		../../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_45t_56b" &
 
-		#../../../../$dataset/.distributions_anti 45b_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45b_56b" &
-		#../../../../$dataset/.distributions_anti 45t_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45t_56t" &
+		../../../../$dataset/.distributions_anti 45b_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45b_56b" &
+		../../../../$dataset/.distributions_anti 45t_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45t_56t" &
 	
 		cd ".."
 	done
@@ -83,7 +97,7 @@ function RunNSiReconstructions()
 #----------------------------------------------------------------------------------------------------
 
 datasets=(
-	#"DS-fill7301/Totem1"
+	"DS-fill7301/Totem1"
 	"DS-fill7302/Totem1"
 )
 
@@ -100,7 +114,7 @@ do
 
 	RunCutCombinationReconstructions
 
-	#RunNSiReconstructions
+	RunNSiReconstructions
 
 	cd "$cwd"
 done

@@ -30,18 +30,17 @@ void MakeComparison(string quantity, real xscale, string unit, string obj, real 
 			comb_pens[ci], replace(combinations[ci], "_", "\_"));	
 	}
 
-	yaxis(XEquals(-3*sigma, false), dashed);
-	yaxis(XEquals(+3*sigma, false), dashed);
+	yaxis(XEquals(-4*sigma, false), dashed);
+	yaxis(XEquals(+4*sigma, false), dashed);
 
 	xlimits(-xlimit, +xlimit, Crop);
 	AttachLegend(quantity, NW, NE);
-
-	//label("TOTEM preliminary", (0, 1));
 }
 
 //----------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 	
+
 NewPad(false);
 for (int dgi : diagonals.keys)
 	NewPadLabel(dgn_labels[dgi]);
@@ -66,13 +65,12 @@ for (int dsi : datasets.keys)
 		combinations.push("no_cuts"); comb_pens.push(black+2pt);
 		combinations.push("cuts:1"); comb_pens.push(orange);
 		combinations.push("cuts:1,2"); comb_pens.push(cyan);
-		combinations.push("cuts:1,2,5"); comb_pens.push(magenta);
-		combinations.push("cuts:1,2,5,6"); comb_pens.push(gray);
-		combinations.push("cuts:1,2,5,6,8"); comb_pens.push(blue);
-		combinations.push("cuts:1,2,5,6,8,9"); comb_pens.push(heavygreen);
+		combinations.push("cuts:1,2,5,6"); comb_pens.push(magenta);
+		//combinations.push("cuts:1,2,5,6,8"); comb_pens.push(gray);
+		combinations.push("cuts:1,2,5,6,8,9"); comb_pens.push(blue);
 		combinations.push("cuts:1,2,5,6,8,9,10"); comb_pens.push(red+2pt);
 		
-		MakeComparison("$\De^{\rm R-L} x^*$", 1e0, "mm", "cut 7/h_cq7", xlimit=2, sigma=0.12, xStep=0.5, xstep=0.1, combinations, comb_pens);
+		MakeComparison("$\De^{\rm R-L} x^*$", 1e0, "mm", "cut 7/h_cq7", xlimit=1.5, sigma=0.12, xStep=0.5, xstep=0.1, combinations, comb_pens);
 	}
 }
 
