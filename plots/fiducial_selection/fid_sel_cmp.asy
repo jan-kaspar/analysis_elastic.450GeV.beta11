@@ -13,9 +13,10 @@ diagonals.push("45b_56t"); diagonal_labels.push("45 bot -- 56 top");
 diagonals.push("45t_56b"); diagonal_labels.push("45 top -- 56 bot");
 
 string cuts[], cut_labels[];
-cuts.push("L"); cut_labels.push("left arm");
-cuts.push("R"); cut_labels.push("right arm");
-cuts.push("G"); cut_labels.push("global");
+pen cut_pens[];
+cuts.push("L"); cut_labels.push("left arm"); cut_pens.push(red);
+cuts.push("R"); cut_labels.push("right arm"); cut_pens.push(blue+dashed);
+cuts.push("G"); cut_labels.push("global"); cut_pens.push(heavygreen);
 
 xSizeDef = 8cm;
 ySizeDef = 8cm;
@@ -38,11 +39,11 @@ for (int dsi : datasets.keys)
 
 		if (diagonals[dgni] == "45b_56t")
 		{
-			TH2_y_min = +30e-6;
+			TH2_y_min = +100e-6;
 			TH2_y_max = +550e-6;
 		} else {
 			TH2_y_min = -550e-6;
-			TH2_y_max = -30e-6;
+			TH2_y_max = -100e-6;
 		}
 
 		//yTicksDef = RightTicks(1., 0.5);
@@ -52,8 +53,8 @@ for (int dsi : datasets.keys)
 
 		for (int ci : cuts.keys)
 		{
-			RootObject obj = RootGetObject(f, "fiducial cuts/fc_"+cuts[ci]+"_l");
-			draw(scale(1e6, 1e6), obj, "l", StdPen(ci+1), cut_labels[ci]);
+			RootObject obj = RootGetObject(f, "fiducial cuts/fc_"+cuts[ci]);
+			draw(scale(1e6, 1e6), obj, "l", cut_pens[ci], cut_labels[ci]);
 
 			if (cuts[ci] != "G")
 			{
@@ -65,16 +66,18 @@ for (int dsi : datasets.keys)
 
 			if (cuts[ci] == "G")
 			{
+				/*
 				real y = obj.rExec("Eval", 0) * 1e6;
 
 				draw((0, y), mCi+3pt+StdPen(ci+1));
 				pair alig = (diagonals[dgni] == "45b_56t") ? NW : SE;
 				label(format("%#.3f", y), (0, y), alig, StdPen(ci+1));
+				*/
 			}
 		}
 
 		limits((TH2_x_min*1e6, TH2_y_min*1e6), (TH2_x_max*1e6, TH2_y_max*1e6), Crop);
-		AttachLegend(diagonal_labels[dgni], NW, NW);
+		AttachLegend(diagonal_labels[dgni], NW, NE);
 	}
 }
 

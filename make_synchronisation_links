@@ -1,0 +1,20 @@
+#!/bin/bash
+
+for f_ref in ../../beta100/4rp/*.{cc,h}
+do
+	f_loc=${f_ref##*/}
+	f_lnk=${f_loc/./.HighBeta.}
+
+	cmp --silent "$f_ref" "$f_loc"
+	identical="$?"
+
+	echo "* $f_loc ($identical)"
+
+	if [ "$identical" == "0" ]
+	then
+		echo "    files identical, link not made"
+	else
+		echo "    making link"
+		ln -s "$f_ref" "$f_lnk"
+	fi
+done

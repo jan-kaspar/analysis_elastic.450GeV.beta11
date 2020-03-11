@@ -1,5 +1,6 @@
 #include "common_definitions.h"
 #include "common_algorithms.h"
+#include "AcceptanceCalculator.h"
 #include "parameters.h"
 #include "common.h"
 
@@ -154,6 +155,10 @@ int main(int argc, char **argv)
 	vector<string> binnings;
 	binnings.push_back("ub");
 	binnings.push_back("eb");
+
+	// initialise acceptance calculation
+	AcceptanceCalculator accCalc;
+	accCalc.Init(th_y_sign, anal);
 
 	// get input
 	TChain *ch_in = new TChain("distilled");
@@ -328,12 +333,8 @@ int main(int argc, char **argv)
 	{
 		ch_in->GetEntry(ev_idx);
 
-		// remove troublesome runs
-		if (SkipRun(ev.run_num))
-			continue;
-
-		// check time - selected?
-		if (anal.SkipTime(ev.timestamp))
+		// check whether the event is to be skipped
+		if (anal.SkipEvent(ev.run_num, ev.lumi_section, ev.timestamp, ev.bunch_num))
 			continue;
 
 		// diagonal cut
@@ -342,13 +343,6 @@ int main(int argc, char **argv)
 			continue;
 		
 		h_timestamp_dgn->Fill(ev.timestamp);
-
-		// select the elastic-trigger bunch(es) only
-		if (SkipBunch(ev.run_num, ev.bunch_num))
-			continue;
-
-		// zero bias event?
-		//bool zero_bias_event = IsZeroBias(ev.trigger_bits, ev.run_num, ev.event_num);
 
 		// apply fine alignment
 		HitData h_al = ev.h;
@@ -478,8 +472,7 @@ int main(int argc, char **argv)
 
 		// calculate acceptance divergence correction
 		double phi_corr = 0., div_corr = 0.;
-		
-		bool skip = CalculateAcceptanceCorrections(th_y_sign, k, anal, phi_corr, div_corr);
+		bool skip = accCalc.Calculate(k, phi_corr, div_corr);
 
 		for (unsigned int bi = 0; bi < binnings.size(); bi++)
 		{

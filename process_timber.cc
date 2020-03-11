@@ -85,11 +85,11 @@ void ProcessCombined(TGraph *g_em_b1, TGraph *g_em_b2, const string &beam, const
 
 		const double bd1 = sqrt(emit1 / ga / beta_st);
 		const double bd2 = sqrt(emit2 / ga / beta_st);
-		const double bd = sqrt(bd1*bd1 + bd2*bd2);
+		const double bd = sqrt(bd1*bd1 + bd2*bd2); // corresponds to RMS of LR-diff of th*_xy
 
 		const double vtx1 = sqrt(emit1 / ga * beta_st);
 		const double vtx2 = sqrt(emit2 / ga * beta_st);
-		const double vtx = sqrt(vtx1*vtx1 + vtx2*vtx2) / 2.;
+		const double vtx = sqrt(vtx1*vtx1 + vtx2*vtx2) / 2.; // corresponds to RMS of xy^* (perfectly reconstructed)
 
 		int idx = g_bd->GetN();
 		//g_emit->SetPoint(idx, time, emit);

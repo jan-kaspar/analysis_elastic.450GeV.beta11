@@ -1,6 +1,6 @@
 void Analysis::BuildCuts()
 {
-	N_cuts = 10;
+	N_cuts = 11;
 
 	// cut structure:
 	//	| a*qa + b*qb + c| < n_si * si
@@ -74,6 +74,13 @@ void Analysis::BuildCuts()
 	ccc[10] = cut10_c;
 	csi[10] = cut10_si;
 	cuts.push_back(10);
+
+	// fake cut, only for tests
+	cqaN[11] = "vtx_{x}"; cqbN[11] = "#theta_{x}^{R} - #theta_{x}^{L}";
+	cca[11] = -5.24893e-05;
+	ccb[11] = 1.;
+	ccc[11] = 0.;
+	csi[11] = 34E-6;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -94,6 +101,8 @@ bool Analysis::EvaluateCuts(const HitData & h, const Kinematics &k, CutData &cd)
 
 	cd.cqa[9] =  h.R_2_F.x;	cd.cqb[9] =  h.R_2_F.x - h.R_1_F.x;
 	cd.cqa[10] = h.L_2_F.x;	cd.cqb[10] = h.L_2_F.x - h.L_1_F.x;
+
+	cd.cqa[11] = k.vtx_x;	cd.cqb[11] = k.th_x_R - k.th_x_L;
 
 	for (unsigned int ci = 1; ci <= N_cuts; ++ci)
 	{

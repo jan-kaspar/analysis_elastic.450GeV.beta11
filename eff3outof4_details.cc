@@ -414,13 +414,13 @@ int main(int argc, char **argv)
 		//if (ev_count > 10000)
 		//	break;
 
-		const unsigned int ev_run = event.id().run();
-		const unsigned int ev_bunch = event.bunchCrossing();
-		//const unsigned int ev_timestamp = event.time().unixTime() - timestamp0;
-		//const unsigned int periodIdx = FillPeriod(ev_run, ev_timestamp);
+		const unsigned int ev_run_num = event.id().run();
+		const unsigned int ev_lumi_section = event.id().luminosityBlock();
+		const unsigned int ev_timestamp = event.time().unixTime() - timestamp0;
+		const unsigned int ev_bunch_num = event.bunchCrossing();
 
-		// select bunches
-		if (SkipBunch(ev_run, ev_bunch))
+		// check whether the event is to be skipped
+		if (anal.SkipEvent(ev_run_num, ev_lumi_section, ev_timestamp, ev_bunch_num))
 			continue;
 
 		// evaluate flags

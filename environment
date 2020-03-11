@@ -18,6 +18,8 @@ function CalculatePrompt()
 PROMPT_COMMAND="CalculatePrompt"
 export PS1="\[\033[00;34m\]${compName} \[\033[00;33m\]${CMSSW_VERSION}\[\033[00;32m\] \$cwd> \[\033[00m\]"
 
+export GSL_DIR="/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/gsl/2.2.1-cms"
+
 cd "$cwd"
 
 echo "CMSSW_BASE=$CMSSW_BASE"

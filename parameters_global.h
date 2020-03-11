@@ -14,8 +14,6 @@ Environment env;
 string unsmearing_file;
 string unsmearing_object;
 
-string luminosity_data_file;
-
 //----------------------------------------------------------------------------------------------------
 
 void Init_global()
@@ -23,8 +21,17 @@ void Init_global()
 	// list of (sub-)directories with distilled ntuples
 	distilledNtuples.push_back(".");
 
-	// selection of bunches
-	keepAllBunches = true;
+	// input selection
+	/*
+	anal.excl_runs.push_back(324467);
+
+	anal.excl_lsIntervals[324462] = { {94, 338} };
+	anal.excl_lsIntervals[324532] = { {399, 520} };
+	anal.excl_lsIntervals[324536] = { {360, 509} };
+
+	anal.excl_timeIntervals.push_back({112100, 112400});
+	anal.excl_timeIntervals.push_back({115000, 117000});
+	*/
 
 	// environment settings
 	env.InitNominal();
@@ -43,17 +50,17 @@ void Init_global()
 	anal.si_th_y_LRdiff_unc = -999.;
 
 	anal.si_th_y_2arm = 0.;
-	anal.si_th_y_2arm_unc = 0E-6;
+	anal.si_th_y_2arm_unc = -999.;
 
 	anal.si_th_x_1arm_L = 0E-6;
 	anal.si_th_x_1arm_R = anal.si_th_x_1arm_L;
-	anal.si_th_x_1arm_unc = 0E-6;
+	anal.si_th_x_1arm_unc = -999.;
 
 	anal.si_th_x_LRdiff = anal.si_th_x_1arm_L * sqrt(2.);
 	anal.si_th_x_LRdiff_unc = -999.;
 
 	anal.si_th_x_2arm = 0E-6;
-	anal.si_th_x_2arm_unc = 0E-6;
+	anal.si_th_x_2arm_unc = -999.;
 
 	// analysis settings
 	anal.use_resolution_fits = true;
@@ -71,7 +78,7 @@ void Init_global()
 
 	anal.t_min_fit = 0.; // TODO
 
-	anal.alignment_t0 = 0.;		// beginning of the first time-slice
+	anal.alignment_t0 = 0.;	// beginning of the first time-slice
 	anal.alignment_ts = 30.*60.;	// time-slice in s
 
 	anal.alignmentYRanges["L_2_F"] = Analysis::AlignmentYRange(-11.5, -7.0, +6.5, +11.0);
@@ -79,16 +86,8 @@ void Init_global()
 	anal.alignmentYRanges["R_1_F"] = Analysis::AlignmentYRange(-9.5, -5.0, +5.0, +9.5);
 	anal.alignmentYRanges["R_2_F"] = Analysis::AlignmentYRange(-9.5, -5.0, +5.0, +9.5);
 
-#if 0
-	// TODO
 	unsmearing_file = "";	// diagonal dependent
-	//unsmearing_object = "cf,<binning>/exp3/corr_final";
-	//unsmearing_object = "cf,<binning>/exp3+exp4/corr_final";
-	unsmearing_object = "ff";
-
-	// TODO
-	luminosity_data_file = "../fill_3549_lumiCalc2.py_V04-02-04_lumibylsXing.csv";
-#endif
+	unsmearing_object = "fit-1/<binning>";
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -122,22 +121,14 @@ void Init_global_45b_56t()
 	anal.cut9_a = -0.499; anal.cut9_c = -0.07; anal.cut9_si = 0.2;
 	anal.cut10_a = -0.564; anal.cut10_c = +0.13; anal.cut10_si = 0.25;
 
-	anal.fc_L_l = FiducialCut(220E-6, -400E-6, -0.15, +200E-6, +0.15);
-	anal.fc_L_h = FiducialCut(480E-6, -400E-6, +4., +400E-6, -4.);
+	anal.fc_L = FiducialCut({{-400E-6, 200E-6}, {+400E-6, 200E-6}, {+450E-6, 250E-6}, {+400E-6, 510E-6}, {-400E-6, 510E-6}, {-450E-6, 250E-6}});
+	anal.fc_R = FiducialCut({{-400E-6, 200E-6}, {+400E-6, 200E-6}, {+450E-6, 250E-6}, {+400E-6, 510E-6}, {-400E-6, 510E-6}, {-450E-6, 250E-6}});
+	anal.fc_G = FiducialCut({{-400E-6, 210E-6}, {+400E-6, 210E-6}, {+440E-6, 250E-6}, {+400E-6, 500E-6}, {-400E-6, 500E-6}, {-440E-6, 250E-6}});
 
-	anal.fc_R_l = FiducialCut(220E-6, -400E-6, -0.15, +200E-6, +0.15);
-	anal.fc_R_h = FiducialCut(480E-6, -400E-6, +4., +400E-6, -4.);
-
-	anal.fc_G_l = FiducialCut(240E-6, -400E-6, -0.15, +200E-6, +0.15);
-	anal.fc_G_h = FiducialCut(500E-6, -400E-6, +4., +400E-6, -4.);
-
-	// TODO
-	//unsmearing_file = "unfolding_fit_45b_56t_old.root";
+	unsmearing_file = "unfolding_cf_ni_45b_56t.root";
 
 	anal.inefficiency_3outof4 = 0.0; // TODO
 	anal.inefficiency_pile_up = 0.0; // TODO
-
-	anal.L_int = 1.;	// TODO	
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -171,20 +162,12 @@ void Init_global_45t_56b()
 	anal.cut9_a = -0.491; anal.cut9_c = -0.05; anal.cut9_si = 0.20;
 	anal.cut10_a = -0.541; anal.cut10_c = +0.12; anal.cut10_si = 0.25;
 
-	anal.fc_L_l = FiducialCut(200E-6, -400E-6, -0.15, +300E-6, +0.15);
-	anal.fc_L_h = FiducialCut(450E-6, -350E-6, +2.00, +350E-6, -2.00);
+	anal.fc_L = FiducialCut({{-400E-6, 200E-6}, {+400E-6, 200E-6}, {+450E-6, 250E-6}, {+400E-6, 510E-6}, {-400E-6, 510E-6}, {-450E-6, 250E-6}});
+	anal.fc_R = FiducialCut({{-400E-6, 200E-6}, {+400E-6, 200E-6}, {+450E-6, 250E-6}, {+400E-6, 510E-6}, {-400E-6, 510E-6}, {-450E-6, 250E-6}});
+	anal.fc_G = FiducialCut({{-400E-6, 210E-6}, {+400E-6, 210E-6}, {+440E-6, 250E-6}, {+400E-6, 500E-6}, {-400E-6, 500E-6}, {-440E-6, 250E-6}});
 
-	anal.fc_R_l = FiducialCut(200E-6, -400E-6, -0.15, +300E-6, +0.15);
-	anal.fc_R_h = FiducialCut(450E-6, -350E-6, +2.00, +350E-6, -2.00);
-
-	anal.fc_G_l = FiducialCut(220E-6, -400E-6, -0.15, +200E-6, +0.15);
-	anal.fc_G_h = FiducialCut(430E-6, -350E-6, +2.00, +350E-6, -2.00);
-
-	// TODO
-	//unsmearing_file = "unfolding_fit_45b_56t_old.root";
+	unsmearing_file = "unfolding_cf_ni_45t_56b.root";
 
 	anal.inefficiency_3outof4 = 0.0; // TODO
 	anal.inefficiency_pile_up = 0.0; // TODO
-
-	anal.L_int = 1.;	// TODO	
 }

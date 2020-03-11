@@ -90,25 +90,16 @@ double AcceptanceCalculator::dist_d_y(double d_y) const
 
 double AcceptanceCalculator::Condition(double th_x_p, double d_x, double th_y_p, double d_y) const
 {
-	double th_x_p_R = th_x_p + d_x/2.;
-	double th_x_p_L = th_x_p - d_x/2.;
+	const double th_x_p_R = th_x_p + d_x/2.;
+	const double th_x_p_L = th_x_p - d_x/2.;
 
-	double th_y_p_R = th_y_p + d_y/2.;
-	double th_y_p_L = th_y_p - d_y/2.;
+	const double th_y_p_R = th_y_p + d_y/2.;
+	const double th_y_p_L = th_y_p - d_y/2.;
 
-	double th_y_L_cut_l = anal.fc_L_l.GetThYLimit(th_x_p_L);
-	double th_y_L_cut_h = anal.fc_L_h.GetThYLimit(th_x_p_L);
+	if (anal.fc_L.Satisfied(th_x_p_L, th_y_p_L) && anal.fc_R.Satisfied(th_x_p_R, th_y_p_R))
+		return 1.;
 
-	double th_y_R_cut_l = anal.fc_R_l.GetThYLimit(th_x_p_R);
-	double th_y_R_cut_h = anal.fc_R_h.GetThYLimit(th_x_p_R);
-
-	if (th_y_p_L < th_y_L_cut_l || th_y_p_L > th_y_L_cut_h)
-		return 0.;
-
-	if (th_y_p_R < th_y_R_cut_l || th_y_p_R > th_y_R_cut_h)
-		return 0.;
-
-	return 1.;
+	return 0;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -124,26 +115,24 @@ double AcceptanceCalculator::IntegOverDY(double d_y, double *, const void* obj)
 
 double AcceptanceCalculator::IntegOverDX(double x, double *par, const void* obj)
 {
-	double &d_x = x;
+	const double &d_x = x;
 
-	double &th_x_p = par[0];
-	double &th_y_p = par[1];
+	const double &th_x_p = par[0];
+	const double &th_y_p = par[1];
 
 	AcceptanceCalculator *ac = (AcceptanceCalculator *) obj;
-
-	double I = 0.;
 
 	if (ac->debug)
 		printf("    d_x = %E\n", d_x);
 
-	double th_x_p_R = th_x_p + d_x/2.;
-	double th_x_p_L = th_x_p - d_x/2.;
+	const double th_x_p_R = th_x_p + d_x/2.;
+	const double th_x_p_L = th_x_p - d_x/2.;
 
-	double th_y_L_cut_l = ac->anal.fc_L_l.GetThYLimit(th_x_p_L);
-	double th_y_L_cut_h = ac->anal.fc_L_h.GetThYLimit(th_x_p_L);
+	double th_y_L_cut_l, th_y_L_cut_h;
+	ac->anal.fc_L.GetThYRange(th_x_p_L, th_y_L_cut_l, th_y_L_cut_h);
 
-	double th_y_R_cut_l = ac->anal.fc_R_l.GetThYLimit(th_x_p_R);
-	double th_y_R_cut_h = ac->anal.fc_R_h.GetThYLimit(th_x_p_R);
+	double th_y_R_cut_l, th_y_R_cut_h;
+	ac->anal.fc_R.GetThYRange(th_x_p_R, th_y_R_cut_l, th_y_R_cut_h);
 
 	if (ac->debug)
 		printf("         th_y_L_cut_l = %E, th_y_R_cut_l = %E\n", th_y_L_cut_l, th_y_R_cut_l);
@@ -155,6 +144,8 @@ double AcceptanceCalculator::IntegOverDX(double x, double *par, const void* obj)
 
 	if (d_y_min >= d_y_max)
 		return 0;
+
+	double I = 0.;
 
 	if (ac->gaussianOptimisation)
 	{
@@ -186,71 +177,24 @@ double AcceptanceCalculator::SmearingFactor(double th_x_p, double th_y_p) const
 
 bool AcceptanceCalculator::SmearingComponentCut(double th_x_L, double th_x_R, double th_y_L, double th_y_R) const
 {
-	double th_y_L_cut_l = anal.fc_L_l.GetThYLimit(th_x_L);
-	double th_y_L_cut_h = anal.fc_L_h.GetThYLimit(th_x_L);
-
-	double th_y_R_cut_l = anal.fc_R_l.GetThYLimit(th_x_R);
-	double th_y_R_cut_h = anal.fc_R_h.GetThYLimit(th_x_R);
-
-	if (debug)
-	{
-		printf("th_y_L_cut_l = %E, th_y_L_cut_h = %E\n", th_y_L_cut_l, th_y_L_cut_h);
-		printf("th_y_R_cut_l = %E, th_y_R_cut_h = %E\n", th_y_R_cut_l, th_y_R_cut_h);
-	}
-
-	if ((th_y_sign * th_y_L < th_y_L_cut_l) || (th_y_sign * th_y_R < th_y_R_cut_l)
-		|| (th_y_sign * th_y_L > th_y_L_cut_h) || (th_y_sign * th_y_R > th_y_R_cut_h))
-		return true;
-
-	return false;
+	return (!anal.fc_L.Satisfied(th_x_L, th_y_sign * th_y_L) || !anal.fc_R.Satisfied(th_x_R, th_y_sign * th_y_R));
 }
 
 //----------------------------------------------------------------------------------------------------
 
 bool AcceptanceCalculator::PhiComponentCut(double th_x, double th_y) const
 {
-	double th_y_G_cut_l = anal.fc_G_l.GetThYLimit(th_x);
-	double th_y_G_cut_h = anal.fc_G_h.GetThYLimit(th_x);
-
-	if ((th_y_sign * th_y < th_y_G_cut_l) || (th_y_sign * th_y > th_y_G_cut_h))
-		return true;
-
-	return false;
+	return (!anal.fc_G.Satisfied(th_x, th_y_sign * th_y));
 }
 
 //----------------------------------------------------------------------------------------------------
 
 double AcceptanceCalculator::PhiFactor(double th) const
 {
-	// get all intersections
-	set<double> phis;
-
-	for (const auto &phi : anal.fc_G_l.GetIntersectionPhis(th))
-		phis.insert(phi);
-
-	for (const auto &phi : anal.fc_G_h.GetIntersectionPhis(th))
-		phis.insert(phi);
-
-	// the number of intersections must be even
-	if ((phis.size() % 2) == 1)
-	{
-		printf("ERROR: odd number of intersections in acceptance calculation\n");
-	}
-
-	// no intersection => no acceptances
-	if (phis.size() == 0)
-		return true;
-
 	// calculate arc-length in within acceptance
 	double phiSum = 0.;
-	for (set<double>::iterator it = phis.begin(); it != phis.end(); ++it)
-	{
-		double phi_start = *it;
-		++it;
-		double phi_end = *it;
-
-		phiSum += phi_end - phi_start;
-	}
+	for (const auto &segment : anal.fc_G.GetIntersectionPhis(th))
+		phiSum += segment.y - segment.x;
 
 	return 2. * M_PI / phiSum;
 }

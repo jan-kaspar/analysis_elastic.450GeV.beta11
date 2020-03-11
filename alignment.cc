@@ -8,6 +8,7 @@
 #include "TGraph.h"
 #include "TGraphErrors.h"
 #include "TH1D.h"
+#include "TH2D.h"
 #include "TF1.h"
 #include "TMath.h"
 #include "TProfile.h"
@@ -43,6 +44,104 @@ struct result
 };
 
 //----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+
+TF1 *f_gauss = NULL;
+
+void DoHorizontalProfileMax(TGraph *g_t, TGraph *g_b,
+		double y_min_top, double y_min_bot, double y_max_top, double y_max_bot,
+		map<string, map<signed int, result> > &results, signed int period)
+{
+	printf(">> DoHorizontalProfileMax\n");
+
+	TGraphErrors *g_x_max_vs_y = new TGraphErrors();
+
+	TH2D *h2_y_vs_x = new TH2D("", ";x;y", 100, -4., +4., 100, -25., +25.);
+	bool first = true;
+
+	for (double y_min = -11.; y_min < +11.; y_min += 0.5)
+	{
+		const double y_max = y_min + 0.5;
+
+		char buf[100];
+		sprintf(buf, "h_x_%+02.1f_%+02.1f", y_min, y_max);
+		TH1 *h_x = new TH1D(buf, ";x", 100, -10., +10.);
+
+		for (const auto g : { g_t, g_b })
+		{
+			for (int i = 0; i < g->GetN(); i++)
+			{
+				double x, y;
+				g->GetPoint(i, x, y);
+
+				bool inTop = (y_min_top < y && y < y_max_top);
+				bool inBot = (y_min_bot < y && y < y_max_bot);
+				if (! (inTop || inBot))
+					continue;
+
+				if (y >= y_min && y < y_max)
+					h_x->Fill(x);
+
+				if (first)
+					h2_y_vs_x->Fill(x, y);
+			}
+		}
+
+		first = false;
+
+		if (h_x->GetEntries() < 800)
+		{
+			delete h_x;
+			continue;
+		}
+
+		// rough estimate of maximum
+		double x_max = 0., v_max = -1.;
+		for (int bi = 1; bi <= h_x->GetNbinsX(); ++bi)
+		{
+			const double x = h_x->GetBinCenter(bi);
+			const double v = h_x->GetBinContent(bi);
+
+			if (v > v_max)
+			{
+				x_max = x;
+				v_max = v;
+			}
+		}
+
+		//printf("%f, %f : x_max = %f, v_max = %f\n", y_min, y_max, x_max, v_max);
+
+		// maximum fit
+		f_gauss->SetParameters(v_max, x_max, 3.0);
+		f_gauss->FixParameter(0, v_max);
+		f_gauss->FixParameter(1, x_max);
+		h_x->Fit(f_gauss, "Q", "", -2., +2.);
+		f_gauss->ReleaseParameter(0);
+		f_gauss->ReleaseParameter(1);
+		h_x->Fit(f_gauss, "Q", "", -2., +2.);
+
+		h_x->Write();
+
+		// add point
+		int idx = g_x_max_vs_y->GetN();
+		g_x_max_vs_y->SetPoint(idx, (y_max + y_min)/2., f_gauss->GetParameter(1));
+		g_x_max_vs_y->SetPointError(idx, (y_max - y_min)/2., f_gauss->GetParError(1));
+	}
+
+	h2_y_vs_x->Write("h2_y_vs_x");
+
+	// fit
+	TF1 *ff = new TF1("ff", "[0] + x*[1]");
+	g_x_max_vs_y->Fit(ff, "Q", "");
+	g_x_max_vs_y->Write("g_x_max_vs_y");
+
+	printf("\ta = %.2f +- %.2f mrad\n", ff->GetParameter(1)*1E3, ff->GetParError(1)*1E3);
+	printf("\tb = %.1f +- %.1f um\n", ff->GetParameter(0)*1E3, ff->GetParError(0)*1E3);
+
+	results["a_pm"][period] = result(ff->GetParameter(1)*1E3, ff->GetParError(1)*1E3);
+	results["b_pm"][period] = result(ff->GetParameter(0)*1E3, ff->GetParError(0)*1E3);
+}
+
 //----------------------------------------------------------------------------------------------------
 
 void DoHorizontalProfile(TGraph *g_t, TGraph *g_b,
@@ -233,7 +332,7 @@ void DoHorizontalGraphFit(TGraph *g_t, TGraph *g_b,
 
 //----------------------------------------------------------------------------------------------------
 
-void DoHorizontalAlignment(TGraph *g_t, TGraph *g_b, const Analysis::AlignmentYRange &r, 
+void DoHorizontalAlignment(TGraph *g_t, TGraph *g_b, const Analysis::AlignmentYRange &r, const string &unit,
 	map<string, map<signed int, result> > &results, signed int period)
 {
 	printf(">> DoHorizontalAlignment\n");
@@ -246,11 +345,23 @@ void DoHorizontalAlignment(TGraph *g_t, TGraph *g_b, const Analysis::AlignmentYR
 	gDirectory = baseDir->mkdir("horizontal profile");
 	DoHorizontalProfile(g_t, g_b, r.top_min, r.bot_min, r.top_max, r.bot_max, results, period);
 
+	gDirectory = baseDir->mkdir("horizontal profile max");
+	// this method can profit from a little wider range
+	Analysis::AlignmentYRange r_pm = r;
+	if (unit == "L_2_F") { r_pm.bot_max = -6.0; r_pm.top_min = +6.0; }
+	if (unit == "L_1_F") { r_pm.bot_max = -5.5; r_pm.top_min = +5.5; }
+	if (unit == "R_1_F") { r_pm.bot_max = -5.5; r_pm.top_min = +5.5; }
+	if (unit == "R_2_F") { r_pm.bot_max = -6.0; r_pm.top_min = +6.0; }
+	DoHorizontalProfileMax(g_t, g_b, r_pm.top_min, r_pm.bot_min, r_pm.top_max, r_pm.bot_max, results, period);
+
 	gDirectory = baseDir->mkdir("horizontal graph fit");
 	DoHorizontalGraphFit(g_t, g_b, r.top_min, r.bot_min, r.top_max, r.bot_max, results, period);
 	
-	results["a"][period] = result::Combine(results["a_p"][period], results["a_g"][period]);
-	results["b"][period] = result::Combine(results["b_p"][period], results["b_g"][period]);
+	//results["a"][period] = result::Combine(results["a_p"][period], results["a_g"][period]);
+	//results["b"][period] = result::Combine(results["b_p"][period], results["b_g"][period]);
+
+	results["a"][period] = results["a_pm"][period];
+	results["b"][period] = results["b_pm"][period];
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -754,8 +865,12 @@ int main(int argc, char **argv)
 	// prepare output
 	TFile *outF = new TFile("alignment.root", "recreate");
 
+	// initialisations
 	char buf[1000];
 
+	f_gauss = new TF1("f_gauss", "[0] * exp(- (x-[1])*(x-[1]) / 2 / [2]/[2])");
+
+	// configuration
 	vector<string> units;
 	vector<double> deYExp;	// expected value of de_y in mm
 	units.push_back("L_2_F"); deYExp.push_back(+0.);
@@ -822,7 +937,7 @@ int main(int argc, char **argv)
 			TDirectory *unitDir = perDir->mkdir(buf);
 			
 			gDirectory = unitDir->mkdir("horizontal");
-			DoHorizontalAlignment(g_t, g_b, r, results[units[ui]], periods[pi]);
+			DoHorizontalAlignment(g_t, g_b, r, units[ui], results[units[ui]], periods[pi]);
 			
 			gDirectory = unitDir->mkdir("vertical");
 			DoVerticalAlignment(g_t, gw_t, g_b, gw_b, r, deYExp[ui], results[units[ui]], periods[pi]);
