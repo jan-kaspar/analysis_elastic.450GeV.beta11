@@ -47,24 +47,23 @@ void Init_global()
 	anal.t_min_full = 0.; anal.t_max_full = 0.3;
 
 	// approximate (time independent) resolutions
-	// TODO
-	anal.si_th_y_1arm = 15.7E-6;
+	anal.si_th_y_1arm = 32E-6;
 	anal.si_th_y_1arm_unc = 0.;
 
 	anal.si_th_y_LRdiff = anal.si_th_y_1arm * sqrt(2.);
 	anal.si_th_y_LRdiff_unc = -999.;
 
-	anal.si_th_y_2arm = 0.;
+	anal.si_th_y_2arm = anal.si_th_y_1arm / sqrt(2.);
 	anal.si_th_y_2arm_unc = -999.;
 
-	anal.si_th_x_1arm_L = 0E-6;
+	anal.si_th_x_1arm_L = 37E-6;
 	anal.si_th_x_1arm_R = anal.si_th_x_1arm_L;
 	anal.si_th_x_1arm_unc = -999.;
 
 	anal.si_th_x_LRdiff = anal.si_th_x_1arm_L * sqrt(2.);
 	anal.si_th_x_LRdiff_unc = -999.;
 
-	anal.si_th_x_2arm = 0E-6;
+	anal.si_th_x_2arm = anal.si_th_x_1arm_L / sqrt(2.);
 	anal.si_th_x_2arm_unc = -999.;
 
 	// analysis settings
