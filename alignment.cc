@@ -59,7 +59,7 @@ void DoHorizontalProfileMax(TGraph *g_t, TGraph *g_b,
 	TH2D *h2_y_vs_x = new TH2D("", ";x;y", 100, -4., +4., 100, -25., +25.);
 	bool first = true;
 
-	for (double y_min = -11.; y_min < +11.; y_min += 0.5)
+	for (double y_min = -15.; y_min < +15.; y_min += 0.5)
 	{
 		const double y_max = y_min + 0.5;
 
@@ -115,10 +115,21 @@ void DoHorizontalProfileMax(TGraph *g_t, TGraph *g_b,
 		f_gauss->SetParameters(v_max, x_max, 3.0);
 		f_gauss->FixParameter(0, v_max);
 		f_gauss->FixParameter(1, x_max);
-		h_x->Fit(f_gauss, "Q", "", -2., +2.);
+		h_x->Fit(f_gauss, "Q", "", -2.5, +2.5);
+
 		f_gauss->ReleaseParameter(0);
 		f_gauss->ReleaseParameter(1);
-		h_x->Fit(f_gauss, "Q", "", -2., +2.);
+		h_x->Fit(f_gauss, "Q", "", -2.5, +2.5);
+
+		const double x_mu = f_gauss->GetParameter(1);
+		double x_si = fabs(f_gauss->GetParameter(2));
+		if (x_si > 1.5)
+			x_si = 1.5;
+		const double x_lim_min = x_mu - 1. * x_si;
+		const double x_lim_max = x_mu + 1. * x_si;
+
+		h_x->Fit(f_gauss, "Q", "", x_lim_min, x_lim_max);
+		h_x->Fit(f_gauss, "Q", "", x_lim_min, x_lim_max);
 
 		h_x->Write();
 
@@ -348,10 +359,10 @@ void DoHorizontalAlignment(TGraph *g_t, TGraph *g_b, const Analysis::AlignmentYR
 	gDirectory = baseDir->mkdir("horizontal profile max");
 	// this method can profit from a little wider range
 	Analysis::AlignmentYRange r_pm = r;
-	if (unit == "L_2_F") { r_pm.bot_max = -6.0; r_pm.top_min = +6.0; }
-	if (unit == "L_1_F") { r_pm.bot_max = -5.5; r_pm.top_min = +5.5; }
-	if (unit == "R_1_F") { r_pm.bot_max = -5.5; r_pm.top_min = +5.5; }
-	if (unit == "R_2_F") { r_pm.bot_max = -6.0; r_pm.top_min = +6.0; }
+	if (unit == "L_2_F") { r_pm.bot_max = -4.0; r_pm.top_min = +4.5; }
+	if (unit == "L_1_F") { r_pm.bot_max = -4.5; r_pm.top_min = +4.0; }
+	if (unit == "R_1_F") { r_pm.bot_max = -4.0; r_pm.top_min = +4.0; }
+	if (unit == "R_2_F") { r_pm.bot_max = -4.0; r_pm.top_min = +4.0; }
 	DoHorizontalProfileMax(g_t, g_b, r_pm.top_min, r_pm.bot_min, r_pm.top_max, r_pm.bot_max, results, period);
 
 	gDirectory = baseDir->mkdir("horizontal graph fit");
