@@ -3,6 +3,8 @@
 *.root
 *.log*
 *.pdf
+*.out
 .*
+*.HighBeta.*
 
 !.gitignore
