@@ -6,7 +6,7 @@ string topDir = "../../";
 
 string datasets[], dataset_fills[];
 datasets.push("DS-fill7301/Totem1"); dataset_fills.push("7301");
-datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
+//datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
 
 string diagonals[], diagonal_labels[];
 pen diagonal_pens[];

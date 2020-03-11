@@ -5,7 +5,7 @@ string topDir = "../../";
 
 string datasets[], dataset_fills[];
 datasets.push("DS-fill7301/Totem1"); dataset_fills.push("7301");
-datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
+//datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
 
 string diagonals[], diagonal_labels[];
 pen diagonal_pens[];
@@ -20,7 +20,7 @@ arms.push(""); arm_ss.push(""); arm_labels.push("double arm");
 xSizeDef = 12cm;
 //xTicksDef = LeftTicks(Step=1, step=0.5);
 
-//TGraph_errorBar = None;
+TGraph_errorBar = None;
 
 //----------------------------------------------------------------------------------------------------
 
@@ -44,27 +44,23 @@ for (int dsi : datasets.keys)
 
 	for (int ai : arms.keys)
 	{
-		NewPad("$\th_y^{*"+arm_ss[ai]+"}\ung{\mu rad}$", "mean of~$\th_x^{*"+arm_ss[ai]+"}$");
+		NewPad("$\th_y^{*"+arm_ss[ai]+"}\ung{\mu rad}$", "mode of~$\th_x^{*"+arm_ss[ai]+"}$");
 		for (int dgni : diagonals.keys)
 		{
 			TF1_x_min = -inf;
 			TF1_x_max = +inf;
 
+			pen p = StdPen(dgni+1);
+
 			string f = topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root";
-			
-			draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/p_th_x"+arms[ai]+"_vs_th_y"+arms[ai]),
-				"eb,d0", StdPen(dgni+1), diagonal_labels[dgni]);
-			RootObject fit = RootGetObject(f, "selected - angles/p_th_x"+arms[ai]+"_vs_th_y"+arms[ai]+"|pol1");
-			draw(scale(1e6, 1e6), fit, black+dashed, (dgni == 0) ? "single-RP fit" : "");
-	
-			real a = fit.rExec("GetParameter", 1);
-			real a_u = fit.rExec("GetParError", 1);
-	
-			real x = (dgni == 0) ? +60 : -60;
-			label(format("slope = $%.3f$", a) + format("$\pm %.3f$", a_u), (x, -2));
+
+			string base = "selected - angles/g_mode_th_x"+arms[ai]+"_vs_th_y"+arms[ai];
+
+			draw(scale(1e6, 1e6), RootGetObject(f, base), "p", p, mCi+2pt+p, diagonal_labels[dgni]);
+			draw(scale(1e6, 1e6), RootGetObject(f, base + "|pol1"), p + dashed);
 		}
 
-		//limits((-90, -3), (90, 3), Crop);
+		limits((-300, -30), (300, 30), Crop);
 	}
 	
 	f_legend = BuildLegend();

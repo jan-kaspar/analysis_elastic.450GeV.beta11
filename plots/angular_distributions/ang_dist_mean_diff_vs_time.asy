@@ -6,7 +6,7 @@ string topDir = "../../";
 
 string datasets[], dataset_fills[];
 datasets.push("DS-fill7301/Totem1"); dataset_fills.push("7301");
-datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
+//datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
 
 string diagonals[], diagonal_labels[];
 diagonals.push("45b_56t"); diagonal_labels.push("45 bot -- 56 top");

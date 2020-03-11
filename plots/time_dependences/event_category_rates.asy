@@ -50,7 +50,7 @@ void PlotRate(RootObject obj, pen p, string label)
 		draw((x*sc, r-r_unc)--(x*sc, r+r_unc), p);
 		draw((x*sc, r), mCi+2pt+p);
 
-		write(format("%#.3f", (x-x_unc)*sc) + format(" %#.3f", (x+x_unc)*sc) + format(" %#.3E", r));
+		//write(format("%#.3f", (x-x_unc)*sc) + format(" %#.3f", (x+x_unc)*sc) + format(" %#.3E", r));
 	}
 
 	AddToLegend(label, p, mCi+2pt+p);
@@ -82,7 +82,7 @@ for (int dsi : datasets.keys)
 
 		for (int rpi : rps.keys)
 		{
-			NewPad("time $\ung{h}$", "prescaled rate$\ung{Hz}$");
+			NewPad("time from 14 Oct 2018$\ung{h}$", "prescaled rate$\ung{Hz}$");
 			scale(Linear, Linear(true));
 
 			real y_max = 1000;

@@ -8,6 +8,7 @@ datasets.push("DS-fill7301/Totem1");
 
 string units[] = { "L_2_F", "L_1_F", "R_1_F", "R_2_F" };
 string unit_labels[] = { "45-220-fr", "45-210-fr", "56-210-fr", "56-220-fr" };
+//string unit_labels[] = { "XRPV.B6L5.B2", "XRPV.D6L5.B2", "XRPV.D6R5.B1", "XRPV.B6R5.B1" };
 
 drawGridDef = true;
 
@@ -47,15 +48,15 @@ for (int dsi : datasets.keys)
 		if (selection == "before selection") tag = "_al_nosel";
 		if (selection == "after selection") tag = "_al_sel";
 
-		RootGetObject(file_45b, "hit distributions/vertical, aligned, "+selection+"/h_y_"+units[ui]+"_vs_x_"+units[ui]+tag);
+		RootGetObject(file_45b, "hit distributions/vertical, aligned, "+selection+"/h2_y_"+units[ui]+"_vs_x_"+units[ui]+tag);
 		robj.vExec("Rebin2D", 2, 4);
 		draw(robj, "p,bar");
 
-		RootGetObject(file_45t, "hit distributions/vertical, aligned, "+selection+"/h_y_"+units[ui]+"_vs_x_"+units[ui]+tag);
+		RootGetObject(file_45t, "hit distributions/vertical, aligned, "+selection+"/h2_y_"+units[ui]+"_vs_x_"+units[ui]+tag);
 		robj.vExec("Rebin2D", 2, 4);
 		draw(robj, "p");
 		
-		//draw(RootGetObject(file_45t, "hit distributions/vertical, not aligned, after selection/h_y_"+units[ui]+"_vs_x_"+units[ui]+"_noal_sel"), "p");
+		//draw(RootGetObject(file_45t, "hit distributions/vertical, not aligned, after selection/h2_y_"+units[ui]+"_vs_x_"+units[ui]+"_noal_sel"), "p");
 
 		limits((-15, -30), (15, 30), Crop);
 		

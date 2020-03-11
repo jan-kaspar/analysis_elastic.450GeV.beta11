@@ -24,6 +24,8 @@ plot.push("th_y_diffLR_vs_th_y"); lab_h.push("$\th_y^{*}\ung{\mu rad}$"); lab_v.
 plot.push("th_y_L_diffNF_vs_th_y_L"); lab_h.push("$\th_y^{*L}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_y^{*L}\ung{\mu rad}$"); y_min.push(-20); y_max.push(+20);
 plot.push("th_y_R_diffNF_vs_th_y_R"); lab_h.push("$\th_y^{*R}\ung{\mu rad}$"); lab_v.push("$\De^{220F-210F}\th_y^{*R}\ung{\mu rad}$"); y_min.push(-20); y_max.push(+20);
 
+TH2_palette = Gradient(blue, heavygreen, yellow, red);
+
 for (int dsi : datasets.keys)
 {
 	for (int dgi : dgns.keys)
@@ -41,17 +43,21 @@ for (int dsi : datasets.keys)
 
 			string base = "selected - angles/h2_"+plot[pi];
 			RootObject h2 = RootGetObject(f, base);
-			h2.vExec("Rebin2D", 2, 2);
+			//h2.vExec("Rebin2D", 2, 2);
 
 			draw(scale(1e6, 1e6), h2, "def");
 
 			string base = "selected - angles/p_"+plot[pi];
+
+			RootObject prof = RootGetObject(f, base);
+			draw(scale(1e6, 1e6), prof, "eb,d0", black);
+
 			RootObject fit = RootGetObject(f, base + "|pol1", error=false);
 			if (fit.valid)
 			{
 				real slope = fit.rExec("GetParameter", 1);
 				real slope_unc = fit.rExec("GetParError", 1);
-				draw(scale(1e6, 1e6), fit, "", blue+2pt, format("slope = $%#+.4f$", slope) + format("$\pm %#.4f$", slope_unc));
+				draw(scale(1e6, 1e6), fit, "", magenta+2pt, format("slope = $%#+.4f$", slope) + format("$\pm %#.4f$", slope_unc));
 			}
 
 			//if (plot[pi] == "p_th_x_diffLR_vs_th_x")

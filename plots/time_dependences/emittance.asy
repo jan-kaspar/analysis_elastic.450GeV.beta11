@@ -18,7 +18,7 @@ quantities.push("emit_b2_v"); q_labels.push("B2, vertical"); q_pens.push(black);
 xSizeDef = 40cm;
 ySizeDef = 6cm;
 
-//xTicksDef = LeftTicks(1., 0.5);
+xTicksDef = LeftTicks(1., 0.5);
 
 TGraph_reducePoints = 10;
 
@@ -26,7 +26,7 @@ TGraph_errorBar = None;
 
 //----------------------------------------------------------------------------------------------------
 
-NewPad("time$\ung{h}$", "normalised emittance$\ung{\mu m}$");
+NewPad("time from 14 Oct 2018$\ung{h}$", "normalised emittance$\ung{\mu m}$");
 
 for (int fi : fills.keys)
 {
@@ -45,4 +45,4 @@ for (int fi : fills.keys)
 for (int qi : quantities.keys)
 	AddToLegend(q_labels[qi], q_pens[qi]);
 
-AttachLegend(NW, NW);
+AttachLegend(BuildLegend(NW), NE);

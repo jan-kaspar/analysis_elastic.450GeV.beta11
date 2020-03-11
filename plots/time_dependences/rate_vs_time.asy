@@ -58,7 +58,7 @@ for (int dsi : datasets.keys)
 
 	for (int dgni : diagonals.keys)
 	{
-		NewPad("time from TODO $\ung{h}$", "rate$\ung{Hz}$");
+		NewPad("time from 14 Oct 2018$\ung{h}$", "rate$\ung{Hz}$");
 		//currentpad.yTicks = RightTicks(1., 0.2);
 		real y_min = 0, y_max = 300;
 
