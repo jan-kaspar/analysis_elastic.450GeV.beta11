@@ -110,16 +110,16 @@ void Init_global_45b_56t()
 
 	// analysis settings
 	anal.cut1_a = 1.; anal.cut1_c = +41E-6; anal.cut1_si = 55E-6;
-	anal.cut2_a = 1.; anal.cut2_c = -30E-6; anal.cut2_si = 45E-6;
+	anal.cut2_a = 1.; anal.cut2_c =  0E-6; anal.cut2_si = 48E-6;
 
-	anal.cut5_a = -0.0186; anal.cut5_c = -0.0; anal.cut5_si = 0.08;
-	anal.cut6_a = +0.0096; anal.cut6_c = -0.08; anal.cut6_si = 0.08;
+	anal.cut5_a = -0.0186; anal.cut5_c = -0.0; anal.cut5_si = 0.085;
+	anal.cut6_a = +0.0096; anal.cut6_c = -0.08; anal.cut6_si = 0.085;
 
-	anal.cut7_a = +1370.; anal.cut7_c = +0.10; anal.cut7_si = 0.12;
-	anal.cut8_a = -3067.; anal.cut8_c = -0.65; anal.cut8_si = 0.3;
+	anal.cut7_a = +1370.; anal.cut7_c = +0.16; anal.cut7_si = 0.12;
+	anal.cut8_a = -3067.; anal.cut8_c = -0.45; anal.cut8_si = 0.37;
 
-	anal.cut9_a = -0.499; anal.cut9_c = -0.07; anal.cut9_si = 0.2;
-	anal.cut10_a = -0.564; anal.cut10_c = +0.13; anal.cut10_si = 0.25;
+	anal.cut9_a = -0.499; anal.cut9_c = -0.07; anal.cut9_si = 0.22;
+	anal.cut10_a = -0.564; anal.cut10_c = +0.13; anal.cut10_si = 0.26;
 
 	anal.fc_L = FiducialCut({{-400E-6, 200E-6}, {+400E-6, 200E-6}, {+450E-6, 250E-6}, {+400E-6, 510E-6}, {-400E-6, 510E-6}, {-450E-6, 250E-6}});
 	anal.fc_R = FiducialCut({{-400E-6, 200E-6}, {+400E-6, 200E-6}, {+450E-6, 250E-6}, {+400E-6, 510E-6}, {-400E-6, 510E-6}, {-450E-6, 250E-6}});
@@ -151,16 +151,16 @@ void Init_global_45t_56b()
 
 	// analysis settings
 	anal.cut1_a = 1.; anal.cut1_c = +34E-6; anal.cut1_si = 55E-6;
-	anal.cut2_a = 1.; anal.cut2_c = -43E-6; anal.cut2_si = 45E-6;
+	anal.cut2_a = 1.; anal.cut2_c =   0E-6; anal.cut2_si = 48E-6;
 
-	anal.cut5_a = -0.0185; anal.cut5_c = -0.03; anal.cut5_si = 0.08;
-	anal.cut6_a = +0.0068; anal.cut6_c = -0.27; anal.cut6_si = 0.08;
+	anal.cut5_a = -0.0185; anal.cut5_c = -0.03; anal.cut5_si = 0.085;
+	anal.cut6_a = +0.0068; anal.cut6_c = -0.08; anal.cut6_si = 0.085;
 
-	anal.cut7_a = +1308.; anal.cut7_c = +0.10; anal.cut7_si = 0.12;
-	anal.cut8_a = -3057.; anal.cut8_c = +0.10; anal.cut8_si = 0.3;
+	anal.cut7_a = +1308.; anal.cut7_c = +0.17; anal.cut7_si = 0.12;
+	anal.cut8_a = -3057.; anal.cut8_c = +0.09; anal.cut8_si = 0.37;
 
-	anal.cut9_a = -0.491; anal.cut9_c = -0.05; anal.cut9_si = 0.20;
-	anal.cut10_a = -0.541; anal.cut10_c = +0.12; anal.cut10_si = 0.25;
+	anal.cut9_a = -0.491; anal.cut9_c = -0.05; anal.cut9_si = 0.22;
+	anal.cut10_a = -0.541; anal.cut10_c = +0.12; anal.cut10_si = 0.26;
 
 	anal.fc_L = FiducialCut({{-400E-6, 200E-6}, {+400E-6, 200E-6}, {+450E-6, 250E-6}, {+400E-6, 510E-6}, {-400E-6, 510E-6}, {-450E-6, 250E-6}});
 	anal.fc_R = FiducialCut({{-400E-6, 200E-6}, {+400E-6, 200E-6}, {+450E-6, 250E-6}, {+400E-6, 510E-6}, {-400E-6, 510E-6}, {-450E-6, 250E-6}});

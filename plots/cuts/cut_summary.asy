@@ -24,11 +24,11 @@ string label_x[] = { "$\th_x^{*R}\ung{\mu rad}$", "$\th_y^{*R}\ung{\mu rad}$", "
 string label_y[] = { "$\th_x^{*L}\ung{\mu rad}$", "$\th_y^{*L}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$y^{R,F} - y^{R,N}\ung{mm}$", "$y^{L,F} - y^{L,N}\ung{mm}$", "$\De^{R-L} x^*\ung{mm}$", "$\De^{R-L} y^*\ung{mm}$", "$x^{R,F} - x^{R,N}\ung{mm}$", "$x^{L,F} - x^{L,N}\ung{mm}$" };
 string label_cut[] = { "$\De^{R-L} \th_x^{*}\ung{\mu rad}$", "$\De^{R-L} \th_y^{*}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$cq5$", "$cq6$", "$cq7$", "$cq8$", "$cq9$", "$cq10$" };
 
-real lim_x_low[] = { -1000, +1, -1000, -1000, +1, +1, -750, -200, -15, -15 };
-real lim_x_high[] = { +1000, -1, +1000, +1000, -1, -1, +750, +200, +15, +15 };
+real lim_x_low[] = { -1000, +1, -1000, -1000, +1, +1, -800, -800, -15, -15 };
+real lim_x_high[] = { +1000, -1, +1000, +1000, -1, -1, +800, +800, +15, +15 };
 
-real lim_y_low[] = { -1000, +1, -0.8, -0.8, +1, +1, -10, -100, -5, -5 };
-real lim_y_high[] = { +1000, -1, +0.8, +0.8, -1, -1, +10, +100, +5, +5 };
+real lim_y_low[] = { -1000, +1, -0.8, -0.8, +1, +1, -5, -5, -5, -5 };
+real lim_y_high[] = { +1000, -1, +0.8, +0.8, -1, -1, +5, +5, +5, +5 };
 
 real lim_q[] = { 250., 50, 10., 10., 1., 1., 2.5, 10., 2, 2 };
 
@@ -68,12 +68,11 @@ for (int dsi : datasets.keys)
 
 			NewPad(label_x[idx], label_y[idx]);
 			scale(Linear, Linear, Log);
-			//string objC = format("elastic cuts/cut %i", cut) + format("/plot_after_cq%i", cut);
 			string objC = format("elastic cuts/cut %i", cut) + format("/plot_before_cq%i", cut);
 			draw(scale(scale_x[idx], scale_y[idx]), RootGetObject(f, objC+"#0"), "p,d0,bar");
 			draw(scale(scale_x[idx], scale_y[idx]), RootGetObject(f, objC+"#1"));
 			draw(scale(scale_x[idx], scale_y[idx]), RootGetObject(f, objC+"#2"));
-			//limits((-lim_x_high[idx], -lim_y_high[idx]), (-lim_x_low[idx], -lim_y_low[idx]), Crop);
+			limits((-lim_x_high[idx], -lim_y_high[idx]), (-lim_x_low[idx], -lim_y_low[idx]), Crop);
 
 			// ---------- after cuts ----------
 			

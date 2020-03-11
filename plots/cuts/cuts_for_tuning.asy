@@ -7,22 +7,14 @@ string dataset = "DS-fill7301/Totem1";
 
 string dgns[] = { "45b_56t", "45t_56b" };
 
-int cuts[] = { 1, 2, 5, 6, 7 };
+int cuts[] = { 1, 2, 5, 6, 7, 8, 9, 10 };
 
-real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6 };
-real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0 };
+real scale_x[] = { 1e6, 1e6, 1e6, 1e6, 1e0, 1e0, 1e6, 1e6, 1e0, 1e0 };
+real scale_y[] = { 1e6, 1e6, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0, 1e0 };
 
-string label_x[] = { "$\th_x^{*R}\ung{\mu rad}$", "$\th_y^{*R}\ung{\mu rad}$", "$\th_x^{*R}\ung{\mu rad}$", "$\th_x^{*L}\ung{\mu rad}$", "$y^{R,210,F}\ung{mm}$", "$y^{L,210,F}\ung{mm}$", "$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$" };
-string label_y[] = { "$\th_x^{*L}\ung{\mu rad}$", "$\th_y^{*L}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$y^{R,220,F} - y^{R,210,F}\ung{mm}$", "$y^{L,220,F} - y^{L,210,F}\ung{mm}$", "$\De^{R-L} x^*\ung{mm}$", "$\De^{R-L} y^*\ung{mm}$" };
-string label_cut[] = { "$\De^{R-L} \th_x^{*}\ung{\mu rad}$", "$\De^{R-L} \th_y^{*}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$cq5$", "$cq6$", "$cq7$", "$cq8$" };
+string label_cut[] = { "$\De^{R-L} \th_x^{*}\ung{\mu rad}$", "$\De^{R-L} \th_y^{*}\ung{\mu rad}$", "$x^{*R}\ung{mm}$", "$x^{*L}\ung{mm}$", "$cq5$", "$cq6$", "$cq7$", "$cq8$", "$cq9$", "$cq10$" };
 
-real lim_x_low[] = { -200, -150, -1000, -1000, -30, -30, -200, -600 };
-real lim_x_high[] = { +200, 150, +1000, +1000, +30, +30, +200, +600 };
-
-real lim_y_low[] = { -200, -150, -0.8, -0.8, -5, -5, -5, -4 };
-real lim_y_high[] = { +200, 150, +0.8, +0.8, +5, +5, +5, +4 };
-
-real lim_q[] = { 25, 5, 10., 10., 0.15, 0.15, 2.5 };
+real lim_q[] = { 300, 300, 0., 0., 0.5, 0.5, 1.0, 3.0, 1.5, 1.5 };
 
 //----------------------------------------------------------------------------------------------------
 
@@ -84,3 +76,5 @@ for (int ci : cuts.keys)
 		AttachLegend();
 	}
 }
+
+GShipout(vSkip=1mm);
