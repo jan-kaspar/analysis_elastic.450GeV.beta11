@@ -34,17 +34,21 @@ void ProfileToRMSGraph(TProfile *p, TGraphErrors *g)
 
 int main()
 {
-	double B = 18.;		// GeV^2
-	double p = 450.;	// GeV
+	const double B = 18.;		// GeV^2
+	const double p = 450.;	// GeV
 
 	// 1-arm
-	double si_de_th_x = 37E-6;
-	double si_de_th_y = 32E-6;
+	const double si_de_th_x = 37E-6;
+	const double si_de_th_y = 32E-6;
 
-	double lcut_th_y_L = 200E-6;
-	double lcut_th_y_R = 200E-6;
-	double hcut_th_y_L = 500E-6;
-	double hcut_th_y_R = 500E-6;
+	const double lcut_th_x = -550E-6;
+	const double hcut_th_x = +550E-6;
+
+	const double lcut_th_y_L = 150E-6;
+	const double lcut_th_y_R = 150E-6;
+
+	const double hcut_th_y_L = 500E-6;
+	const double hcut_th_y_R = 500E-6;
 
 	TFile *out_f = new TFile("simu.root", "recreate");
 
@@ -90,6 +94,9 @@ int main()
 			continue;
 
 		if (th_y_sm_R < lcut_th_y_R || th_y_sm_R > hcut_th_y_R)
+			continue;
+
+		if (th_x_sm < lcut_th_x || th_x_sm > hcut_th_x)
 			continue;
 
 		h_th_x_sm->Fill(th_x_sm, w);
