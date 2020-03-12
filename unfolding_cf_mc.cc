@@ -100,6 +100,7 @@ int main(int argc, const char **argv)
 	
 	// binnings
 	vector<string> binnings;
+	binnings.push_back("ub");
 	binnings.push_back("eb");
 
 	// models
