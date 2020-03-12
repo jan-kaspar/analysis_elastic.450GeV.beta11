@@ -109,7 +109,7 @@ for (int bi : binnings.keys)
 		
 		frame fLegend = BuildLegend();
 		
-		limits((0, 1e6), (0.15, 1e8), Crop);
+		limits((0, 1e6), (0.10, 1e8), Crop);
 
 		//--------------------
 		
@@ -134,7 +134,7 @@ for (int bi : binnings.keys)
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
 		
-		limits((0, -10), (0.15, 10), Crop);
+		limits((0, -10), (0.10, 10), Crop);
 		
 		//--------------------
 
@@ -149,6 +149,6 @@ for (int bi : binnings.keys)
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
 		
-		limits((0, -1), (0.15, 3), Crop);
+		limits((0, -1), (0.10, 3), Crop);
 	}
 }

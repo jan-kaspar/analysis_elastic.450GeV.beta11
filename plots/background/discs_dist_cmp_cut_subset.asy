@@ -62,22 +62,6 @@ for (int dsi : datasets.keys)
 		
 		combinations.push("no_cuts"); comb_pens.push(black+2pt);
 		combinations.push("cuts:1"); comb_pens.push(orange);
-		combinations.push("cuts:1,5"); comb_pens.push(cyan);
-		combinations.push("cuts:1,5,6"); comb_pens.push(magenta);
-		combinations.push("cuts:1,5,6,7"); comb_pens.push(gray);
-		combinations.push("cuts:1,5,6,7,8"); comb_pens.push(blue);
-		combinations.push("cuts:1,5,6,7,8,9"); comb_pens.push(heavygreen);
-		combinations.push("cuts:1,5,6,7,8,9,10"); comb_pens.push(red+2pt);
-		
-		MakeComparison("$\De\th_y^*$", 1e6, "\mu rad", "cut 2/h_cq2", xlimit=600, sigma=45., xStep=200, xstep=100, combinations, comb_pens);
-		
-		//--------------------
-
-		string combinations[];
-		pen comb_pens[];
-		
-		combinations.push("no_cuts"); comb_pens.push(black+2pt);
-		combinations.push("cuts:1"); comb_pens.push(orange);
 		combinations.push("cuts:1,2"); comb_pens.push(cyan);
 		combinations.push("cuts:1,2,5"); comb_pens.push(magenta);
 		combinations.push("cuts:1,2,5,6"); comb_pens.push(gray);
@@ -86,6 +70,22 @@ for (int dsi : datasets.keys)
 		combinations.push("cuts:1,2,5,6,8,9,10"); comb_pens.push(red+2pt);
 		
 		MakeComparison("$\De^{\rm R-L} x^*$", 1e0, "mm", "cut 7/h_cq7", xlimit=1.5, sigma=0.12, xStep=0.5, xstep=0.1, combinations, comb_pens);
+		
+		//--------------------
+
+		string combinations[];
+		pen comb_pens[];
+		
+		combinations.push("no_cuts"); comb_pens.push(black+2pt);
+		combinations.push("cuts:1"); comb_pens.push(orange);
+		combinations.push("cuts:1,5"); comb_pens.push(cyan);
+		combinations.push("cuts:1,5,6"); comb_pens.push(magenta);
+		combinations.push("cuts:1,5,6,7"); comb_pens.push(gray);
+		combinations.push("cuts:1,5,6,7,8"); comb_pens.push(blue);
+		combinations.push("cuts:1,5,6,7,8,9"); comb_pens.push(heavygreen);
+		combinations.push("cuts:1,5,6,7,8,9,10"); comb_pens.push(red+2pt);
+		
+		MakeComparison("$\De\th_y^*$", 1e6, "\mu rad", "cut 2/h_cq2", xlimit=600, sigma=45., xStep=200, xstep=100, combinations, comb_pens);
 	}
 
 	GShipout("discs_dist_cmp_cut_subset_" + replace(dataset, "/", "_") + ".pdf");

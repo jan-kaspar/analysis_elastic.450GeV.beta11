@@ -21,7 +21,7 @@ quantities.push("vtx_y"); q_timber.push("vtx_comb_v"); q_labels.push("y^*"); q_m
 xSizeDef = 40cm;
 ySizeDef = 6cm;
 
-//xTicksDef = LeftTicks(1., 0.5);
+xTicksDef = LeftTicks(1., 0.5);
 
 TGraph_errorBar = None;
 
