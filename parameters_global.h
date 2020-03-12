@@ -42,9 +42,8 @@ void Init_global()
 	env.InitNominal();
 
 	// binning
-	// TODO
-	anal.t_min = 0.; anal.t_max = 0.2;
-	anal.t_min_full = 0.; anal.t_max_full = 0.3;
+	anal.t_min = 0.; anal.t_max = 0.10;
+	anal.t_min_full = 0.; anal.t_max_full = 0.15;
 
 	// approximate (time independent) resolutions
 	anal.si_th_y_1arm = 32E-6;
