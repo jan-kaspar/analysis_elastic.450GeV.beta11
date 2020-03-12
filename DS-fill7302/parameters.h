@@ -19,11 +19,11 @@ void Init_base()
 	alSrc.SetAlignmentB(atConstant);
 	alSrc.SetAlignmentC(atConstant);
 
-	alSrc.cnst.a_L_2_F =  -4E-3; alSrc.cnst.b_L_2_F = +300E-3; alSrc.cnst.c_L_2_F = +250E-3;
-	alSrc.cnst.a_L_1_F =  +2E-3; alSrc.cnst.b_L_1_F = +700E-3; alSrc.cnst.c_L_1_F =  -50E-3;
-
-	alSrc.cnst.a_R_1_F =  +2E-3; alSrc.cnst.b_R_1_F = -200E-3; alSrc.cnst.c_R_1_F = -300E-3;
-	alSrc.cnst.a_R_2_F =  +2E-3; alSrc.cnst.b_R_2_F = +600E-3; alSrc.cnst.c_R_2_F = -200E-3;
+	alSrc.cnst.a_L_2_F = 0E-3; alSrc.cnst.b_L_2_F = +300E-3 - 10E-3; alSrc.cnst.c_L_2_F = +250E-3;
+	alSrc.cnst.a_L_1_F = 0E-3; alSrc.cnst.b_L_1_F = +700E-3 + 10E-3; alSrc.cnst.c_L_1_F =  -50E-3;
+                                                                   
+	alSrc.cnst.a_R_1_F = 0E-3; alSrc.cnst.b_R_1_F = -200E-3 - 10E-3; alSrc.cnst.c_R_1_F = -300E-3;
+	alSrc.cnst.a_R_2_F = 0E-3; alSrc.cnst.b_R_2_F = +600E-3 + 10E-3; alSrc.cnst.c_R_2_F = -200E-3;
 
 	alignmentSources.push_back(alSrc);
 }
@@ -35,17 +35,17 @@ void Init_45b_56t()
 	Init_global_45b_56t();
 
 	// analysis settings
-	anal.cut1_c = +76E-6;
+	anal.cut1_c = +52E-6;
 	anal.cut2_c = +14E-6;
 
 	anal.cut5_c = +0.02;
 	anal.cut6_c = +0.00;
 
-	anal.cut7_c = +0.00;
+	anal.cut7_c = -0.08;
 	anal.cut8_c = -0.21;
 
-	anal.cut9_c = +0.10;
-	anal.cut10_c = +0.11;
+	anal.cut9_c = +0.11;
+	anal.cut10_c = +0.02;
 
 	// normalisation settings
 	anal.L_int = 1.;
@@ -58,17 +58,17 @@ void Init_45t_56b()
 	Init_global_45t_56b();
 
 	// analysis settings
-	anal.cut1_c = +9E-6;
+	anal.cut1_c = +33E-6;
 	anal.cut2_c = +0E-6;
 
 	anal.cut5_c = -0.02;
 	anal.cut6_c = +0.00;
 
-	anal.cut7_c = +0.00;
+	anal.cut7_c = -0.01;
 	anal.cut8_c = +0.28;
 
-	anal.cut9_c = +0.03;
-	anal.cut10_c = +0.02;
+	anal.cut9_c = +0.06;
+	anal.cut10_c = +0.06;
 
 	// normalisation settings
 	anal.L_int = 1.;
