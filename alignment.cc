@@ -143,6 +143,7 @@ void DoHorizontalProfileMax(TGraph *g_t, TGraph *g_b,
 
 	// fit
 	TF1 *ff = new TF1("ff", "[0] + x*[1]");
+	ff->FixParameter(1, 0.);
 	g_x_max_vs_y->Fit(ff, "Q", "");
 	g_x_max_vs_y->Write("g_x_max_vs_y");
 
