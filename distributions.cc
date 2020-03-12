@@ -281,7 +281,7 @@ void AnalyzeMode(TH2D *h2_input, const string &name)
 	{
 		const double th_y = h2_input->GetYaxis()->GetBinCenter(byi);
 
-		if (fabs(th_y) > 80E-6)
+		if (fabs(th_y) > 500E-6)
 			continue;
 
 		TH1D *slice = h2_input->ProjectionX("", byi, byi);
@@ -290,14 +290,14 @@ void AnalyzeMode(TH2D *h2_input, const string &name)
 			continue;
 
 		f_gauss->SetParameters(100, 0E-6, 20E-6);
-		slice->Fit(f_gauss, "Q", "", -50E-6, +50E-6);
+		slice->Fit(f_gauss, "Q", "", -200E-6, +200E-6);
 
 		//slice->Write("slice");
 
-		if (fabs(f_gauss->GetParameter(1)) > 20E-6)
+		if (fabs(f_gauss->GetParameter(1)) > 200E-6)
 			continue;
 
-		if (f_gauss->GetParError(1) > 30E-6)
+		if (f_gauss->GetParError(1) > 100E-6)
 			continue;
 
 		int idx = g_mode_th_x_vs_th_y->GetN();
