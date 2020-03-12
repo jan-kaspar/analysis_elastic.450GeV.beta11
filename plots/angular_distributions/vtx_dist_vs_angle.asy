@@ -5,7 +5,7 @@ string topDir = "../../";
 
 string datasets[] = {
 	"DS-fill7301/Totem1",
-	//"DS-fill7302/Totem1",
+	"DS-fill7302/Totem1",
 };
 
 string dgns[] = { "45b_56t", "45t_56b" };

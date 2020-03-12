@@ -5,7 +5,7 @@ string topDir = "../../";
 
 string datasets[], dataset_fills[];
 datasets.push("DS-fill7301/Totem1"); dataset_fills.push("7301");
-//datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
+datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
 
 string dgns[] = { "45b_56t", "45t_56b" };
 string dgn_labs[] = { "45 bot -- 56 top", "45 top -- 56 bot" };

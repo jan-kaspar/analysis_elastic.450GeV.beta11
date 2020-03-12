@@ -5,7 +5,7 @@ string top_dir = "../../";
 
 string datasets[] = {
 	"DS-fill7301/Totem1",
-	"DS-fill7302/Totem1",
+	//"DS-fill7302/Totem1",
 };
 
 string diagonals[], diagonal_labels[];
