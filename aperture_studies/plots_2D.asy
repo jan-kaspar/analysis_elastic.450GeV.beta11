@@ -1,0 +1,24 @@
+import root;
+import pad_layout;
+
+string f = "single_side.root";
+
+int rebin = 2;
+
+TH2_palette = Gradient(blue, heavygreen, yellow, red);
+
+NewPad("$\th^*_x\ung{\mu rad}$", "$\th^*_y\ung{\mu rad}$", axesAbove=true);
+RootObject h2 = RootGetObject(f, "arm 1/h2_th_y_vs_th_x_acc_vtx_neg_rat");
+h2.vExec("Rebin2D", rebin, rebin);
+h2.vExec("Scale", 1./rebin/rebin);
+draw(scale(1e6, 1e6), h2);
+limits((-800, -800), (+800, +800), Crop);
+AttachLegend("acceptance, vertex neglected", S, N);
+
+NewPad("$\th^*_x\ung{\mu rad}$", "$\th^*_y\ung{\mu rad}$", axesAbove=true);
+RootObject h2 = RootGetObject(f, "arm 1/h2_th_y_vs_th_x_acc_vtx_inc_rat");
+h2.vExec("Rebin2D", rebin, rebin);
+h2.vExec("Scale", 1./rebin/rebin);
+draw(scale(1e6, 1e6), h2);
+limits((-800, -800), (+800, +800), Crop);
+AttachLegend("acceptance, vertex inc", S, N);
