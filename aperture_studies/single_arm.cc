@@ -23,7 +23,7 @@ int main()
 		1
 	};
 
-	TFile *f_out = TFile::Open("single_side.root", "recreate");
+	TFile *f_out = TFile::Open("single_arm.root", "recreate");
 
 	for (const auto &arm : arms)
 	{
@@ -61,7 +61,9 @@ int main()
 
 		map<unsigned int, ApertureStat> apertureStat;
 
-		for (unsigned int evi = 0; evi < 100000000; ++evi)
+		unsigned int n_ev = 10000000;
+
+		for (unsigned int evi = 0; evi < n_ev; ++evi)
 		{
 			const double th_x = -2000E-6 + 4000E-6 * gRandom->Rndm();
 			const double th_y = -2000E-6 + 4000E-6 * gRandom->Rndm();
@@ -94,7 +96,7 @@ int main()
 		}
 
 		for (const auto &p : apertureStat)
-			printf("%i (%s) --> %.2E, min th_x = %.1f, min th_y = %.1f urad\n", p.first, aes[p.first].name.c_str(), double(p.second.count),
+			printf("%2i (%20s) --> %4.1f %%, min th_x = %6.1f, min th_y = %6.1f urad\n", p.first, aes[p.first].name.c_str(), double(p.second.count) / n_ev * 100,
 				p.second.th_x_min * 1E6, p.second.th_y_min * 1E6);
 
 		h2_th_y_vs_th_x_all->Write();

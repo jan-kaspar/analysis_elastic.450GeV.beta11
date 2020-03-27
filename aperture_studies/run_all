@@ -1,0 +1,10 @@
+#!/bin/bash
+
+make -j8 || exit 1
+
+./single_arm &
+./double_arm &
+
+wait
+
+echo "done"

@@ -44,6 +44,11 @@ vector<unsigned int> CheckApertures(const vector<Element> &elements, double th_x
 			inAperture = (fabs(x) < e.aperture.p1 && fabs(y) < e.aperture.p2 && r2eff < 1.);
 		}
 
+		if (e.aperture.type == "RP")
+		{
+			inAperture = (fabs(y) > e.aperture.p1);
+		}
+
 		if (!inAperture)
 			indices.push_back(ei);
 	}
