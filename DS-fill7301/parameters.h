@@ -35,16 +35,16 @@ void Init_45b_56t()
 	Init_global_45b_56t();
 
 	// analysis settings
-	anal.cut1_c = +35E-6;
-	anal.cut2_c = +11E-6;
+	anal.cut1_c = +28E-6;
+	anal.cut2_c = +4E-6;
 
 	anal.cut5_c = -0.00;
-	anal.cut6_c = +0.02;
+	anal.cut6_c = +0.00;
 
-	anal.cut7_c = -0.10;
+	anal.cut7_c = -0.09;
 	anal.cut8_c = -0.12;
 
-	anal.cut9_c = +0.12;
+	anal.cut9_c = +0.09;
 	anal.cut10_c = -0.02;
 
 
@@ -59,17 +59,17 @@ void Init_45t_56b()
 	Init_global_45t_56b();
 
 	// analysis settings
-	anal.cut1_c = +14E-6;
+	anal.cut1_c = +20E-6;
 	anal.cut2_c = +1E-6;
 
 	anal.cut5_c = -0.03;
-	anal.cut6_c = +0.02;
+	anal.cut6_c = +0.03;
 
-	anal.cut7_c = -0.04;
-	anal.cut8_c = +0.42;
+	anal.cut7_c = -0.07;
+	anal.cut8_c = +0.46;
 
-	anal.cut9_c = +0.05;
-	anal.cut10_c = +0.02;
+	anal.cut9_c = +0.09;
+	anal.cut10_c = +0.00;
 
 	// normalisation settings
 	anal.L_int = 1.;
