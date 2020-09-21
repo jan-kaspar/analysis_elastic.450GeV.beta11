@@ -326,7 +326,7 @@ int main(int argc, char **argv)
 		return rcIncompatibleDiagonal;
 
 	// default parameters
-	unsigned int detailsLevel = 2; 	// 0: no details, 1: some details, >= 2 all details
+	unsigned int detailsLevel = 0; 	// 0: no details, 1: some details, >= 2 all details
 	bool overrideCutSelection = false;	// whether the default cut selection should be overriden by the command-line selection
 	string cutSelectionString;
 	string outputDir = ".";
@@ -1049,6 +1049,12 @@ int main(int argc, char **argv)
 		printf("R_2_F: x / L_x = %E\n", h_al.R_2_F.x / env.L_x_R_2_F);
 		printf("R_2_F: x / L_x = %E\n", h_al.R_2_F.x / env.L_x_R_2_F);
 		*/
+
+		if (k.vtx_x < anal.vtx_x_min || k.vtx_x > anal.vtx_x_max)
+			continue;
+
+		if (k.vtx_y < anal.vtx_y_min || k.vtx_y > anal.vtx_y_max)
+			continue;
 
 		// cut evaluation
 		CutData cd;

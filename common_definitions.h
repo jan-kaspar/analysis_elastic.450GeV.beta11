@@ -820,6 +820,8 @@ struct Analysis
 
 	// fiducial cuts
 	FiducialCut fc_L, fc_R, fc_G;
+	double vtx_x_min = -1E100, vtx_x_max = +1E100;
+	double vtx_y_min = -1E100, vtx_y_max = +1E100;
 
 	// (un)-smearing parameters
 	double si_th_x_1arm_L;
@@ -968,6 +970,8 @@ struct Analysis
 		printf("fc_L: "); fc_L.Print();
 		printf("fc_R: "); fc_R.Print();
 		printf("fc_G: "); fc_G.Print();
+		printf("vtx_x: min = %.3E, max = %.3E\n", vtx_x_min, vtx_x_max);
+		printf("vtx_y: min = %.3E, max = %.3E\n", vtx_y_min, vtx_y_max);
 
 		printf("\n");
 		printf("smearing parameters:\n");
