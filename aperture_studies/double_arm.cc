@@ -29,7 +29,7 @@ int main()
 	TH1D *h_t_acc_vtx_neg = new TH1D("h_t_acc_vtx_neg", ";t", 100, 0., 0.10);
 	TH1D *h_t_acc_vtx_inc = new TH1D("h_t_acc_vtx_inc", ";t", 100, 0., 0.10);
 
-	for (unsigned int evi = 0; evi < 10000000; ++evi)
+	for (unsigned int evi = 0; evi < (unsigned int) 1E7; ++evi)
 	{
 		// elastic event
 		const double th_x = -2000E-6 + 4000E-6 * gRandom->Rndm();
@@ -38,11 +38,11 @@ int main()
 		const double t = env.p*env.p * (th_x*th_x + th_y*th_y);
 
 		// beam divergence
-		const double th_x_L = - th_x + gRandom->Rndm() * env.si_th_x_L;
-		const double th_y_L = - th_y + gRandom->Rndm() * env.si_th_y_L;
+		const double th_x_L = - th_x + gRandom->Gaus() * env.si_th_x_L;
+		const double th_y_L = - th_y + gRandom->Gaus() * env.si_th_y_L;
 
-		const double th_x_R = + th_x + gRandom->Rndm() * env.si_th_x_R;
-		const double th_y_R = + th_y + gRandom->Rndm() * env.si_th_y_R;
+		const double th_x_R = + th_x + gRandom->Gaus() * env.si_th_x_R;
+		const double th_y_R = + th_y + gRandom->Gaus() * env.si_th_y_R;
 
 		// vertex smearing
 		const double vtx_x = gRandom->Gaus() * env.si_vtx_x * 1E-3; // conversion to m

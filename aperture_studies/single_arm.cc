@@ -61,7 +61,7 @@ int main()
 
 		map<unsigned int, ApertureStat> apertureStat;
 
-		unsigned int n_ev = 10000000;
+		unsigned int n_ev = (unsigned int) 1E7;
 
 		for (unsigned int evi = 0; evi < n_ev; ++evi)
 		{
