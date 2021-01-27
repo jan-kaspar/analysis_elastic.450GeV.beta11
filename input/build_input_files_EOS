@@ -1,0 +1,75 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeFilesOne()
+{
+	local dir="$1"
+	local eos_dir="$2"
+	local run_sel="$3"
+
+	echo "* $dir"
+
+	# get list of input files
+	local buffer=""
+	for file in `eos ls $eos_dir|grep ${run_sel}|grep _reco_|grep .root`
+	do
+		if [ -n "$buffer" ]
+		then
+			buffer="$buffer,\n"
+		fi
+		buffer="$buffer  \"root://eostotem.cern.ch//$eos_dir/$file\""
+
+	done
+
+	if [ "$buffer" == "" ]
+	then
+		return
+	fi
+
+	# make list of files
+	mkdir -p "$dir"
+
+	(
+		echo "import FWCore.ParameterSet.Config as cms"
+		echo ""
+		echo "input_files = cms.vstring("
+		echo -e "$buffer"
+		echo ")"
+	) > "$dir/input_files.py"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeFiles()
+{
+	local fill="$1"
+	local run_sel="$2"
+
+	local dir="../data/fill${fill}"
+	mkdir -p "$dir"
+
+	# make stream-common config
+	if [ ! -f "$dir/config_common.py" ]
+	then
+		(
+			echo "import sys"
+			echo "import os"
+			echo "import FWCore.ParameterSet.Config as cms"
+			echo ""
+			echo "sys.path.append(os.path.relpath(\"../../../\"))"
+			echo "from config_base import *"
+		) > "$dir/config_common.py"
+	fi
+
+	# make per stream configs
+	MakeFilesOne "$dir/Totem1" "$eos_dir_base/Totem1/version3" "$run_sel"
+	MakeFilesOne "$dir/ZeroBias" "$eos_dir_base/ZeroBias/version2" "$run_sel"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+eos_dir_base="/eos/totem/data/offline/2018/450GeV/beta11"
+
+MakeFiles "7301" "324575\|324576"
+MakeFiles "7302" "324578\|324579\|324580\|324581"
