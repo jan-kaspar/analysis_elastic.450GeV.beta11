@@ -21,6 +21,7 @@ drawGridDef = true;
 TGraph_errorBar = None;
 
 bool drawFit = true;
+bool drawGlobalFit = false;
 bool centreToFit = false;
 
 //----------------------------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ for (int ui : units.keys)
 	currentpad.yTicks = RightTicks(2., 1.1);
 
 	real y_cen = 0.;
-	real y_min = y_cen - 20, y_max = y_cen + 20;
+	real y_min = y_cen - 10, y_max = y_cen + 10;
 
 	for (int dsi : datasets.keys)
 	{
@@ -62,9 +63,12 @@ for (int ui : units.keys)
 		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/a_g"), "p,eb", heavygreen, mCi+1pt+heavygreen);
 	
 		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/a"), "p,eb", blue, mCi+1pt+blue);
+
+		if (drawFit)
+			draw(swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", units[ui]+"/a_fit"), "l", red);
 	}
 	
-	if (drawFit)
+	if (drawGlobalFit)
 	{
 		RootObject fit = RootGetObject(topDir+"/alignment/global_fit.root", units[ui]+"/a_fit");
 		real unc = 5;
@@ -100,9 +104,12 @@ for (int ui : units.keys)
 		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/b_g"), "p,eb", heavygreen, mCi+1pt+heavygreen);
 
 		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/b"), "p,eb", blue+1pt, mCi+1pt+blue);
+
+		if (drawFit)
+			draw(swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", units[ui]+"/b_fit"), "l", red);
 	}
 	
-	if (drawFit)
+	if (drawGlobalFit)
 	{
 		RootObject fit = RootGetObject(topDir+"/alignment/global_fit.root", units[ui]+"/b_fit");
 		real unc = 100;
@@ -140,9 +147,12 @@ for (int ui : units.keys)
 		draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c_hist_chi_sq"), "p,eb", heavygreen, mCi+1pt+heavygreen);
 			
 		//draw(swToHours, RootGetObject(topDir+dataset+"/alignment.root", "global/"+units[ui]+"/c"), "p,l,eb", blue+1pt, mCi+1pt+blue);
+
+		if (drawFit)
+			draw(swToHours, RootGetObject(topDir+dataset+"/alignment_fit.root", units[ui]+"/c_fit"), "l", red);
 	}
 	
-	if (drawFit)
+	if (drawGlobalFit)
 	{
 		RootObject fit = RootGetObject(topDir+"/alignment/global_fit.root", units[ui]+"/c_fit");
 		real unc = 100;

@@ -35,7 +35,7 @@ for (int dsi : datasets.keys)
 	
 	for (int ui : units.keys)
 	{
-		NewPad("$y\ung{mm}$", "$\hbox{mean } x\ung{mm}$");
+		NewPad("$y\ung{mm}$", "$\hbox{central } x\ung{mm}$");
 	
 		//draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p"), "d0,eb", blue);
 		//draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/horizontal/horizontal profile/p|ff"), "l", red+1pt);
