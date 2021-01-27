@@ -3,8 +3,8 @@
 base_dir="/afs/cern.ch/user/j/jkaspar/public/ForFrici/beta11/version_2020_08_17"
 
 datasets=(
-	"DS-fill7301"
-	"DS-fill7302"
+	"data/fill7301"
+	"data/fill7302"
 )
 
 diagonals=(
