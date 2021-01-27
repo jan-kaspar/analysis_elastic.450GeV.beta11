@@ -164,7 +164,7 @@ int main(int argc, const char **argv)
 	// do fits
 	printf("\n\n---------- d_x ----------\n");
 	gDirectory = f_out->mkdir("d_x");
-	RunOneFit(g_run_boundaries, p_diffLR_th_x_vs_time, gRMS_diffLR_th_x_vs_time, 3E-6);
+	RunOneFit(g_run_boundaries, p_diffLR_th_x_vs_time, gRMS_diffLR_th_x_vs_time, 1E-6);
 
 	printf("\n\n---------- d_y ----------\n");
 	gDirectory = f_out->mkdir("d_y");

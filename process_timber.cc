@@ -12,8 +12,8 @@ const double E = 450.;	// GeV
 const double m = 0.938;	// GeV
 
 const map<string, double> m_beta_st = {
-	{ "h", 70. },
-	{ "v", 100. },
+	{ "h", 11. },
+	{ "v", 11. },
 };
 
 const unsigned int time_margin = 1800.; // s
