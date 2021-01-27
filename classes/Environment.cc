@@ -15,25 +15,31 @@ void Environment::InitNominal()
 	// momentum uncertainty
 	si_de_p = 1E-3 * p;
 
-	// beam divergence (rad, for simulation)
-	si_th_x_L = si_th_x_R = 6.7E-6;	// beta*_x = 70 m
-	si_th_y_L = si_th_y_R = 5.6E-6; // beta*_y = 100 m
+	// beam divergence (rad)
+	si_th_x_L = si_th_x_R = 16E-6;
+	si_th_y_L = si_th_y_R = 16E-6;
 
-	// vertex smearing (mm, for simulation)
-	si_vtx_x = 330E-3;
-	si_vtx_y = 395E-3;
+	// vertex smearing (mm)
+	si_vtx_x = 125E-3;
+	si_vtx_y = 125E-3;
 
-	// pitch-induced error (mm)
+	// pitch-induced error (mm), later adjusted by parameters.h
 	si_de_P_L = si_de_P_R = 12E-3;
 
-	// optics (nominal, sent by Frici on 26 Feb 2020)
-	v_x_R_1_F = -2.29251110442821; L_x_R_1_F = 35.1828162653735E3; v_y_R_1_F = 0.126220649033512; L_y_R_1_F = 171.911207102938E3; D_x_R_1_F = -0.0864671103458512E3;
-	v_x_R_2_F = -1.97644302902099; L_x_R_2_F = 27.2787476702851E3; v_y_R_2_F = 0.100459146707445; L_y_R_2_F = 192.282747401847E3; D_x_R_2_F = -0.0683872276311071E3;
+	// optics
+	v_x_R_1_F = -3.50435319019148; L_x_R_1_F = 9.63720339960312E3; v_y_R_1_F = -2.85401239131265; L_y_R_1_F = 18.1193542771580E3;
+	v_x_R_2_F = -3.21469929522496; L_x_R_2_F = 6.84312044909302E3; v_y_R_2_F = -3.13198840555586; L_y_R_2_F = 17.4314616375356E3;
 
-	v_x_L_1_F = -2.24947329593445; L_x_L_1_F = 35.8475945504415E3; v_y_L_1_F = 0.124161170232800; L_y_L_1_F = 173.630053228259E3; D_x_L_1_F = +0.0855111365318488E3;
-	v_x_L_2_F = -1.93196310652978; L_x_L_2_F = 27.6759142870506E3; v_y_L_2_F = 0.098769215019425; L_y_L_2_F = 194.499649253117E3; D_x_L_2_F = +0.0672035864182922E3;
+	v_x_L_1_F = -3.48842105181819; L_x_L_1_F = 9.19360885324731E3; v_y_L_1_F = -3.04102845358226; L_y_L_1_F = 20.9577511745132E3;
+	v_x_L_2_F = -3.24137540851482; L_x_L_2_F = 6.53589039675599E3; v_y_L_2_F = -3.34416396613407; L_y_L_2_F = 20.7450069119535E3;
 
-	// optics imperfections, real numbers not yet available
+	// optics: x-y coupling
+	/*
+	la_x_L_F = la_x_L_N = la_x_R_N = la_x_R_F = 0.;	// mm
+	la_y_L_F = la_y_L_N = la_y_R_N = la_y_R_F = 0.;	// mm
+	*/
+
+	// optics imperfections
 	/*
 	double opt_cov_data[] = {
 		1.66491785322919E-5,	7.89369350809322E-4,	-6.32104648991575E-5,	-2.59256651347955E-3,	1.32082198894547E-5,	6.74825862436010E-4,	-7.05099468507492E-5,	-2.90814857624182E-3,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,	0.0000000000E+00,
