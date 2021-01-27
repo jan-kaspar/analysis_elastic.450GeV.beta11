@@ -257,17 +257,9 @@ int main(int argc, char **argv)
 	for (int ev_idx = 0; ev_idx < ch_in->GetEntries(); ++ev_idx)
 	{
 		ch_in->GetEntry(ev_idx);
-		
-		// remove troublesome runs
-		if (SkipRun(ev.run_num))
-			continue;
 
-		// select the elastic-trigger bunch(es) only
-		if (SkipBunch(ev.run_num, ev.bunch_num))
-			continue;
-
-		// check time - selected?
-		if (anal.SkipTime(ev.timestamp))
+		// check whether the event is to be skipped
+		if (anal.SkipEvent(ev.run_num, ev.lumi_section, ev.timestamp, ev.bunch_num))
 			continue;
 
 		// apply fine alignment

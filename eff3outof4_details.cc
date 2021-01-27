@@ -170,6 +170,8 @@ struct HistGroup
 
 	void Init()
 	{
+		gDirectory = nullptr;
+
 		h_y = new TH1D("", ";y   (mm)", 100, -40., +40.);
 
 		h_th_x = new TH1D("", ";#theta_{x}   (#murad)", 200, -800., +800.);

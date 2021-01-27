@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# clean data
+find DS-fill* DS-merged -type f \( -iname \*.root -o -iname \*.log\* \)|while read f
+do
+    o=`echo $f`
+
+    if [ -n "$o" ]
+    then
+	    rm "$f"
+    fi
+done
+
+# re-run everything
+datasets="DS-fill*/Totem1"
+
+./run -no-bckg "distill.cc" $datasets || exit 1
+./run -no-bckg -danti "distill.cc" $datasets || exit 2
+
+./run -no-bckg -O "-bootstrap 1 -details 5" "distributions.cc" $datasets || exit 10
+./run -no-bckg -danti "distributions_anti.cc" $datasets || exit 11
+
+./run -no-bckg "process_timber.cc" $datasets || exit 20
+
+./run -no-bckg "alignment.cc" $datasets || exit 21
+./run -no-bckg "eff3outof4.cc" $datasets || exit 22
+./run -no-bckg "eff3outof4_details.cc" $datasets || exit 22
+./run -no-bckg "pileup.cc" $datasets || exit 23
+#./run -no-bckg "unfolding_cf_mc.cc" $datasets || exit 24
+./run -no-bckg "unfolding_cf_ni.cc" $datasets || exit 25
+
+./run -no-bckg "resolution_fit.cc" $datasets || exit 30
+./run -no-bckg "alignment_fit.cc" $datasets || exit 30
+./run -no-bckg "eff3outof4_fit.cc" $datasets || exit 30
+
+./run -no-bckg "distributions.cc" $datasets || exit 40
+
+#./run -no-bckg "alignment_final.cc" $datasets || exit 50
+
+cd DS-merged
+make
+./merge &> "merge.log" || exit 60

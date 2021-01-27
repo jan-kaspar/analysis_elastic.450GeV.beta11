@@ -16,6 +16,7 @@
 #include "TTree.h"
 
 #include <cmath>
+#include <cstdio>
 
 using namespace std;
 
@@ -336,6 +337,7 @@ int main(int argc, char **argv)
 	int time_group_remainder = 0;
 	int event_group_divisor = 0;
 	int event_group_index = 0;
+	bool bootstrap = false;
 
 	// parse command line arguments, starting from index 2
 	for (int i = 2; i < argc; i++)
@@ -407,11 +409,18 @@ int main(int argc, char **argv)
 			continue;
 		}
 
-
 		if (strcmp(argv[i], "-eg-index") == 0)
 		{
 			if (argc-1 > i)
 				event_group_index = (int) atof(argv[++i]);
+			continue;
+		}
+
+		if (strcmp(argv[i], "-bootstrap") == 0)
+		{
+			if (argc-1 > i)
+				bootstrap = (int) atoi(argv[++i]);
+
 			continue;
 		}
 
@@ -427,6 +436,7 @@ int main(int argc, char **argv)
 	printf("* time_group_remainder = %i\n", time_group_remainder);
 	printf("* event_group_divisor = %i\n", event_group_divisor);
 	printf("* event_group_index = %i\n", event_group_index);
+	printf("* bootstrap = %i\n", bootstrap);
 
 	// select cuts
 	anal.BuildCuts(); 
@@ -461,6 +471,13 @@ int main(int argc, char **argv)
 				pch = strtok (NULL, ",");
 			}
 		}
+	}
+
+	if (bootstrap)
+	{
+		anal.use_resolution_fits = false;
+		anal.use_3outof4_efficiency_fits = false;
+		anal.use_pileup_efficiency_fits = false;
 	}
 
 	// print info

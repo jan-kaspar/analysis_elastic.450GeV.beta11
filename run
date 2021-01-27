@@ -30,6 +30,7 @@ diag_45b_56b="n"
 diag_45t_56t="n"
 
 runInBackground="y"
+pids=""
 
 lxbatch="n"
 submit="n"
@@ -38,6 +39,8 @@ rcIncompatibleDiagonal=123
 
 bsub_options="pool>5000"
 bsub_queue="8nh"
+
+compileError="n"
 
 #----------------------------------------------------------------------------------------------------
 
@@ -87,15 +90,18 @@ function RunOneDiagonal()
 		case "$errCode" in
 			0)
 				echo "$label > done"
+				return 0
 				;;
 
 			$rcIncompatibleDiagonal)
 				rm "$log"
+				return 0
 				;;
 
 			*)
 				echo "$label > run error ($errCode)"
 				if [ "$par_more" -eq 1 ]; then tail -n 5 "$log"; fi
+				return 1
 				;;
 		esac
 	fi
@@ -118,7 +124,6 @@ function RunOneDir()
 	cp "$input" "$dir/$src_file"
 	cd "$dir"
 
-
 	echo "$tag @ $dir > compiling"
 	g++ -O3 -Wall -Wextra -Wno-attributes --std=c++11 -g\
 			-I"$top_dir" \
@@ -139,6 +144,7 @@ function RunOneDir()
 	then
 		echo "$tag @ $dir > error in compilation"
 		if [ "$par_more" -eq 1 ]; then cat "$tag.log_compile"; fi
+		compileError="y"
 		return
 	else
 		echo "$tag @ $dir > compiled"
@@ -153,26 +159,31 @@ function RunOneDir()
 	if [ "$diag_45b_56t" == "y" ]
 	then
 		RunOneDiagonal "$tag" "$dir" "$par_more" "45b_56t" "$options" &
+		pids="$pids $!"
 	fi
 
 	if [ "$diag_45t_56b" == "y" ]
 	then
 		RunOneDiagonal "$tag" "$dir" "$par_more" "45t_56b" "$options" &
+		pids="$pids $!"
 	fi
 
 	if [ "$diag_combined" == "y" ]
 	then
 		RunOneDiagonal "$tag" "$dir" "$par_more" "combined" "$options" &
+		pids="$pids $!"
 	fi
 
 	if [ "$diag_45b_56b" == "y" ]
 	then
 		RunOneDiagonal "$tag" "$dir" "$par_more" "45b_56b" "$options" &
+		pids="$pids $!"
 	fi
 
 	if [ "$diag_45t_56t" == "y" ]
 	then
 		RunOneDiagonal "$tag" "$dir" "$par_more" "45t_56t" "$options" &
+		pids="$pids $!"
 	fi
 
 	cd - &> /dev/null
@@ -268,12 +279,7 @@ do
 				then
 					echo "ERROR: source file not defined, skipping directory '$1'."
 				else
-					if [ "$runInBackground" == "y" ]
-					then
-						RunOneDir "$src_file" "$1" "1" "$run_options" &
-					else
-						RunOneDir "$src_file" "$1" "1" "$run_options"
-					fi
+					RunOneDir "$src_file" "$1" "1" "$run_options"
 				fi
 			fi
 			;;
@@ -281,3 +287,18 @@ do
 
 	shift
 done
+
+if [ "$runInBackground" != "y" ]
+then
+	error="$compileError"
+
+	for p in $pids
+	do
+		wait $p || error="y"
+	done
+
+	if [ "$error" == "y" ]
+	then
+		exit 1
+	fi
+fi
