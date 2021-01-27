@@ -4,7 +4,7 @@ make -j8 || exit 1
 
 #----------------------------------------------------------------------------------------------------
 
-ds="fill7291/Totem1"
+ds="fill7301/Totem1"
 reference_directory="../4rp-before-new-framework"
 
 log="compare_old_framework.log"
@@ -45,7 +45,7 @@ function MakeOneComparison()
 #----------------------------------------------------------------------------------------------------
 
 dir_file_loc="./data/$ds"
-dir_file_ref="{reference_directory}/DS-$ds"
+dir_file_ref="${reference_directory}/DS-$ds"
 
 ###   MakeOneComparison "alignment.root" "global/L_1_F/a"
 ###   MakeOneComparison "alignment.root" "global/L_1_F/b"
@@ -61,10 +61,10 @@ dir_file_ref="{reference_directory}/DS-$ds"
 ###   MakeOneComparison "alignment_fit.root" "R_1_F/b_fit"
 ###   MakeOneComparison "alignment_fit.root" "R_1_F/c_fit"
 ###   
-###   MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
-###   MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
-###   MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
-###   MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
+MakeOneComparison "distributions_45b_56t.root" "acceptance correction/ub/h_t_after"
+MakeOneComparison "distributions_45t_56b.root" "acceptance correction/ub/h_t_after"
+MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/ub/h_t_normalized_unsmeared"
+MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/ub/h_t_normalized_unsmeared"
 ###   
 ###   MakeOneComparison "distributions_anti_45b_56b.root" "acceptance correction/eb/h_t_after"
 ###   MakeOneComparison "distributions_anti_45t_56t.root" "acceptance correction/eb/h_t_after"
@@ -87,10 +87,10 @@ dir_file_ref="{reference_directory}/DS-$ds"
 ###   MakeOneComparison "pileup_combined.root" "45b_56t/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
 ###   MakeOneComparison "pileup_combined.root" "45t_56b/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
 ###   
-###   MakeOneComparison "resolution_fit_45b_56t.root" "d_x/g_fits"
-###   MakeOneComparison "resolution_fit_45b_56t.root" "d_y/g_fits"
-###   MakeOneComparison "resolution_fit_45t_56b.root" "d_x/g_fits"
-###   MakeOneComparison "resolution_fit_45t_56b.root" "d_y/g_fits"
+MakeOneComparison "resolution_fit_45b_56t.root" "d_x/g_fits"
+MakeOneComparison "resolution_fit_45b_56t.root" "d_y/g_fits"
+MakeOneComparison "resolution_fit_45t_56b.root" "d_x/g_fits"
+MakeOneComparison "resolution_fit_45t_56b.root" "d_y/g_fits"
 ###   
 ###   MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-1/eb"
 ###   MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/eb"
@@ -143,19 +143,19 @@ dir_file_ref="{reference_directory}/DS-$ds"
 # studies/reconstruction_formulae
 #----------------------------------------------------------------------------------------------------
 
-dir_file_loc="studies/reconstruction_formulae"
-dir_file_ref="${reference_directory}/reconstruction_formulae"
-
-MakeOneComparison "test_formulae_graph.root" "theta_x_one_pot_hit_L2F, th_x_L/pitch,beamDiv,vertex/g_stddev"
-MakeOneComparison "test_formulae_graph.root" "theta_x_one_arm_regr, th_x_L/pitch,beamDiv,vertex/g_stddev"
-MakeOneComparison "test_formulae_graph.root" "theta_x_two_arm_regr_LRavg, th_x/pitch,beamDiv,vertex/g_stddev"
-
-MakeOneComparison "test_formulae_graph.root" "theta_y_one_pot_hit_L1F, th_y_L/pitch,beamDiv,vertex/g_stddev"
-MakeOneComparison "test_formulae_graph.root" "theta_y_one_arm_hit, th_y_L/pitch,beamDiv,vertex/g_stddev"
-MakeOneComparison "test_formulae_graph.root" "theta_y_two_arm_hit_LRavg, th_y/pitch,beamDiv,vertex/g_stddev"
-
-MakeOneComparison "test_formulae_graph.root" "vtx_x_two_arm_regr_LRavg, vtx_x/pitch,beamDiv,angle/g_stddev"
-
-MakeOneComparison "test_formulae_graph.root" "vtx_y_two_arm_regr_LRavg, vtx_y/pitch,beamDiv,angle/g_stddev"
-
-MakeOneComparison "test_formulae_correlation.root" "theta_x_one_pot_hit_LR2F/pitch,beamDiv,vertex/th_x=5.00E-05,th_y=5.00E-05,vtx_x=0.00E+00/h2_scatter"
+###   dir_file_loc="studies/reconstruction_formulae"
+###   dir_file_ref="${reference_directory}/reconstruction_formulae"
+###   
+###   MakeOneComparison "test_formulae_graph.root" "theta_x_one_pot_hit_L2F, th_x_L/pitch,beamDiv,vertex/g_stddev"
+###   MakeOneComparison "test_formulae_graph.root" "theta_x_one_arm_regr, th_x_L/pitch,beamDiv,vertex/g_stddev"
+###   MakeOneComparison "test_formulae_graph.root" "theta_x_two_arm_regr_LRavg, th_x/pitch,beamDiv,vertex/g_stddev"
+###   
+###   MakeOneComparison "test_formulae_graph.root" "theta_y_one_pot_hit_L1F, th_y_L/pitch,beamDiv,vertex/g_stddev"
+###   MakeOneComparison "test_formulae_graph.root" "theta_y_one_arm_hit, th_y_L/pitch,beamDiv,vertex/g_stddev"
+###   MakeOneComparison "test_formulae_graph.root" "theta_y_two_arm_hit_LRavg, th_y/pitch,beamDiv,vertex/g_stddev"
+###   
+###   MakeOneComparison "test_formulae_graph.root" "vtx_x_two_arm_regr_LRavg, vtx_x/pitch,beamDiv,angle/g_stddev"
+###   
+###   MakeOneComparison "test_formulae_graph.root" "vtx_y_two_arm_regr_LRavg, vtx_y/pitch,beamDiv,angle/g_stddev"
+###   
+###   MakeOneComparison "test_formulae_correlation.root" "theta_x_one_pot_hit_LR2F/pitch,beamDiv,vertex/th_x=5.00E-05,th_y=5.00E-05,vtx_x=0.00E+00/h2_scatter"

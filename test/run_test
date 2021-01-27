@@ -240,7 +240,7 @@ function MainAnalysisComparison()
 #----------------------------------------------------------------------------------------------------
 
 # defaults
-ds="fill7281/Totem1"
+ds="fill7301/Totem1"
 
 steps="
  FixmeCheck
@@ -283,7 +283,7 @@ done
 # adjust settings
 if [ -z "$reference_directory" ]
 then
-	reference_directory=`ls -d /afs/cern.ch/user/j/jkaspar/www/IB/es_450GeV_beta100_4rp/*/|tail -n 1`
+	reference_directory=`ls -d /afs/cern.ch/user/j/jkaspar/www/IB/es_450GeV_beta11_4rp/*/|tail -n 1`
 	echo "* setting default reference directory: $reference_directory"
 fi
 
