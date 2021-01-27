@@ -13,12 +13,14 @@ void Init_base()
 	anal.alignment_t0 = timestamp_min;
 	anal.alignment_ts = (timestamp_max - timestamp_min) / 4.;
 
-	// crude alignment
+	// alignment
 	AlignmentSource alSrc;
 	alSrc.SetAlignmentA(atConstant);
 	alSrc.SetAlignmentB(atConstant);
 	alSrc.SetAlignmentC(atConstant);
 
+	// first number: from alignment.cc, second number: TODO source
+	// TODO: why the numbers
 	alSrc.cnst.a_L_2_F = 0E-3; alSrc.cnst.b_L_2_F = +300E-3 - 10E-3; alSrc.cnst.c_L_2_F = +250E-3;
 	alSrc.cnst.a_L_1_F = 0E-3; alSrc.cnst.b_L_1_F = +700E-3 + 10E-3; alSrc.cnst.c_L_1_F =  -50E-3;
                                                                    
