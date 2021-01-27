@@ -39,15 +39,12 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
 	k.th_x_R = (env.v_x_R_1_F * h.R_2_F.x - env.v_x_R_2_F * h.R_1_F.x) / D_x_R;
 	k.vtx_x_R = (+ h.R_1_F.x * env.L_x_R_2_F - h.R_2_F.x * env.L_x_R_1_F) / D_x_R;
 
-	k.th_y_L = (k.th_y_L_1_F + k.th_y_L_2_F) / 2.;
-  	k.th_y_R = (k.th_y_R_1_F + k.th_y_R_2_F) / 2.;
-
 	const double D_y_L = - env.v_y_L_1_F * env.L_y_L_2_F + env.v_y_L_2_F * env.L_y_L_1_F;
-	//k.th_y_L = (env.v_y_L_1_F * h.L_2_F.y - env.v_y_L_2_F * h.L_1_F.y) / D_y_L;
+	k.th_y_L = (env.v_y_L_1_F * h.L_2_F.y - env.v_y_L_2_F * h.L_1_F.y) / D_y_L;
 	k.vtx_y_L = (- h.L_1_F.y * env.L_y_L_2_F + h.L_2_F.y * env.L_y_L_1_F) / D_y_L;
 
 	const double D_y_R = + env.v_y_R_1_F * env.L_y_R_2_F - env.v_y_R_2_F * env.L_y_R_1_F;
-	//k.th_y_R = (env.v_y_R_1_F * h.R_2_F.y - env.v_y_R_2_F * h.R_1_F.y) / D_y_R;
+	k.th_y_R = (env.v_y_R_1_F * h.R_2_F.y - env.v_y_R_2_F * h.R_1_F.y) / D_y_R;
 	k.vtx_y_R = (+ h.R_1_F.y * env.L_y_R_2_F - h.R_2_F.y * env.L_y_R_1_F) / D_y_R;
 
 	// ----- double-arm kinematics reconstruction -----
@@ -95,13 +92,6 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 
 	if (type.compare("eb") == 0)
 	{
-		be.push_back(0.0E-4);
-		be.push_back(0.1E-4);
-		be.push_back(1.1E-4);
-		be.push_back(2.1E-4);
-
-		t = 4.0E-4;
-
 		double w = 0.2E-3;
 		for (; t < 0.6E-3; t += w)
 			be.push_back(t);
@@ -195,7 +185,7 @@ void BuildThBinning()
 		if (x != 0E-6)
 			edges.push_front(-x);
 
-		if (x > 480E-6)
+		if (x > 800E-6)
 			break;
 
 		x += 20E-6;
@@ -208,13 +198,13 @@ void BuildThBinning()
 
 	// ----- th_y, 1D -----
 	edges.clear();
-	for (double y = 0E-6; ; )
+	for (double y = 150E-6; ; )
 	{
 		edges.push_back(y);
-		if (y > 160E-6)
+		if (y > 650E-6)
 			break;
 
-		y += (y > 30E-6) ? 10./120 * (y - 30E-6) + 5E-6 : 5E-6;
+		y += 10E-6;
 	}
 
 	th_y_binning_edges_1d = new double[edges.size()];
@@ -230,7 +220,7 @@ void BuildThBinning()
 		if (x != 0E-6)
 			edges.push_front(-x);
 
-		if (x > 480E-6)
+		if (x > 800E-6)
 			break;
 
 		x += 50E-6;
@@ -246,13 +236,13 @@ void BuildThBinning()
 
 	// ----- th_y, 2D -----
 	edges.clear();
-	for (double y = 0E-6; ; )
+	for (double y = 150E-6; ; )
 	{
 		edges.push_back(y);
-		if (y > 160E-6)
+		if (y > 650E-6)
 			break;
 
-		y += (y > 30E-6) ? 10./120 * (y - 30E-6) + 5E-6 : 5E-6;
+		y += 20E-6;
 	}
 
 	printf("\n");
@@ -266,7 +256,7 @@ void BuildThBinning()
 	}
 
 	// ----- th_x, 2D, coarse -----
-	edges = { -400E-6, -300E-6, -200E-6, -150E-6, -100E-6, 100E-6, 150E-6, 200E-6, 300E-6, 400E-6 };
+	edges = { -800E-6, -500E-6, -300E-6, -150E-6, -50E-6, 0E-6, 50E-6, 150E-6, 300E-6, 500E-6, 800E-6 };
 
 	th_x_binning_edges_2d_coarse = new double[edges.size()];
 	th_x_binning_n_2d_coarse = edges.size() - 1;
@@ -274,7 +264,7 @@ void BuildThBinning()
 		th_x_binning_edges_2d_coarse[i] = edges[i];
 
 	// ----- th_y, 2D, coarse -----
-	edges = { 30E-6, 50E-6, 70E-6, 100E-6, 130E-6 };
+	edges = { 200E-6, 250E-6, 350E-6, 500E-6, 700E-6 };
 
 	th_y_binning_edges_2d_coarse = new double[edges.size()];
 	th_y_binning_n_2d_coarse = edges.size() - 1;
