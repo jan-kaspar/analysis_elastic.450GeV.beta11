@@ -1,0 +1,72 @@
+#!/bin/bash
+
+configs=()
+
+for t_max in "0.04"
+do
+	for corr_set in "corr" "uncorr"
+	do
+		configs+=("$t_max 1E8 $corr_set")
+	done
+done
+
+seeds=(
+	1
+)
+
+#----------------------------------------------------------------------------------------------------
+
+#batch_queue="1nd"
+
+#----------------------------------------------------------------------------------------------------
+
+function ParseConfig
+{
+	t_max="$1"
+	events="$2"
+	md_corr="$3"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function SubmitOne()
+{
+	echo "$dir | $options"
+
+	mkdir -p "$dir"
+
+	job_file="$dir/job"
+
+	# make job script
+	cat "job_template" | sed "
+			s|\$options|$options|g;	
+			s|\$output|$dir/validation_with_mc.root|g;	
+			s|\$log|$dir/log|g;	
+		" > "$job_file"
+
+	chmod u+x "$job_file"
+
+	# execute job locally
+	"$job_file" &
+
+	# submit job
+	#bsub -q "$batch_queue" -R "$batch_resources" $batch_options `pwd -P`"/$job_file"
+}
+
+#----------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------
+
+make "validation_with_mc" || exit 1
+
+for config in "${configs[@]}"
+do
+	ParseConfig $config
+
+	for seed in ${seeds[*]}
+	do
+		dir="simulations/$t_max,$events,$md_corr/seed$seed"
+		options="-t-max $t_max -events $events -md-$md_corr -seed $seed"
+
+		SubmitOne
+	done
+done

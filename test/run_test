@@ -1,0 +1,333 @@
+#!/bin/bash
+
+function FixmeCheck()
+{
+	output=`grep -RlI "FIXME" . 2> /dev/null  | grep -v "OLD\|.git\|.tex\|.log\|test/run_test"`
+	if [ -n "$output" ]
+	then
+		echo "There are FIXMEs in the code."
+		echo "<li>FAILED</li>" >> "$report"
+		return 1
+	fi
+
+	echo "<li>OK</li>" >> "$report"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function TodoCheck()
+{
+	n_TODO=`grep -RlI "TODO" . 2> /dev/null  | grep -v "OLD\|.git\|.tex\|.log\|test/run_test" |wc -l`
+
+	if [ "$n_TODO" -eq "0" ]
+	then
+		echo "<li>OK</li>" >> "$report"
+	else
+		echo "<li>$n_TODO files affected</li>" >> "$report"
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function StaticAnalysisCheck()
+{
+	./configure || return 1
+
+	rm "scan-build" -rf
+	mkdir "scan-build"
+	scan-build -o "scan-build" make -j8 || return 2
+
+	index=`ls scan-build/*/index.html 2> /dev/null`
+
+	if [ -z "$index" ]
+	then
+		echo "<li>OK</li>" >> "$report"
+	else
+		echo "<li>report <a href=\"$index\">here</a></li>" >> "$report"
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function Compilation()
+{
+	make -j8 || return 1
+
+	echo "<li>OK</li>" >> "$report"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function MainAnalysis()
+{
+	echo "<li>dataset: $ds</li>" >> "$report"
+
+	./run -wait "distill.cc" "data/$ds" || return 10
+	./run -wait "distill.cc" "data/$ds" -danti || return 11
+
+	./run -wait "distributions.cc" "data/$ds" -O "-bootstrap 1 -details 5" || return 12
+
+	./run -wait "resolution_fit.cc" "data/$ds" || return 13
+
+	./run -wait "process_timber.cc" "data/$ds" || return 20
+
+	./run -wait "alignment.cc" "data/$ds" || return 21
+	./run -wait "alignment_fit.cc" "data/$ds" || return 22
+
+	./run -wait "eff3outof4.cc" "data/$ds" || return 23
+	./run -wait "eff3outof4_details.cc" "data/$ds" || return 24
+	./run -wait "eff3outof4_fit.cc" "data/$ds" || return 25
+
+	./run -wait "pileup.cc" "data/$ds/../ZeroBias" || return 26
+
+	#./run -wait "unfolding_cf_mc.cc" "data/$ds" || return 27
+	./run -wait "unfolding_cf_ni.cc" "data/$ds" || return 28
+
+	./run -wait "distributions_anti.cc" "data/$ds" -danti || return 29
+
+	./run -wait "distributions.cc" "data/$ds" || return 30
+
+	./run -wait "alignment_final.cc" "data/$ds" || return 31
+
+	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 40
+
+	cd "studies/systematics"
+	./run_all "1E6" || return 50
+	cd - &> /dev/null
+
+	echo "<li>OK</li>" >> "$report"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function ResetComparisonResults()
+{
+	n_diff="0"
+	failed_comparisons=""
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function MakeOneComparison()
+{
+	local file="$1"
+	local obj="$2"
+	local options="$3"
+
+	local file1="./data/$ds/$file"
+	local file2="$reference_directory/data/$ds/$file"
+	if [ "$options" == "global" ]
+	then
+		file1="$file"
+		file2="$reference_directory/$file"
+	fi
+
+	local plot_file="cmp_${file}_${obj}"
+	plot_file="${plot_file//./_}"
+	plot_file="${plot_file//\//_}"
+	plot_file="${plot_file// /_}"
+	plot_file="${plot_file}.png"
+
+	test/compare "$file1" "$obj" "$file2" "$obj" "$plot_file"
+	res="$?"
+
+	if [ ! "$res" -eq "0" ]
+	then
+		let n_diff+=1
+
+		diff_msg=""
+		if [ "$res" -eq "1" ]; then diff_msg="number of points"; fi
+		if [ "$res" -eq "2" ]; then diff_msg="major"; fi
+		if [ "$res" -eq "3" ]; then diff_msg="minor"; fi
+
+		if [ -n "$diff_msg" ]
+		then
+			diff_msg="$diff_msg, <a href="$plot_file">plot</a>"
+		else
+			diff_msg="other error"
+		fi
+
+		failed_comparisons="${failed_comparisons}    <li>$file, $obj ($diff_msg)</li>\n"
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function MainAnalysisComparison()
+{
+	ResetComparisonResults
+
+	if [ "$reference_directory" == "none" ]
+	then
+		echo "<li>not run - missing reference</li>" >> "$report"
+
+		return 1
+	else
+		MakeOneComparison "alignment.root" "global/L_1_F/a"
+		MakeOneComparison "alignment.root" "global/L_1_F/b"
+		MakeOneComparison "alignment.root" "global/L_1_F/c"
+		MakeOneComparison "alignment.root" "global/R_2_F/a"
+		MakeOneComparison "alignment.root" "global/R_2_F/b"
+		MakeOneComparison "alignment.root" "global/R_2_F/c"
+
+		MakeOneComparison "alignment_final.root" "diff map"
+
+		MakeOneComparison "alignment_fit.root" "L_2_F/a_fit"
+		MakeOneComparison "alignment_fit.root" "L_2_F/b_fit"
+		MakeOneComparison "alignment_fit.root" "L_2_F/c_fit"
+		MakeOneComparison "alignment_fit.root" "R_1_F/a_fit"
+		MakeOneComparison "alignment_fit.root" "R_1_F/b_fit"
+		MakeOneComparison "alignment_fit.root" "R_1_F/c_fit"
+
+		MakeOneComparison "distributions_45b_56t.root" "elastic cuts/cut 1/h_cq1"
+		MakeOneComparison "distributions_45b_56t.root" "elastic cuts/cut 2/h_cq2"
+		MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
+		MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
+		MakeOneComparison "distributions_45t_56b.root" "elastic cuts/cut 1/h_cq1"
+		MakeOneComparison "distributions_45t_56b.root" "elastic cuts/cut 2/h_cq2"
+		MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
+		MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/eb/h_t_normalized_unsmeared"
+
+		MakeOneComparison "distributions_anti_45b_56b.root" "acceptance correction/eb/h_t_after"
+		MakeOneComparison "distributions_anti_45t_56t.root" "acceptance correction/eb/h_t_after"
+
+		MakeOneComparison "eff3outof4_45b_56t.root" "excluded RPs L_2_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
+		MakeOneComparison "eff3outof4_45b_56t.root" "excluded RPs R_1_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
+		MakeOneComparison "eff3outof4_45t_56b.root" "excluded RPs L_2_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
+		MakeOneComparison "eff3outof4_45t_56b.root" "excluded RPs R_1_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
+
+		MakeOneComparison "eff3outof4_details.root" "45b_56t/L_1_F/track/th_y : rel"
+		MakeOneComparison "eff3outof4_details.root" "45b_56t/R_2_F/track/th_y : rel"
+		MakeOneComparison "eff3outof4_details.root" "45t_56b/L_1_F/track/th_y : rel"
+		MakeOneComparison "eff3outof4_details.root" "45t_56b/R_2_F/track/th_y : rel"
+
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "L_2_F/h_simple_ratio_vs_th_x_th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "L_1_F/h_simple_ratio_vs_th_x_th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "R_1_F/h_simple_ratio_vs_th_x_th_y"
+		MakeOneComparison "eff3outof4_fit_45b_56t.root" "R_2_F/h_simple_ratio_vs_th_x_th_y"
+
+		MakeOneComparison "pileup_correction.root" "45b_56t/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
+		MakeOneComparison "pileup_correction.root" "45t_56b/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
+
+		MakeOneComparison "resolution_fit_45b_56t.root" "d_x/g_fits"
+		MakeOneComparison "resolution_fit_45b_56t.root" "d_y/g_fits"
+		MakeOneComparison "resolution_fit_45t_56b.root" "d_x/g_fits"
+		MakeOneComparison "resolution_fit_45t_56b.root" "d_y/g_fits"
+
+		MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-1/eb"
+		MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/eb"
+
+		MakeOneComparison "data/merged.root" "eb/merged/combined/h_dsdt" "global"
+
+		MakeOneComparison "studies/systematics/matrix.root" "matrices/all-but-norm/eb/h_stddev" "global"
+		MakeOneComparison "studies/systematics/matrix.root" "matrices/all/eb/h_stddev" "global"
+
+		if [ "$n_diff" -eq "0" ]
+		then
+			echo "<li>OK</li>" >> "$report"
+		else
+			echo "<li>$n_diff differences:</li>" >> "$report"
+			echo "<ul>" >> "$report"
+			echo -e "$failed_comparisons" >> "$report"
+			echo "</ul>" >> "$report"
+
+			return 2
+		fi
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------
+
+# defaults
+ds="fill7281/Totem1"
+
+steps="
+ FixmeCheck
+ TodoCheck
+ StaticAnalysisCheck
+ Compilation
+ MainAnalysis
+ MainAnalysisComparison
+"
+reference_directory=""
+report="test.log_short.html"
+
+# parse command line
+while [ -n "$1" ]
+do
+	case "$1" in
+		"-ref")
+			shift
+			reference_directory="$1"
+			;;
+
+		"-steps")
+			shift
+			steps="$1"
+			;;
+
+		"-report")
+			shift
+			report="$1"
+			;;
+
+		*)
+			echo "Unknown parameter: '$1'"
+			exit 1
+	esac
+
+	shift
+done
+
+# adjust settings
+if [ -z "$reference_directory" ]
+then
+	reference_directory=`ls -d /afs/cern.ch/user/j/jkaspar/www/IB/es_450GeV_beta100_4rp/*/|tail -n 1`
+	echo "* setting default reference directory: $reference_directory"
+fi
+
+# initialisation
+rm -f "$report"
+
+(
+	echo "<html>"
+	echo "<body>"
+	echo "<ul>"
+	echo "<li>starting test at: $(pwd -P)</li>"
+	echo "<li>reference directory: $reference_directory</li>"
+) >> "$report"
+
+# prepare environment
+source environment || exit 1
+
+# run steps
+failure="False"
+for step in $steps
+do
+	echo "----- $step --------------------------------------------------"
+
+	echo "<li>$step</li>" >> "$report"
+	echo "<ul>" >> "$report"
+
+	$step
+	if [ "$?" -ne "0" ]
+	then
+		failure="True"
+		break
+	fi
+
+	echo "</ul>" >> "$report"
+done
+
+# finalisation
+(
+	echo "</ul>"
+	echo "</body>"
+	echo "</html>"
+) >> "$report"
+
+if [ "$failure" == "True" ]
+then
+	exit 10
+fi

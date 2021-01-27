@@ -1,0 +1,13 @@
+#!/bin/bash
+
+make -C ../.. -j8 || exit 1
+
+./algorithm_test &> "algorithm_test.log" &
+
+./mc_resolution_details &> "mc_resolution_details.log" &
+
+./validation_gaussian_approx &> "validation_gaussian_approx.log" &
+
+./validation_with_mc_submit
+
+wait

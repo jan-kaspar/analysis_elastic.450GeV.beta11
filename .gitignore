@@ -4,7 +4,14 @@
 *.log*
 *.pdf
 *.out
+*.pyc
+*.o
+*.png
 .*
-*.HighBeta.*
 
+compile_commands.json
+makefile
+
+!.clang-format
+!.clang-tidy
 !.gitignore
