@@ -1,24 +1,19 @@
-#include "TRandom2.h"
+#include "classes/Kinematics.hh"
+#include "classes/Stat.hh"
+
+#include "common.hh"
+#include "formulae.hh"
+
+#include "TRandom3.h"
 #include "TH1D.h"
 #include "TGraph.h"
-#include "TRandom2.h"
-#include "TVectorD.h"
 #include "TFile.h"
 
 #include <string>
 #include <vector>
 #include <cmath>
 
-#include "../stat.h"
-#include "../common_definitions.h"
-#include "../common_algorithms.h"
-
 using namespace std;
-
-#include "formulae.h"
-
-#include "common.h"
-
 
 //---------------------------------------------------------------------------------------------------
 
@@ -123,7 +118,7 @@ void Test(const string &label, RecoQuantity q, Func f)
 	TestOneMode(q, f, bComplementary);
 	TestOneMode(q, f, sbPitch | sbBeamDivergence | bComplementary);
 	//TestOneMode(q, f, sbMisalignment);
-	TestOneMode(q, f, sbOptics);
+	//TestOneMode(q, f, sbOptics);
 	//TestOneMode(q, f, bComplementary | sbOptics);
 	//TestOneMode(q, f, sbPitch | sbBeamDivergence | bComplementary | sbOptics);
 	

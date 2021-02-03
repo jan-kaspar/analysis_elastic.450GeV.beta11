@@ -1,22 +1,12 @@
 #!/bin/bash
 
 #----------------------------------------------------------------------------------------------------
-# compilation
-
-function RunCompilation()
-{
-	cd ".."
-	./run distributions.cc -no-bckg -no-run "$dataset" || exit 1
-	./run distributions_anti.cc -no-bckg -no-run "$dataset" || exit 2
-	cd - > /dev/null
-}
-
-#----------------------------------------------------------------------------------------------------
 # cut combinations
 
 cut_combinations=(
 	""
 	"1"
+
 	"1,2"
 	"1,2,5"
 	"1,2,5,6"
@@ -30,8 +20,6 @@ cut_combinations=(
 	"1,5,6"
 	"1,5,6,7"
 	"1,5,6,7,8"
-	"1,5,6,7,8,9"
-	"1,5,6,7,8,9,10"
 
 	# cut 7 is used as a benchmarking distribution
 	"1,2,5,6,8"
@@ -53,13 +41,21 @@ function RunCutCombinationReconstructions()
 		mkdir -p "$tag"
 	
 		cd "$tag" || continue
-	
-		../../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_45b_56t" &
-		../../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_45t_56b" &
 
-		../../../../$dataset/.distributions_anti 45b_56b "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45b_56b" &
-		../../../../$dataset/.distributions_anti 45t_56t "-no-details" -input-dir "../../../../$dataset" -cuts "$cut" &> "log_anti_45t_56t" &
+		src_dir="$BASE_DIR/data/$dataset"
 	
+		for diagonal in "45b_56t" "45t_56b"
+		do
+			$BASE_DIR/.distributions -dgn "$diagonal" -details 0 -input-dir "$src_dir" -cfg "$src_dir/config.py" -cuts "$cut" \
+				&> "distributions_$diagonal.log" &
+		done
+
+		for diagonal in "45b_56b" "45t_56t"
+		do
+			$BASE_DIR/.distributions_anti -dgn "$diagonal" -details 0 -input-dir "$src_dir" -cfg "$src_dir/config.py" -cuts "$cut" \
+				&> "distributions_anti_$diagonal.log" &
+		done
+
 		cd ".."
 	done
 }
@@ -85,9 +81,12 @@ function RunNSiReconstructions()
 		mkdir -p "$tag"
 	
 		cd "$tag" || continue
-	
-		../../../../$dataset/.distributions 45b_56t "-no-details" -input-dir "../../../../$dataset" -n-si "$n_si" &> "log_45b_56t" &
-		../../../../$dataset/.distributions 45t_56b "-no-details" -input-dir "../../../../$dataset" -n-si "$n_si" &> "log_45t_56b" &
+
+		for diagonal in "45b_56t" "45t_56b"
+		do
+			$BASE_DIR/.distributions -dgn "$diagonal" -details 0 -input-dir "$src_dir" -cfg "$src_dir/config.py" -n-si "$n_si" \
+				&> "distributions_$diagonal.log" &
+		done
 	
 		cd ".."
 	done
@@ -96,25 +95,29 @@ function RunNSiReconstructions()
 #----------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------
 
+make -C "../../" -j8 || exit 1
+
 datasets=(
-	"DS-fill7301/Totem1"
-	"DS-fill7302/Totem1"
+	"fill7301/Totem1"
+	"fill7302/Totem1"
 )
+
+cwd=`pwd -P`
 
 for dataset in "${datasets[@]}"
 do
 	echo "* $dataset"
-
-	RunCompilation
-
-	cwd=`pwd -P`
 
 	mkdir -p "$dataset"
 	cd "$dataset"
 
 	RunCutCombinationReconstructions
 
+	wait
+
 	RunNSiReconstructions
+
+	wait
 
 	cd "$cwd"
 done

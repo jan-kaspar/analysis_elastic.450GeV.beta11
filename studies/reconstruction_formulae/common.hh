@@ -1,3 +1,14 @@
+#ifndef _common_hh_
+#define _common_hh_
+
+#include "classes/Kinematics.hh"
+#include "classes/common_event.hh"
+#include "classes/Environment.hh"
+#include "classes/common_algorithms.hh"
+#include "classes/Stat.hh"
+
+#include "TRandom3.h"
+
 //----------------------------------------------------------------------------------------------------
 
 typedef Kinematics (*Func)(const HitData &, const Environment &);
@@ -136,13 +147,11 @@ void SimulateEvent(const Kinematics &k_cv, unsigned int b, Func f_reco, Kinemati
 	// misalignment
 	if (b & sbMisalignment) 
 	{
-		double de_y_R = gRandom->Gaus() * env_sim.si_de_y_R;
-		double de_y_D = gRandom->Gaus() * env_sim.si_de_y_D;
 
-		h.L_2_F.x += gRandom->Gaus() * env_sim.si_de_x; h.L_2_F.y += -de_y_R + de_y_D;
-		h.L_1_F.x += gRandom->Gaus() * env_sim.si_de_x; h.L_1_F.y += -de_y_R + de_y_D;
-		h.R_1_F.x += gRandom->Gaus() * env_sim.si_de_x; h.R_1_F.y += +de_y_R;
-		h.R_2_F.x += gRandom->Gaus() * env_sim.si_de_x; h.R_2_F.y += +de_y_R;
+		h.L_2_F.x += gRandom->Gaus() * env_sim.si_de_x; h.L_2_F.y += gRandom->Gaus() * env_sim.si_de_y;
+		h.L_1_F.x += gRandom->Gaus() * env_sim.si_de_x; h.L_1_F.y += gRandom->Gaus() * env_sim.si_de_y;
+		h.R_1_F.x += gRandom->Gaus() * env_sim.si_de_x; h.R_1_F.y += gRandom->Gaus() * env_sim.si_de_y;
+		h.R_2_F.x += gRandom->Gaus() * env_sim.si_de_x; h.R_2_F.y += gRandom->Gaus() * env_sim.si_de_y;
 	}
 
 	// pitch error
@@ -158,3 +167,5 @@ void SimulateEvent(const Kinematics &k_cv, unsigned int b, Func f_reco, Kinemati
 	Environment env_rec = env_nom;
 	k_re = f_reco(h, env_rec);
 }
+
+#endif

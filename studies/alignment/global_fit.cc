@@ -82,8 +82,8 @@ int main()
 {
 	// input
 	vector<string> datasets = {
-		"DS-fill7301/Totem1",
-		"DS-fill7302/Totem1",
+		"data/fill7301/Totem1",
+		"data/fill7302/Totem1",
 	};
 
 	vector<string> units = {
@@ -99,7 +99,7 @@ int main()
 	// process input
 	for (const auto &dataset : datasets)
 	{
-		string f_in_name = "../" + dataset + "/alignment_fit.root";
+		string f_in_name = "../../" + dataset + "/alignment_fit.root";
 		TFile *f_in = TFile::Open(f_in_name.c_str());
 
 		for (unsigned int ui = 0; ui < units.size(); ++ui)

@@ -1,3 +1,10 @@
+#ifndef _formulae_hh_
+#define _formulae_hh_
+
+#include "classes/Kinematics.hh"
+#include "classes/common_event.hh"
+#include "classes/Environment.hh"
+
 //----------------------------------------------------------------------------------------------------
 // theta_x, one pot
 //----------------------------------------------------------------------------------------------------
@@ -375,3 +382,5 @@ Kinematics vtx_y_two_arm_regr_LRavg(const HitData &h, const Environment &env)
 
 	return k;
 }
+
+#endif

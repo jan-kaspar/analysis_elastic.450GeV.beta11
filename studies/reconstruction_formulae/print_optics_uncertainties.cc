@@ -1,9 +1,10 @@
+#include "classes/Environment.hh"
+
+#include "TMatrixDSymEigen.h"
+
 #include <string>
 #include <vector>
 #include <cmath>
-
-#include "../common_definitions.h"
-#include "../common_algorithms.h"
 
 //----------------------------------------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ int main()
 	// nominal environment
 	Environment env;
 	env.InitNominal();
-	env.UseMatchedOptics();
+	//env.UseMatchedOptics();
 
 	env.Print();
 

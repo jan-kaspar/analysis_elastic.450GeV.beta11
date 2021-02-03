@@ -1,0 +1,7 @@
+#!/bin/bash
+
+make -C ../../ -j8 || exit 1
+
+./print_optics_uncertainties &> print_optics_uncertainties.log  &
+./test_formulae_correlation &> test_formulae_correlation.log &
+./test_formulae_graph &> test_formulae_graph.log &

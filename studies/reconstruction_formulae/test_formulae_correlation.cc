@@ -1,24 +1,19 @@
-#include "TRandom2.h"
-#include "TH1D.h"
+#include "classes/Kinematics.hh"
+#include "classes/Stat.hh"
+
+#include "common.hh"
+#include "formulae.hh"
+
 #include "TH2D.h"
 #include "TGraph.h"
-#include "TRandom2.h"
-#include "TVectorD.h"
+#include "TRandom3.h"
 #include "TFile.h"
 
 #include <string>
 #include <vector>
 #include <cmath>
 
-#include "../stat.h"
-#include "../common_definitions.h"
-#include "../common_algorithms.h"
-
 using namespace std;
-
-#include "formulae.h"
-
-#include "common.h"
 
 //---------------------------------------------------------------------------------------------------
 
@@ -122,7 +117,7 @@ int main()
 
 	// nominal environment
 	env_nom.InitNominal();
-	env_nom.UseMatchedOptics();
+	//env_nom.UseMatchedOptics();
 
 	env_nom.si_de_P_L = 11.8E-3; env_nom.si_de_P_R = 11.8E-3;	// mm	(45 bottom - 56 top)
 	//env_nom.si_de_P_L = 11.0E-3; env_nom.si_de_P_R = 11.0E-3;	// mm	(45 top - 56 bottom)
