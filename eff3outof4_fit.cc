@@ -72,8 +72,8 @@ int main(int argc, const char **argv)
 	units.push_back("R_1_F");
 	units.push_back("R_2_F");
 
-	const double th_y_min = 40E-6;
-	const double th_y_max = 140E-6;
+	const double th_y_min = 250E-6;
+	const double th_y_max = 550E-6;
 
 	printf("th_y_min = %E\n", th_y_min);
 	printf("th_y_max = %E\n", th_y_max);
@@ -174,7 +174,7 @@ int main(int argc, const char **argv)
 			TGraph *g_fit = new TGraph();
 			g_fit->SetName("g_fit");
 			g_fit->SetLineColor(2);
-			for (double th_y = 0E-6; th_y <= 150E-6; th_y += 1E-6)
+			for (double th_y = 200E-6; th_y <= 600E-6; th_y += 10E-6)
 			{
 				auto idx = g_fit->GetN();
 				g_fit->SetPoint(idx, th_y, ff->Eval(th_x_mean, th_y));

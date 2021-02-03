@@ -24,8 +24,8 @@ struct HistGroup
 
 	void Init()
 	{
-		de_th_x = new TH1D("", ";#Delta #theta_{x}", 200, -150E-6, +150E-6);
-		de_th_y = new TH1D("", ";#Delta #theta_{y}", 200, -50E-6, +50E-6);
+		de_th_x = new TH1D("", ";#Delta #theta_{x}", 200, -500E-6, +500E-6);
+		de_th_y = new TH1D("", ";#Delta #theta_{y}", 200, -500E-6, +500E-6);
 
 		if (th_x_binning_edges_1d == nullptr)
 			BuildThBinning();
@@ -240,8 +240,8 @@ int main(int argc, const char **argv)
 	TFile *outF = new TFile((string("eff3outof4_") + cfg.diagonal_str + ".root").c_str(), "recreate");
 
 	// tolerances (= 1 sigma of left-right difference)
-	double si_de_th_x = 46E-6;
-	double si_de_th_y = 8.5E-6;
+	double si_de_th_x = 110E-6;
+	double si_de_th_y = 50E-6;
 
 	// vector of cut sigma multiples
 	vector<double> n_si;
@@ -372,11 +372,11 @@ int main(int argc, const char **argv)
 			h_full[rpi][nsi].th_x->Draw("same");
 			c->Write("th_x comparison");
 
-			TH1D *h_simple_ratio_vs_th_x = MakeSimpleRatio(h_full[rpi][nsi].th_x, h_sel[rpi][nsi].th_x, ff, -300E-6, 300E-6, false);
+			TH1D *h_simple_ratio_vs_th_x = MakeSimpleRatio(h_full[rpi][nsi].th_x, h_sel[rpi][nsi].th_x, ff, -30E-6, 30E-6, false);
 			h_simple_ratio_vs_th_x->SetName("h_simple_ratio.th_x");
 			h_simple_ratio_vs_th_x->Write();
 
-			TH1D *h_refined_ratio_vs_th_x = MakeRefinedRatio(h_full[rpi][nsi].th_x, h_sel[rpi][nsi].th_x, ff, -300E-6, 300E-6, false);
+			TH1D *h_refined_ratio_vs_th_x = MakeRefinedRatio(h_full[rpi][nsi].th_x, h_sel[rpi][nsi].th_x, ff, -30E-6, 30E-6, false);
 			h_refined_ratio_vs_th_x->SetName("h_refined_ratio.th_x");
 			h_refined_ratio_vs_th_x->Write();
 
@@ -395,11 +395,11 @@ int main(int argc, const char **argv)
 			h_full[rpi][nsi].th_y->Draw("same");
 			c->Write("th_y comparison");
 
-			TH1D *h_simple_ratio_vs_th_y = MakeSimpleRatio(h_full[rpi][nsi].th_y, h_sel[rpi][nsi].th_y, ff, 30E-6, 150E-6, false);
+			TH1D *h_simple_ratio_vs_th_y = MakeSimpleRatio(h_full[rpi][nsi].th_y, h_sel[rpi][nsi].th_y, ff, 10E-6, 90E-6, false);
 			h_simple_ratio_vs_th_y->SetName("h_simple_ratio.th_y");
 			h_simple_ratio_vs_th_y->Write();
 
-			TH1D *h_refined_ratio_vs_th_y = MakeRefinedRatio(h_full[rpi][nsi].th_y, h_sel[rpi][nsi].th_y, ff, 30E-6, 150E-6, false);
+			TH1D *h_refined_ratio_vs_th_y = MakeRefinedRatio(h_full[rpi][nsi].th_y, h_sel[rpi][nsi].th_y, ff, 10E-6, 90E-6, false);
 			h_refined_ratio_vs_th_y->SetName("h_refined_ratio.th_y");
 			h_refined_ratio_vs_th_y->Write();
 
@@ -428,7 +428,7 @@ int main(int argc, const char **argv)
 			h_simple_ratio_vs_th_x_th_y_unif->Write();
 			
 			//--------------------
-			
+
 			gDirectory = nsiDir->mkdir("t dependence");
 			printf("\tt dependence\n");
 			c = new TCanvas();
