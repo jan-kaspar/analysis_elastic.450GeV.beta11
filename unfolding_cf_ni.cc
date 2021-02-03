@@ -160,7 +160,7 @@ void MakeGraphs()
 	TGraph *g_t_sm = new TGraph(); g_t_sm->SetName("g_t_sm"); g_t_sm->SetLineColor(2);
 	TGraph *g_t_corr = new TGraph(); g_t_corr->SetName("g_t_corr"); g_t_sm->SetLineColor(4);
 
-	for (double t = 1E-4; t <= 0.05; )
+	for (double t = 0.001; t <= 0.10; )
 	{
 		// evaluate distributions
 		const double d_t_true = dist_t_true(t);
@@ -205,7 +205,7 @@ void MakeCorrectionHistograms(const vector<TH1D *> binning_hists)
 
 			double v_corr;
 
-			if (l+w < 3E-4 || l > 0.05)
+			if (l+w < 3E-4 || l > 0.10)
 			{
 				v_corr = 0.;
 			} else {
