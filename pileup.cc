@@ -289,7 +289,7 @@ struct Period
 
 	unsigned int arrayIndexBeforeSort;
 	
-	static const time_t width = 60;	// s
+	static const time_t width = 300;	// s
 
 	Period(unsigned int _run, signed int _idx, time_t _tsf=0, time_t _tsl=0) :
 		run(_run), idx(_idx), ts_first(_tsf), ts_last(_tsl) {}
