@@ -6,10 +6,10 @@ include "../run_info.asy";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string fills[], f_datasets[];
-fills.push("7301"); f_datasets.push("DS-fill7301/Totem1");
-fills.push("7301"); f_datasets.push("DS-fill7301/ZeroBias");
-fills.push("7302"); f_datasets.push("DS-fill7302/Totem1");
-fills.push("7302"); f_datasets.push("DS-fill7302/ZeroBias");
+fills.push("7301"); f_datasets.push("data/fill7301/Totem1");
+fills.push("7301"); f_datasets.push("data/fill7301/ZeroBias");
+fills.push("7302"); f_datasets.push("data/fill7302/Totem1");
+fills.push("7302"); f_datasets.push("data/fill7302/ZeroBias");
 
 string diagonals[], dgn_labels[];
 diagonals.push("45b_56t"); dgn_labels.push("45 bot -- 56 top");

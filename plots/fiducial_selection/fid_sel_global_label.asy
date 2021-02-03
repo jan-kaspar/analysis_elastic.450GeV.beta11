@@ -3,8 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[] = {
-	"DS-fill7301/Totem1",
-	"DS-fill7302/Totem1",
+	"data/fill7301/Totem1",
+	"data/fill7302/Totem1",
 };
 
 real thetas[] = { 200, 300, 400, 500, 600, 700 };

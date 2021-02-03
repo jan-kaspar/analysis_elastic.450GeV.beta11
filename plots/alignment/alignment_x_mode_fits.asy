@@ -2,7 +2,7 @@ import root;
 import pad_layout;
 include "../common.asy";
 
-string dataset = "DS-fill7302/Totem1";
+string dataset = "data/fill7302/Totem1";
 string period = "0";
 
 string units[], unit_labels[];

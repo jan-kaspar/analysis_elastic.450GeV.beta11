@@ -3,8 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[], dataset_fills[];
-datasets.push("DS-fill7301/Totem1"); dataset_fills.push("7301");
-datasets.push("DS-fill7302/Totem1"); dataset_fills.push("7302");
+datasets.push("data/fill7301/Totem1"); dataset_fills.push("7301");
+datasets.push("data/fill7302/Totem1"); dataset_fills.push("7302");
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 

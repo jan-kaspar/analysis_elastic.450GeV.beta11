@@ -5,7 +5,7 @@ include "../common.asy";
 string topDir = "../../";
 
 string datasets[] = {
-	"DS-fill7301/Totem1"
+	"data/fill7301/Totem1"
 };
 
 string diagonals[] = { "45b_56t", "45t_56b" };

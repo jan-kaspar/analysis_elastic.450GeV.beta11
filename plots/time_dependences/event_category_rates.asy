@@ -6,8 +6,8 @@ include "../run_info.asy";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[], ds_labels[];
-datasets.push("DS-fill7301/Totem1"); ds_labels.push("7301");
-datasets.push("DS-fill7302/Totem1"); ds_labels.push("7302");
+datasets.push("data/fill7301/Totem1"); ds_labels.push("7301");
+datasets.push("data/fill7302/Totem1"); ds_labels.push("7302");
 
 string rows[];
 rows.push("top");

@@ -4,7 +4,7 @@ include "../common.asy";
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
-string f = topDir + "DS-fill7301/Totem1/distributions_45t_56b.root";
+string f = topDir + "data/fill7301/Totem1/distributions_45t_56b.root";
 
 string rp = "L_2_F";
 

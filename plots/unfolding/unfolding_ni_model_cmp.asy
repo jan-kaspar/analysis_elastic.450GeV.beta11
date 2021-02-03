@@ -11,7 +11,7 @@ string models[] = {
 	"fit-1",
 };
 
-string dataset = "DS-fill7301/Totem1";
+string dataset = "data/fill7301/Totem1";
 
 xSizeDef = 10cm;
 ySizeDef = 8cm;

@@ -4,8 +4,8 @@ include "../common.asy";
 include "../run_info.asy";
 
 string datasets[], fills[];
-datasets.push("DS-fill7301/Totem1"); fills.push("7301");
-datasets.push("DS-fill7302/Totem1"); fills.push("7302");
+datasets.push("data/fill7301/Totem1"); fills.push("7301");
+datasets.push("data/fill7302/Totem1"); fills.push("7302");
 
 string diagonals[];
 diagonals.push("45b_56t");

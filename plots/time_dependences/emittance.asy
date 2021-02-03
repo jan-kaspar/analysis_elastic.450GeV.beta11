@@ -4,8 +4,8 @@ include "../common.asy";
 include "../run_info.asy";
 
 string fills[], f_datasets[];
-fills.push("7301"); f_datasets.push("DS-fill7301/Totem1");
-fills.push("7302"); f_datasets.push("DS-fill7302/Totem1");
+fills.push("7301"); f_datasets.push("data/fill7301/Totem1");
+fills.push("7302"); f_datasets.push("data/fill7302/Totem1");
 
 string quantities[], q_labels[];
 pen q_pens[];

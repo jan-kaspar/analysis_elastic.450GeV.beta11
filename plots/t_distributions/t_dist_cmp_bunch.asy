@@ -2,7 +2,7 @@ import root;
 import pad_layout;
 include "../common.asy";
 
-string dataset = "DS-fill5317";
+string dataset = "data/fill5317";
 
 string bunches[];
 bunches.push("10");

@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string diagonals[] = { "45t_56b" };
 string diagonal_labels[] = { "45t -- 56b" };

@@ -2,7 +2,7 @@ import root;
 import pad_layout;
 include "../common.asy";
 
-string dataset = "DS-fill7301/Totem1";
+string dataset = "data/fill7301/Totem1";
 string period = "0";
 int period_idx = 0; // period index in global graph
 string unit = "L_2_F";

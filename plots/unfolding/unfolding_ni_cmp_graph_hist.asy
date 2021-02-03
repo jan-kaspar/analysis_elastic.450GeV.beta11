@@ -9,7 +9,7 @@ string diagonal_labels[] = { "45t -- 56b" };
 
 string model = "fit-1";
 
-string dataset = "DS-fill7301/Totem1";
+string dataset = "data/fill7301/Totem1";
 
 string binnings[] = {
 	"ub",

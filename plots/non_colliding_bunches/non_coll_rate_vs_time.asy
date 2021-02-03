@@ -5,8 +5,8 @@ include "../run_info.asy";
 
 string datasets[], fills[];
 pen d_pens[];
-datasets.push("DS-fill7284/EmptyBX"); fills.push("7284"); d_pens.push(red);
-datasets.push("DS-fill7289/EmptyBX"); fills.push("7289"); d_pens.push(blue);
+datasets.push("data/fill7284/EmptyBX"); fills.push("7284"); d_pens.push(red);
+datasets.push("data/fill7289/EmptyBX"); fills.push("7289"); d_pens.push(blue);
 
 string conditions[], c_labels[];
 pen c_pens[];

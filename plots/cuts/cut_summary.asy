@@ -5,8 +5,8 @@ include "../common.asy";
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string datasets[] = {
-	"DS-fill7301/Totem1",
-	"DS-fill7302/Totem1",
+	"data/fill7301/Totem1",
+	"data/fill7302/Totem1",
 };
 
 string dgns[] = {

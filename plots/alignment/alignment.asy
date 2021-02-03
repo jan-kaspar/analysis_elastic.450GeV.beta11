@@ -4,8 +4,8 @@ include "../common.asy";
 include "../run_info.asy";
 
 string datasets[], fills[];
-datasets.push("DS-fill7301/Totem1"); fills.push("7301");
-datasets.push("DS-fill7302/Totem1"); fills.push("7302");
+datasets.push("data/fill7301/Totem1"); fills.push("7301");
+datasets.push("data/fill7302/Totem1"); fills.push("7302");
 
 string units[], unit_labels[];
 units.push("L_2_F"); unit_labels.push("L-220-fr");

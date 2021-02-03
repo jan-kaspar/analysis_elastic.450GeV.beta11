@@ -5,8 +5,8 @@ include "../run_info.asy";
 
 string datasets[];
 string periods[][];
-datasets.push("DS-fill7301/Totem1"); periods.push(new string[] { "0", "1"} );
-datasets.push("DS-fill7302/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7301/Totem1"); periods.push(new string[] { "0", "1"} );
+datasets.push("data/fill7302/Totem1"); periods.push(new string[] { "0", "1"} );
 
 string units[], unit_labels[];
 real u_ycut_neg[], u_ycut_pos[];

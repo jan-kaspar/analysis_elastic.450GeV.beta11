@@ -5,7 +5,7 @@ include "../common.asy";
 xSizeDef = 10cm;
 ySizeDef = 8cm;
 
-string dataset = "DS-fill7302/Totem1";
+string dataset = "data/fill7302/Totem1";
 
 //----------------------------------------------------------------------------------------------------
 

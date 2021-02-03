@@ -3,8 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[], fills[];
-datasets.push("DS-fill7301/Totem1"); fills.push("7301");
-datasets.push("DS-fill7302/Totem1"); fills.push("7302");
+datasets.push("data/fill7301/Totem1"); fills.push("7301");
+datasets.push("data/fill7302/Totem1"); fills.push("7302");
 
 string diagonals[];
 diagonals.push("45b_56t");
@@ -61,7 +61,7 @@ for (int rpi : rps.keys)
 		// plot fits per dataset
 		for (int dsi : datasets.keys)
 		{
-			if (rp_labels[rpi] == "L-220-fr" && diagonals[dgi] == "45t_56b" && datasets[dsi] == "DS-fill5317")
+			if (rp_labels[rpi] == "L-220-fr" && diagonals[dgi] == "45t_56b" && datasets[dsi] == "data/fill5317")
 				continue;
 
 			string f = topDir + datasets[dsi] + "/eff3outof4_fit.root";

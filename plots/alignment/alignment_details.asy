@@ -5,8 +5,8 @@ include "../run_info.asy";
 
 string datasets[];
 string periods[];
-datasets.push("DS-fill7301/Totem1"); periods.push("0");
-//datasets.push("DS-fill7302/Totem1"); periods.push("0");
+datasets.push("data/fill7301/Totem1"); periods.push("0");
+datasets.push("data/fill7302/Totem1"); periods.push("0");
 
 string units[], unit_labels[];
 units.push("L_2_F"); unit_labels.push("L-220-fr");
