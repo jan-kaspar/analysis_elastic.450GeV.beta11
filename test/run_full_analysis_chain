@@ -18,8 +18,7 @@ datasets="data/fill*/Totem1"
 ./run -wait "distributions.cc" $datasets -O "-bootstrap 1 -details 5" || exit 10
 ./run -wait "distributions_anti.cc" $datasets -danti || exit 11
 
-# TODO: uncomment once the RP directory is restored
-#./run -wait "process_timber.cc" $datasets || exit 20
+./run -wait "process_timber.cc" $datasets || exit 20
 
 ./run -wait "alignment.cc" $datasets || exit 21
 ./run -wait "eff3outof4.cc" $datasets || exit 22
