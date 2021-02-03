@@ -10,8 +10,8 @@ using namespace std;
 int main()
 {
 	vector<string> datasets = {
-		"DS-fill7301/Totem1",
-		"DS-fill7302/Totem1",
+		"fill7301/Totem1",
+		"fill7302/Totem1",
 	};
 
 	vector<string> diagonals = {
@@ -40,7 +40,7 @@ int main()
 
 			double entries = h_in->GetEntries();
 
-			printf("%10.2E", entries);
+			printf("%10.3E", entries);
 
 			entries_tot += entries;
 		}
@@ -48,7 +48,7 @@ int main()
 		printf("\n");
 	}
 
-	printf("\n* total: %.2E\n", entries_tot);
+	printf("\n* total: %.3E\n", entries_tot);
 
 	return 0;
 }
