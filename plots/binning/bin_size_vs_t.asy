@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 xSizeDef = 10cm;
 ySizeDef = 8cm;

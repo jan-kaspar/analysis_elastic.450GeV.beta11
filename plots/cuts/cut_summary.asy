@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 

@@ -1,5 +1,6 @@
 import root;
 import pad_layout;
+include "../common.asy";
 include common_code;
 
 //----------------------------------------------------------------------------------------------------
@@ -11,8 +12,6 @@ string datasets[] = { "merged" };
 
 string diagonals[] = { "combined" };
 string diagonals_long[] = { "combined" };
-
-string topDir = "../../";
 
 xSizeDef = 8cm;
 ySizeDef = 6cm;

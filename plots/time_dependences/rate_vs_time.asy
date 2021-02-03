@@ -1,5 +1,6 @@
 import root;
 import pad_layout;
+include "../common.asy";
 include "../run_info.asy";
 
 string datasets[], fills[];
@@ -14,8 +15,6 @@ pen t_pens[];
 types.push("input"); t_labels.push("coincidence of 2 RPs (220-fr)"); t_pens.push(heavygreen);
 types.push("dgn"); t_labels.push("coincidence of 4 RPs (220-fr and 210-fr)"); t_pens.push(red);
 types.push("sel"); t_labels.push("selected"); t_pens.push(blue);
-
-string topDir = "../../";
 
 xSizeDef = 10cm;
 ySizeDef = 6cm;

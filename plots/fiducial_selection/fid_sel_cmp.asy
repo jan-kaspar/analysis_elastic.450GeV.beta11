@@ -1,11 +1,10 @@
 import root;
 import pad_layout;
-
-string top_dir = "../../";
+include "../common.asy";
 
 string datasets[] = {
 	"DS-fill7301/Totem1",
-	//"DS-fill7302/Totem1",
+	"DS-fill7302/Totem1",
 };
 
 string diagonals[], diagonal_labels[];
@@ -32,7 +31,7 @@ for (int dsi : datasets.keys)
 
 	for (int dgni : diagonals.keys)
 	{
-		string f = top_dir+"/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
+		string f = topDir+"/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
 
 		TH2_x_min = -800e-6;
 		TH2_x_max = +800e-6;

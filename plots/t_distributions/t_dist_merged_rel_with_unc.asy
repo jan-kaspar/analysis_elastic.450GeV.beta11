@@ -1,8 +1,7 @@
 import root;
 import pad_layout;
+include "../common.asy";
 include common_code;
-
-string topDir = "../../";
 
 string dataset = "merged";
 

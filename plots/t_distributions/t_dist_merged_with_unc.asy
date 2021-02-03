@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 //string binning = "ob-1-20-0.05";
 string binning = "ob-2-10-0.05";

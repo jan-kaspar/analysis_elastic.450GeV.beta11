@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string diagonals[], diagLabels[];
 diagonals.push("45b_56t"); diagLabels.push("45 bot -- 56 top");

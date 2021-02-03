@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string dataset = "DS-fill7302/Totem1";
 string period = "0";

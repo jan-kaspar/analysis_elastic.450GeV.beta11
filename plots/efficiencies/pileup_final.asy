@@ -1,9 +1,7 @@
 import root;
 import pad_layout;
-
+include "../common.asy";
 include "../run_info.asy";
-
-string topDir = "../../";
 
 string fills[], f_datasets[];
 fills.push("7301"); f_datasets.push("DS-fill7301/ZeroBias");

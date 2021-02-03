@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string top_dir = "../../";
+include "../common.asy";
 
 string datasets[] = {
 	"DS-fill7301/Totem1",
@@ -27,7 +26,7 @@ for (int dsi : datasets.keys)
 		NewPad(false);
 		label("\vbox{\SetFontSizesXX\hbox{" + datasets[dsi] + "}\hbox{" + diagonal_labels[dgni]+ "}}");
 
-		string f = top_dir+"/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
+		string f = topDir+"/"+datasets[dsi]+"/distributions_" + diagonals[dgni] + ".root";
 
 		TH2_x_min = -800e-6;
 		TH2_x_max = +800e-6;

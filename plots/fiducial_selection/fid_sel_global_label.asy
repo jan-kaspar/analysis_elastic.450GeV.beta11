@@ -1,9 +1,9 @@
 import root;
 import pad_layout;
-
-string top_dir = "../../";
+include "../common.asy";
 
 string datasets[] = {
+	"DS-fill7301/Totem1",
 	"DS-fill7302/Totem1",
 };
 
@@ -49,7 +49,7 @@ for (int dsi : datasets.keys)
 	for (int dgni : dgns.keys)
 	{
 		string opt = (dgni == 0) ? "def" : "p";
-		draw(scale(1e6, 1e6), RootGetObject(top_dir+"/"+datasets[dsi]+"/distributions_" + dgns[dgni] + ".root", "acceptance correction/h2_th_y_vs_th_x_after"), opt);
+		draw(scale(1e6, 1e6), RootGetObject(topDir+"/"+datasets[dsi]+"/distributions_" + dgns[dgni] + ".root", "acceptance correction/h2_th_y_vs_th_x_after"), opt);
 	}
 	
 	// accepted arcs
@@ -57,7 +57,7 @@ for (int dsi : datasets.keys)
 	{
 		for (int dgni : dgns.keys)
 		{
-			string f = top_dir+"/"+datasets[dsi]+"/distributions_" + dgns[dgni] + ".root";
+			string f = topDir+"/"+datasets[dsi]+"/distributions_" + dgns[dgni] + ".root";
 
 			for (string name : RootGetListOfObjects(f, "fiducial cuts"))
 			{

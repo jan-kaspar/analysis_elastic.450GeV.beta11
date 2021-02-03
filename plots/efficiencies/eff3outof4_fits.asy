@@ -1,7 +1,6 @@
 import root;
 import pad_layout;
-
-string topDir = "../../";
+include "../common.asy";
 
 string datasets[], fills[];
 datasets.push("DS-fill7301/Totem1"); fills.push("7301");
