@@ -1,3 +1,5 @@
+import patterns;
+
 //----------------------------------------------------------------------------------------------------
 
 transform swToHours = scale(1/3600, 1);
@@ -5,23 +7,39 @@ transform swToMinutes = scale(1/60, 1);
 
 //----------------------------------------------------------------------------------------------------
 
-string run_datasets[];
 int runs[];
-real ts_from[], ts_to[];
-pen colors[];
+string run_datasets[];
+real run_ts_from[], run_ts_to[];
+pen run_colors[];
 
-void AddRun(string ds, int r, real f, real t, pen p = yellow)
+void AddRun(string ds, int r, real f, real t, pen p = yellow + opacity(0.3))
 {
 	run_datasets.push(ds);
 	runs.push(r);
-	ts_from.push(f);
-	ts_to.push(t);
-	colors.push(p);
+	run_ts_from.push(f);
+	run_ts_to.push(t);
+	run_colors.push(p);
 }
 
+//----------------------------------------------------------------------------------------------------
+
+string excl_datasets[];
+real excl_ts_from[], excl_ts_to[];
+
+void AddExcl(string ds, real f, real t)
+{
+	excl_datasets.push(ds);
+	excl_ts_from.push(f);
+	excl_ts_to.push(t);
+}
+
+pen p_excl = black + opacity(0.4);
+
+// fill 7301
 AddRun("7301", 324575, 58711, 60559);
 AddRun("7301", 324576, 61090, 62660);
 
+// fill 7302
 AddRun("7302", 324578, 69013, 73405);
 AddRun("7302", 324579, 73563, 75862);
 AddRun("7302", 324580, 75983, 76430);
@@ -41,16 +59,16 @@ void DrawBands(string filter="", string bands="ds", string labels="ds", real y_m
 	{
 		if (run_datasets[i] == filter)
 		{
-			x_min = min(x_min, ts_from[i]/3600);
-			x_max = max(x_max, ts_to[i]/3600);
+			x_min = min(x_min, run_ts_from[i]/3600);
+			x_max = max(x_max, run_ts_to[i]/3600);
 		}
 	}
 
 	// draw bands
-	pen p = yellow+opacity(0.3);
-
 	if (bands == "ds")
 	{
+		pen p = yellow+opacity(0.3);
+
 		filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p, nullpen);
 	}
 
@@ -61,8 +79,20 @@ void DrawBands(string filter="", string bands="ds", string labels="ds", real y_m
 			if (run_datasets[i] != filter)
 				continue;
 
-			real x_min = ts_from[i]/3600, x_max = ts_to[i]/3600;
-			filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p, nullpen);
+			real x_min = run_ts_from[i]/3600, x_max = run_ts_to[i]/3600;
+			filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, run_colors[i], nullpen);
+		}
+	}
+
+	// draw exclusions
+	{
+		for (int i : excl_datasets.keys)
+		{
+			if (excl_datasets[i] == filter)
+			{
+				real x_min = excl_ts_from[i]/3600, x_max = excl_ts_to[i]/3600;
+				filldraw((x_min, y_min)--(x_max, y_min)--(x_max, y_max)--(x_min, y_max)--cycle, p_excl, nullpen);
+			}
 		}
 	}
 
@@ -79,7 +109,7 @@ void DrawBands(string filter="", string bands="ds", string labels="ds", real y_m
 			if (run_datasets[i] != filter)
 				continue;
 
-			real x_min = ts_from[i]/3600, x_max = ts_to[i]/3600;
+			real x_min = run_ts_from[i]/3600, x_max = run_ts_to[i]/3600;
 			label(format("{\SmallerFonts %u}", runs[i]), ((x_min + x_max)/2, y_max), S);
 		}
 	}
@@ -109,7 +139,7 @@ void DrawRunBoundaries(string filter="")
 			if (run_datasets[i] != filter)
 				continue;
 
-		yaxis(XEquals(ts_from[i]/3600, false), dashed);
-		yaxis(XEquals(ts_to[i]/3600, false), dashed);
+		yaxis(XEquals(run_ts_from[i]/3600, false), dashed);
+		yaxis(XEquals(run_ts_to[i]/3600, false), dashed);
 	}
 }
