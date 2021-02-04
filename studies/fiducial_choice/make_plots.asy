@@ -1,7 +1,7 @@
 import root;
 import pad_layout;
 
-string topDir = "../DS-all-good/Totem1/";
+string topDir = "../../data/all-good/Totem1/";
 
 string dgns[], d_labels[];
 dgns.push("45b_56t"); d_labels.push("45 bot -- 56 top");
@@ -65,26 +65,14 @@ void DrawOne(string fn, string con, string con_h_lab, string con_v_lab, string t
 
 //----------------------------------------------------------------------------------------------------
 
-/*
 string tests[] = new string[] { "default", "vtx_x_low", "vtx_x_mid", "vtx_x_hig" };
 DrawOne("vtx_x", "selected - vertex/h_vtx_x", "$x^*$", "", tests);
 
 string tests[] = new string[] { "default", "vtx_y_low", "vtx_y_mid", "vtx_y_hig" };
 DrawOne("vtx_y", "selected - vertex/h_vtx_y", "$y^*$", "", tests);
-*/
 
-//string tests[] = new string[] { "default", "vtx_x_y_mid" };
-//DrawOne("vtx_x_y", "selected - vertex/h_vtx_y", "$y^*$", "", tests);
-
-/*
 string tests[] = new string[] { "default", "th_x_low", "th_x_mid", "th_x_hig" };
 DrawOne("th_x", "fiducial cuts/fc_G", "$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", tests);
-*/
 
 string tests[] = new string[] { "default", "th_y_low", "th_y_mid", "th_y_hig" };
 DrawOne("th_y", "fiducial cuts/fc_G", "$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", tests);
-
-/*
-string tests[] = new string[] { "default", "opt1", "opt1LR" };
-DrawOne("opt", "fiducial cuts/fc_G", "$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", tests);
-*/
