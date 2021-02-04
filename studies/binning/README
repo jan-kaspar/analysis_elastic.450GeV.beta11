@@ -1,4 +1,4 @@
-1. Run make
+1. Run mk
 
 2. Run "./get_acceptance_correction" which will extract from
 		"../DS-XXX/XXX/distributions_XXX.root"
@@ -8,7 +8,7 @@
 		"acceptance_correction.root"
 
 3. Run "./make_fit" which will fit histogram
-		"ub/merged/45b_56t/h_dNdt"
+		"eb/merged/45b_56t/h_dNdt"
 	from
 		"../DS-merged/merged.root"
 	and save into
@@ -17,3 +17,5 @@
 4. Run "./simu"
 
 5. Run "./make_generators"
+
+6. Make plots in "plots/".

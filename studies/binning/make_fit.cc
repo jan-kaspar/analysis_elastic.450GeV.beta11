@@ -5,7 +5,7 @@
 
 int main()
 {
-	TFile *f_in = new TFile("../DS-merged/merged.root");
+	TFile *f_in = new TFile("../../data/merged.root");
 	TH1D *h_in = (TH1D *) f_in->Get("ub/merged/combined/h_dNdt");
 	//TH1D *h_in = (TH1D *) f_in->Get("ub/merged/45t_56b/h_dsdt");
 
