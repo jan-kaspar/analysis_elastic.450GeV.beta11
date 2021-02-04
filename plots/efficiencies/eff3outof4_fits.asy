@@ -16,79 +16,59 @@ rps.push("L_1_F"); rp_labels.push("45-210-fr");
 rps.push("R_1_F"); rp_labels.push("56-210-fr");
 rps.push("R_2_F"); rp_labels.push("56-220-fr" );
 
+string slices[], s_labels[];
+slices.push("slice_th_x_-250_-200"); s_labels.push("$-250 < \th^*_x < -200\un{\mu rad}$");
+slices.push("slice_th_x_-200_-100"); s_labels.push("$-200 < \th^*_x < -100\un{\mu rad}$");
+slices.push("slice_th_x_-100_+0"); s_labels.push("$-100 < \th^*_x < 0\un{\mu rad}$");
+slices.push("slice_th_x_+0_+100"); s_labels.push("$0 < \th^*_x < +100\un{\mu rad}$");
+slices.push("slice_th_x_+100_+200"); s_labels.push("$+100 < \th^*_x < +200\un{\mu rad}$");
+slices.push("slice_th_x_+200_+250"); s_labels.push("$+200 < \th^*_x < +250\un{\mu rad}$");
+
 xSizeDef = 6cm;
 ySizeDef = 5cm;
 yTicksDef = RightTicks(5., 1.);
-
-int gx=0, gy=0;
-
-TF1_nPoints = 4;
 
 //----------------------------------------------------------------------------------------------------
 
 for (int dsi : datasets.keys)
 {
-	real rp_eff_cen[] = { 0.96, 0.98, 0.97, 0.95};
-	//if (datasets[dsi] == "DS2a")
-	//	rp_eff_cen = new real[] { 0.95, 0.98, 0.98, 0.96 };
+	real rp_eff_cen[] = { 0.96, 0.98, 0.97, 0.98};
 
 	for (int dgi : diagonals.keys)
 	{
-		string f = topDir + datasets[dsi] + "/eff3outof4_fit.root";
-		string opt = "vl,eb";
-		
-		++gy; gx = 0;
-		for (int rpi : rps.keys)
-		{
-			++gx;
-			NewPad(false, gx, gy);
-			label("{\SetFontSizesXX " + rp_labels[rpi] + "}");
-		}
-		
-		NewPad(false, -1, gy);
-		label(replace("\vbox{\SetFontSizesXX\hbox{dataset: "+datasets[dsi]+"}\hbox{diagonal: "+diagonals[dgi]+"}}", "_", "\_"));
+		NewPage();
 
+		string f = topDir + datasets[dsi] + "/eff3outof4_fit_" + diagonals[dgi] + ".root";
+
+		NewRow();
+
+		NewPadLabel(replace("\vbox{\SetFontSizesXX\hbox{dataset: "+datasets[dsi]+"}\hbox{diagonal: "+diagonals[dgi]+"}}", "_", "\_"));
+		
+		for (int rpi : rps.keys)
+			NewPadLabel(rp_labels[rpi]);
+		
 		frame fLegend;
 
-		++gy; gx = 0;
-		for (int rpi : rps.keys)
+		for (int sli : slices.keys)
 		{
-			string d = diagonals[dgi] + "/" + rps[rpi];
+			NewRow();
 
-			++gx;
-			NewPad("$\th_y^*\ung{\mu rad}$", "\ung{\%}", gx, gy);
-			currentpad.yTicks = RightTicks(1., 0.5);
-			draw(scale(1e6, 100), RootGetObject(f, d+"/h_refined_ratio.th_y"), opt, blue, "efficiency histogram");
+			NewPadLabel(s_labels[sli]);
 
-			/*
-			RootObject fit = RootGetObject(f, d+"/pol0");
-			TF1_x_min = -inf; TF1_x_max = +inf;
-			draw(scale(1e6, 100), fit, heavygreen+2pt, "const fit");
-			TF1_x_min = 0; TF1_x_max = 120e-6;
-			draw(scale(1e6, 100), fit, heavygreen+dashed);
-			*/
+			for (int rpi : rps.keys)
+			{
+				NewPad("$\th_y^*\ung{\mu rad}$", "\ung{\%}");
+				currentpad.yTicks = RightTicks(1., 0.5);
 
-			RootObject fit = RootGetObject(f, d+"/pol1");
-			TF1_x_min = -inf; TF1_x_max = +inf;
-			draw(scale(1e6, 100), fit, red+2pt, "linear fit");
-			TF1_x_min = 0; TF1_x_max = 120e-6;
-			draw(scale(1e6, 100), fit, red+dashed);
+				string p_base = rps[rpi] + "/" + slices[sli] + "/cmp";
 
-			real y = 100*rp_eff_cen[rpi] - 1.5;
+				draw(scale(1e6, 100), RootGetObject(f, p_base+"|h_th_y_slice"), "vl,eb", blue, "efficiency histogram");
+				draw(scale(1e6, 100), RootGetObject(f, p_base+"|g_fit"), "l", red, "fit");
 
-			string slope_label = format("slope = ($%#.1f$", fit.rExec("GetParameter", 1))
-				+ format("$\pm %#.1f) \un{rad^{-1}}$", fit.rExec("GetParError", 1));
-			label(slope_label, (400, y), red, Fill(white));
-
-			limits((150, 100*rp_eff_cen[rpi] - 2), (650, 100*rp_eff_cen[rpi] + 2), Crop);
-			fLegend = BuildLegend();
-		}
-
-		if (dgi == 0)
-		{
-			++gx;
-			NewPad(false, gx, gy);
-			add(fLegend);
+				//limits((0, 100*rp_eff_cen[rpi] - 2), (150, 100*rp_eff_cen[rpi] + 2), Crop);
+				limits((200, 90), (550, 100), Crop);
+				fLegend = BuildLegend();
+			}
 		}
 	}
 }

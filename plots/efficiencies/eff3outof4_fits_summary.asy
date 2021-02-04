@@ -61,7 +61,7 @@ for (int rpi : rps.keys)
 		// plot fits per dataset
 		for (int dsi : datasets.keys)
 		{
-			if (rp_labels[rpi] == "L-220-fr" && diagonals[dgi] == "45t_56b" && datasets[dsi] == "data/fill5317")
+			if (rp_labels[rpi] == "L-220-fr" && diagonals[dgi] == "45t_56b")
 				continue;
 
 			string f = topDir + datasets[dsi] + "/eff3outof4_fit.root";
