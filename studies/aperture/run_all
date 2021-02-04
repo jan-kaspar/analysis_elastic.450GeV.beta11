@@ -1,0 +1,11 @@
+#!/bin/bash
+
+make -C ../.. -j8 || exit 1
+
+./single_arm &> single_arm.log &
+./double_arm &> double_arm.log &
+./double_arm_realistic &> double_arm_realistic.log &
+
+wait
+
+echo "done"

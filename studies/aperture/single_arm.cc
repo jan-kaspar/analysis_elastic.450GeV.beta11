@@ -1,8 +1,9 @@
-#include "../common_definitions.h"
+#include "classes/Environment.hh"
 
-#include "apertures.h"
-#include "aperture_list.h"
+#include "apertures.hh"
+#include "aperture_list.hh"
 
+#include "TFile.h"
 #include "TH2D.h"
 #include "TRandom3.h"
 

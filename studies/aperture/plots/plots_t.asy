@@ -1,8 +1,10 @@
 import root;
 import pad_layout;
 
-string f_si = "single_arm.root";
-string f_do = "double_arm.root";
+string topDir = "../";
+
+string f_si = topDir + "single_arm.root";
+string f_do = topDir + "double_arm.root";
 
 //----------------------------------------------------------------------------------------------------
 
@@ -23,7 +25,7 @@ NewPad("$|t|\ung{GeV^2}$", "(vtx included) / (vtx neglected)");
 
 draw(RootGetObject(f_si, "arm 1/h_t_acc_vtx_inc_over_neg"), "vl", magenta);
 
-limits((0, 0.0), (0.10, 1.2), Crop);
+limits((0, 0.0), (0.05, 1.2), Crop);
 
 //----------------------------------------------------------------------------------------------------
 
@@ -46,4 +48,4 @@ NewPad("$|t|\ung{GeV^2}$", "(vtx included) / (vtx neglected)");
 
 draw(RootGetObject(f_do, "h_t_acc_vtx_inc_over_neg"), "vl", magenta);
 
-limits((0, 0.0), (0.10, 1.2), Crop);
+limits((0, 0.0), (0.05, 1.2), Crop);

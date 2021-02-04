@@ -1,3 +1,12 @@
+#ifndef _aperture_list_hh_
+#define _aperture_list_hh_
+
+#include "apertures.hh"
+
+#include <vector>
+#include <string>
+#include <map>
+
 std::map<unsigned int, std::vector<Element>> elements;
 
 void InitElements()
@@ -65,4 +74,9 @@ void InitElements()
 
 		{ "XRPH.B6R5.B1", 2.20E+02, { "RP", 3.1E-3, 0., 0., 0. }, { -3.23E+00, 7.02E+00, -3.11E+00, 1.75E+01} },
 	};
+
+	// symmetric approximation
+	elements[0] = elements[1];
 }
+
+#endif

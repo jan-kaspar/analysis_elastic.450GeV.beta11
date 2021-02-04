@@ -1,3 +1,10 @@
+#ifndef _apertures_hh_
+#define _apertures_hh_
+
+#include <vector>
+#include <string>
+#include <cmath>
+
 struct Optics
 {
 	double v_x, L_x, v_y, L_y;
@@ -23,9 +30,9 @@ struct Element
 
 //----------------------------------------------------------------------------------------------------
 
-vector<unsigned int> CheckApertures(const vector<Element> &elements, double th_x, double th_y, double vtx_x, double vtx_y)
+std::vector<unsigned int> CheckApertures(const std::vector<Element> &elements, double th_x, double th_y, double vtx_x, double vtx_y)
 {
-	vector<unsigned int> indices;
+	std::vector<unsigned int> indices;
 
 	for (unsigned int ei = 0; ei < elements.size(); ++ei)
 	{
@@ -55,3 +62,5 @@ vector<unsigned int> CheckApertures(const vector<Element> &elements, double th_x
 
 	return indices;
 }
+
+#endif
