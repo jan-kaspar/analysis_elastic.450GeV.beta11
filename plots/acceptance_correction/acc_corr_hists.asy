@@ -3,7 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[] = {
-	"data/fill7301/Totem1"
+	"data/fill7301/Totem1",
+	"data/fill7302/Totem1"
 };
 
 real t_min[] = { 0.027, 0.02 };

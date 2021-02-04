@@ -5,7 +5,7 @@ include "../common.asy";
 string diagonals[] = { "45t_56b" };
 string diagonal_labels[] = { "45t -- 56b" };
 
-string model = "new_fit:2,KL,con-g_fit";
+string model = "fit-1";
 
 string extensions[] = {
 	"x+1",

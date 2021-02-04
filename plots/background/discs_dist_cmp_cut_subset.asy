@@ -3,8 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[];
-datasets.push("data/fill7301/Totem1");
-datasets.push("data/fill7302/Totem1");
+datasets.push("fill7301/Totem1");
+datasets.push("fill7302/Totem1");
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
@@ -24,7 +24,7 @@ void MakeComparison(string quantity, real xscale, string unit, string obj, real 
 	scale(Linear, Log(true));
 	for (int ci : combinations.keys)
 	{
-		string f = topDir+"/background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+		string f = topDir+"/studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 		draw(scale(xscale, 1), RootGetObject(f, "elastic cuts/"+obj), "vl",
 			comb_pens[ci], replace(combinations[ci], "_", "\_"));	
 	}

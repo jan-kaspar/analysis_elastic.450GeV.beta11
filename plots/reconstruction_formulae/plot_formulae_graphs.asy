@@ -2,7 +2,7 @@ import root;
 import pad_layout;
 include "../common.asy";
 
-string f = "../../reconstruction_formulae/test_formulae_graph.root";
+string f = topDir + "studies/reconstruction_formulae/test_formulae_graph.root";
 
 void DrawSet(string iq, real scale_x, string unit, string formulae[])
 {

@@ -32,12 +32,12 @@ for (int dsi : datasets.keys)
 	//TH2_z_max = 3.75;
 
 	// 45 bottom - 56 top
-	string f = top_dir+"/"+datasets[dsi]+"/distributions_45b_56t.root";
+	string f = topDir+"/"+datasets[dsi]+"/distributions_45b_56t.root";
 	draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_vs_th_x"), "def");
 	draw(scale(1e6, 1e6) * xyswitch, RootGetObject(f, "selected - angles/g_mode_th_x_vs_th_y"), "p");
 	
 	// 45 top - 56 bottom
-	string f = top_dir+"/"+datasets[dsi]+"/distributions_45t_56b.root";
+	string f = topDir+"/"+datasets[dsi]+"/distributions_45t_56b.root";
 	draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_vs_th_x"), "p");
 	draw(scale(1e6, 1e6) * xyswitch, RootGetObject(f, "selected - angles/g_mode_th_x_vs_th_y"), "p");
 	

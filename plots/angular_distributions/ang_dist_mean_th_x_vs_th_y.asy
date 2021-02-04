@@ -59,7 +59,7 @@ for (int dsi : datasets.keys)
 			draw(scale(1e6, 1e6), RootGetObject(f, base + "|pol1"), p + dashed);
 		}
 
-		limits((-300, -30), (300, 30), Crop);
+		limits((-300, -100), (300, 100), Crop);
 	}
 	
 	f_legend = BuildLegend();

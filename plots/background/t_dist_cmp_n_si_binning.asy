@@ -2,7 +2,7 @@ import root;
 import pad_layout;
 include "../common.asy";
 
-string dataset = "data/fill7302/Totem1";
+string dataset = "fill7302/Totem1";
 
 string diagonals[] = { "45b_56t", "45t_56b" };
 string dgn_labels[] = { "45b -- 56t", "45t -- 56b" };
@@ -81,7 +81,7 @@ for (int bi : binnings.keys)
 			if (combinations[ci] == ref_comb)
 				label += " (reference)";
 		
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			draw(RootGetObject(f, hist_path), "eb", comb_pens[ci], label);
 		}
 		
@@ -102,7 +102,7 @@ for (int bi : binnings.keys)
 			if (combinations[ci] == ref_comb)
 				label += " (reference)";
 		
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			draw(RootGetObject(f, hist_path), "eb", comb_pens[ci], label);
 		}
 		
@@ -117,7 +117,7 @@ for (int bi : binnings.keys)
 		
 		//--------------------
 		
-		string ref_f = topDir+"background_studies/"+dataset+"/"+ref_comb+"/distributions_"+diagonal+".root";
+		string ref_f = topDir+"studies/background/"+dataset+"/"+ref_comb+"/distributions_"+diagonal+".root";
 		RootObject ref_o = RootGetObject(ref_f, hist_path);
 		
 		//--------------------
@@ -128,7 +128,7 @@ for (int bi : binnings.keys)
 			//if (combinations[ci] == ref_comb)
 			//	continue;
 		
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			RootObject o = RootGetObject(f, hist_path);
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}
@@ -143,7 +143,7 @@ for (int bi : binnings.keys)
 			//if (combinations[ci] == ref_comb)
 			//	continue;
 		
-			string f = topDir+"background_studies/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
+			string f = topDir+"studies/background/"+dataset+"/"+combinations[ci]+"/distributions_"+diagonal+".root";
 			RootObject o = RootGetObject(f, hist_path);
 			PlotRatio(o, ref_o, comb_pens[ci]);
 		}

@@ -3,8 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[];
-datasets.push("data/fill7301/Totem1");
-datasets.push("data/fill7302/Totem1");
+datasets.push("fill7301/Totem1");
+datasets.push("fill7302/Totem1");
 
 string diagonals[] = { "45b_56t", "45t_56b", "anti_45b_56b", "anti_45t_56t" };
 string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot", "45 bot -- 56 bot", "45 top -- 56 top" };
@@ -24,7 +24,7 @@ void MakeComparison(string cut_str, string quantity, real xscale, string unit, s
 	AddToLegend("<" + quantity);
 	AddToLegend("<(" + cut_str + ")");
 	
-	string dir = topDir+"background_studies/"+dataset+"/"+cut_str;
+	string dir = topDir+"studies/background/"+dataset+"/"+cut_str;
 
 	for (int dgni : diagonals.keys)
 		draw(scale(xscale, 1), RootGetObject(dir + "/distributions_"+diagonals[dgni]+".root", "elastic cuts/"+obj),

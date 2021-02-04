@@ -40,7 +40,7 @@ void DrawSet(string binning)
 			pen p = StdPen(dsi+1);
 
 			DrawRelDiff(
-				RootGetObject(topDir+"DS-merged/merged.root", binning+"/"+datasets[dsi]+"/"+diagonals[di]+"/h_dsdt"),
+				RootGetObject(topDir+"data/merged.root", binning+"/"+datasets[dsi]+"/"+diagonals[di]+"/h_dsdt"),
 				p, datasets[dsi]);
 			
 			limits((0, -0.03), (0.25, 0.03), Crop);
@@ -59,4 +59,4 @@ void DrawSet(string binning)
 
 //----------------------------------------------------------------------------------------------------
 
-DrawSet("ob-3-5-0.05");
+DrawSet("eb");

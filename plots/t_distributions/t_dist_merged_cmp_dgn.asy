@@ -18,7 +18,7 @@ for (int dgni : diagonals.keys)
 {
 	pen p = StdPen(dgni + 1);
 
-	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/merged/" + diagonals[dgni] + "/h_dsdt"),
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/" + diagonals[dgni] + "/h_dsdt"),
 		"d0,eb", p, diagLabels[dgni]);
 
 	AddToLegend(format("events $%.2E$", robj.rExec("GetEntries")));

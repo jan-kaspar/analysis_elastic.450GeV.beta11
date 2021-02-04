@@ -3,9 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string binnings[] = {
-	"ob-1-20-0.05",
-	"ob-2-10-0.05",
-	"ob-3-5-0.05",
+	"eb",
+	"ub",
 };
 
 drawGridDef = true;
@@ -30,17 +29,18 @@ for (int bi : binnings.keys)
 	scale(Linear, Log);
 	currentpad.xTicks = LeftTicks(0.2, 0.1);
 
-	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
 
-	limits((0, 1e-3), (1, 1e3), Crop);
+	//limits((0, 1e-3), (1, 1e3), Crop);
+	xlimits(0, 1, Crop);
 	
 	// ----------
 
 	NewPad("$|t|\ung{GeV^2}$", "$\d\si/\d t\ung{mb/GeV^2}$");
-	currentpad.xTicks = LeftTicks(0.002, 0.001);
+	currentpad.xTicks = LeftTicks(0.02, 0.01);
 
-	draw(RootGetObject(topDir+"DS-merged/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
+	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/combined/h_dsdt"), "d0,eb", red);
 
-	limits((0, 400), (0.01, 1000), Crop);
-
+	//limits((0, 400), (0.01, 1000), Crop);
+	xlimits(0, 0.1, Crop);
 }

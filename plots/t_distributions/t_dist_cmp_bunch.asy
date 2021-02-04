@@ -15,9 +15,11 @@ string diagonals[], diagLabels[];
 diagonals.push("45b_56t"); diagLabels.push("45 bot -- 56 top");
 diagonals.push("45t_56b"); diagLabels.push("45 top -- 56 bot");
 
+string binning = "eb";
+
 drawGridDef = true;
 
-TH1_x_min = 8.1e-4;
+TH1_x_min = 1e-4;
 
 //----------------------------------------------------------------------------------------------------
 
@@ -32,8 +34,6 @@ for (int dgni : diagonals.keys)
 
 	NewPad("$|t|\ung{GeV^2}$", "$\d N/\d t\ung{mb/GeV^2}$", 12cm, 9cm);
 	scale(Linear, Log);
-
-	string binning = "ob-3-5-0.05";
 
 	for (int bi : bunches.keys)
 	{
