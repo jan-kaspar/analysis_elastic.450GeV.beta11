@@ -156,8 +156,8 @@ int main(int argc, const char **argv)
 	} else {
 		printf("* using default list of entries\n");
 
-		entries.push_back(Entry("DS-fill7301/Totem1", 1., "DS-fill7301", true));
-		entries.push_back(Entry("DS-fill7302/Totem1", 1., "DS-fill7302", true));
+		entries.push_back(Entry("fill7301/Totem1", 1., "fill7301", true));
+		entries.push_back(Entry("fill7302/Totem1", 1., "fill7302", true));
 	}
 
 	vector<string> diagonals;
