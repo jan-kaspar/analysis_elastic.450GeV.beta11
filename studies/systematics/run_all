@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mc_events=${1:-1E8}
+
+./run_multiple_mc_simu -events $mc_events -wait
+./run_multiple_mc_process -events $mc_events
+
+./run_multiple_ni_simu -wait
+./run_multiple_ni_process
+
+./matrix -dir-mc data-mc/$mc_events

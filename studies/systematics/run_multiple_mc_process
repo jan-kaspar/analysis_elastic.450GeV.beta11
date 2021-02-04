@@ -1,0 +1,70 @@
+#!/bin/bash
+
+#----------------------------------------------------------------------------------------------------
+# defaults
+
+diagonals=(
+	"45b_56t"
+	"45t_56b"
+)
+
+stat=""
+
+#----------------------------------------------------------------------------------------------------
+# parse command line
+
+function PrintUsage()
+{
+	echo "USAGE: run_multiple_mc_process [option] [option] ..."
+	echo "OPTIONS:"
+	echo "    -events <int>    number of events to simulate"
+}
+
+while [ "$1" != "" ]
+do
+	key="$1"
+
+	case $key in
+		-h|--help)
+			PrintUsage
+			exit 0
+		;;
+
+		-events)
+			stat="$2"
+			shift
+		;;
+
+		*)
+			echo "ERROR: unknown option '$key'."
+			PrintUsage
+			exit 1
+		;;
+	esac
+
+	shift
+done
+
+
+#----------------------------------------------------------------------------------------------------
+# consistency check
+
+if [ "$stat" == "" ]
+then
+	echo "ERROR: statistics not defined. Use '-events' option."
+	PrintUsage
+	exit 2
+fi
+
+#----------------------------------------------------------------------------------------------------
+
+make -C ../../ -j8 || exit 1
+
+for diagonal in ${diagonals[*]}
+do
+	dir="data-mc/$stat/$diagonal"
+
+	echo "* $dir"
+
+	./mc_process -input "$dir" -output "$dir/mc_process.root"
+done
