@@ -47,53 +47,58 @@ function MakeOneComparison()
 dir_file_loc="./data/$ds"
 dir_file_ref="${reference_directory}/DS-$ds"
 
-###   MakeOneComparison "alignment.root" "global/L_1_F/a"
-###   MakeOneComparison "alignment.root" "global/L_1_F/b"
-###   MakeOneComparison "alignment.root" "global/L_1_F/c"
-###   MakeOneComparison "alignment.root" "global/R_2_F/a"
-###   MakeOneComparison "alignment.root" "global/R_2_F/b"
-###   MakeOneComparison "alignment.root" "global/R_2_F/c"
-###   
-###   MakeOneComparison "alignment_fit.root" "L_2_F/a_fit"
-###   MakeOneComparison "alignment_fit.root" "L_2_F/b_fit"
-###   MakeOneComparison "alignment_fit.root" "L_2_F/c_fit"
-###   MakeOneComparison "alignment_fit.root" "R_1_F/a_fit"
-###   MakeOneComparison "alignment_fit.root" "R_1_F/b_fit"
-###   MakeOneComparison "alignment_fit.root" "R_1_F/c_fit"
-###   
-MakeOneComparison "distributions_45b_56t.root" "acceptance correction/ub/h_t_after"
-MakeOneComparison "distributions_45t_56b.root" "acceptance correction/ub/h_t_after"
-MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/ub/h_t_normalized_unsmeared"
-MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/ub/h_t_normalized_unsmeared"
-###   
-###   MakeOneComparison "distributions_anti_45b_56b.root" "acceptance correction/eb/h_t_after"
-###   MakeOneComparison "distributions_anti_45t_56t.root" "acceptance correction/eb/h_t_after"
-###   
-###   MakeOneComparison "eff3outof4_45b_56t.root" "excluded RPs L_2_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
-###   MakeOneComparison "eff3outof4_45b_56t.root" "excluded RPs R_1_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
-###   MakeOneComparison "eff3outof4_45t_56b.root" "excluded RPs L_2_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
-###   MakeOneComparison "eff3outof4_45t_56b.root" "excluded RPs R_1_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
-###   
-###   MakeOneComparison "eff3outof4_details.root" "45b_56t/L_1_F/track/th_y : rel"
-###   MakeOneComparison "eff3outof4_details.root" "45b_56t/R_2_F/track/th_y : rel"
-###   MakeOneComparison "eff3outof4_details.root" "45t_56b/L_1_F/track/th_y : rel"
-###   MakeOneComparison "eff3outof4_details.root" "45t_56b/R_2_F/track/th_y : rel"
-###   
-###   MakeOneComparison "eff3outof4_fit.root" "45b_56t/L_2_F/h_refined_ratio.th_y"
-###   MakeOneComparison "eff3outof4_fit.root" "45b_56t/L_1_F/h_refined_ratio.th_y"
-###   MakeOneComparison "eff3outof4_fit.root" "45b_56t/R_1_F/h_refined_ratio.th_y"
-###   MakeOneComparison "eff3outof4_fit.root" "45b_56t/R_2_F/h_refined_ratio.th_y"
-###   
-###   MakeOneComparison "pileup_combined.root" "45b_56t/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
-###   MakeOneComparison "pileup_combined.root" "45t_56b/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
-###   
-MakeOneComparison "resolution_fit_45b_56t.root" "d_x/g_fits"
-MakeOneComparison "resolution_fit_45b_56t.root" "d_y/g_fits"
-MakeOneComparison "resolution_fit_45t_56b.root" "d_x/g_fits"
-MakeOneComparison "resolution_fit_45t_56b.root" "d_y/g_fits"
-###   
-###   MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-1/eb"
-###   MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/eb"
+#MakeOneComparison "alignment.root" "global/L_1_F/a"
+#MakeOneComparison "alignment.root" "global/L_1_F/b"
+#MakeOneComparison "alignment.root" "global/L_1_F/c"
+#MakeOneComparison "alignment.root" "global/R_2_F/a"
+#MakeOneComparison "alignment.root" "global/R_2_F/b"
+#MakeOneComparison "alignment.root" "global/R_2_F/c"
+#
+#MakeOneComparison "alignment_fit.root" "L_2_F/a_fit"
+#MakeOneComparison "alignment_fit.root" "L_2_F/b_fit"
+#MakeOneComparison "alignment_fit.root" "L_2_F/c_fit"
+#MakeOneComparison "alignment_fit.root" "R_1_F/a_fit"
+#MakeOneComparison "alignment_fit.root" "R_1_F/b_fit"
+#MakeOneComparison "alignment_fit.root" "R_1_F/c_fit"
+
+#MakeOneComparison "distributions_45b_56t.root" "acceptance correction/ub/h_t_after"
+#MakeOneComparison "distributions_45t_56b.root" "acceptance correction/ub/h_t_after"
+#MakeOneComparison "distributions_45b_56t.root" "normalization+unfolding/ub/h_t_normalized_unsmeared"
+#MakeOneComparison "distributions_45t_56b.root" "normalization+unfolding/ub/h_t_normalized_unsmeared"
+
+#MakeOneComparison "distributions_anti_45b_56b.root" "acceptance correction/eb/h_t_after"
+#MakeOneComparison "distributions_anti_45t_56t.root" "acceptance correction/eb/h_t_after"
+   
+#MakeOneComparison "eff3outof4_45b_56t.root" "excluded RPs L_2_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
+#MakeOneComparison "eff3outof4_45b_56t.root" "excluded RPs R_1_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
+#MakeOneComparison "eff3outof4_45t_56b.root" "excluded RPs L_2_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
+#MakeOneComparison "eff3outof4_45t_56b.root" "excluded RPs R_1_F/n_si 3.0/th_y dependence/h_refined_ratio.th_y"
+#
+#MakeOneComparison "eff3outof4_details.root" "45b_56t/L_1_F/track/th_y : rel"
+#MakeOneComparison "eff3outof4_details.root" "45b_56t/R_2_F/track/th_y : rel"
+#MakeOneComparison "eff3outof4_details.root" "45t_56b/L_1_F/track/th_y : rel"
+#MakeOneComparison "eff3outof4_details.root" "45t_56b/R_2_F/track/th_y : rel"
+#
+#MakeOneComparison "eff3outof4_fit.root" "45b_56t/L_2_F/h_refined_ratio.th_y"
+#MakeOneComparison "eff3outof4_fit.root" "45b_56t/L_1_F/h_refined_ratio.th_y"
+#MakeOneComparison "eff3outof4_fit.root" "45b_56t/R_1_F/h_refined_ratio.th_y"
+#MakeOneComparison "eff3outof4_fit.root" "45b_56t/R_2_F/h_refined_ratio.th_y"
+   
+#MakeOneComparison "pileup_combined.root" "45b_56t/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
+#MakeOneComparison "pileup_combined.root" "45t_56b/dgn/pat_suff_destr && pat_suff_destr, L || R/rel"
+   
+#MakeOneComparison "resolution_fit_45b_56t.root" "d_x/g_fits"
+#MakeOneComparison "resolution_fit_45b_56t.root" "d_y/g_fits"
+#MakeOneComparison "resolution_fit_45t_56b.root" "d_x/g_fits"
+#MakeOneComparison "resolution_fit_45t_56b.root" "d_y/g_fits"
+   
+#MakeOneComparison "unfolding_cf_ni_45b_56t.root" "fit-1/eb"
+#MakeOneComparison "unfolding_cf_ni_45t_56b.root" "fit-1/eb"
+
+#MakeOneComparison "process_timber.root" "g_emit_b1_h"
+#MakeOneComparison "process_timber.root" "g_bd_b2_h"
+#MakeOneComparison "process_timber.root" "g_vtx_comb_h"
+
 
 ###   test/compare\
 ###   	"data/merged.root" "eb/merged/combined/h_dsdt" \
@@ -125,13 +130,13 @@ MakeOneComparison "resolution_fit_45t_56b.root" "d_y/g_fits"
 # studies/background
 #----------------------------------------------------------------------------------------------------
 
-###   for dir in studies/background/fill7280/Totem1/*
+###   for dir in studies/background/fill7301/Totem1/*
 ###   do
 ###   	subdir="${dir##*/}"
 ###   	echo "* $subdir"
 ###   
 ###   	dir_file_loc="$dir"
-###   	dir_file_ref="${reference_directory}/background_studies/DS-fill7280/Totem1/$subdir"
+###   	dir_file_ref="${reference_directory}/background_studies/DS-fill7301/Totem1/$subdir"
 ###   
 ###   	MakeOneComparison "distributions_45b_56t.root" "acceptance correction/eb/h_t_after"
 ###   	MakeOneComparison "distributions_45t_56b.root" "acceptance correction/eb/h_t_after"
