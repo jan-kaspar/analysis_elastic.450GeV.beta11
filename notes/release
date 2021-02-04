@@ -17,6 +17,18 @@ fi
 # make release directory
 mkdir -p "$release_dir" || exit 2
 
+# make info file
+echo "    making info file..."
+
+(
+	echo "* recent commits"
+	git log --oneline | head -n 10
+
+	echo ""
+	echo "* status"
+	git status
+) > "$release_dir/info"
+
 # copy plots
 echo "    copying plots..."
 cp -rL "../plots" "$release_dir"
