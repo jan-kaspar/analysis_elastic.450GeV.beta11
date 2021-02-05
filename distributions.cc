@@ -185,7 +185,9 @@ struct OpticsMatchingInput
 	TGraph *g_x_R_210_F_vs_y_R_210_F;
 	TGraph *g_x_R_220_F_vs_y_R_220_F;
 
+	// control plots
 	TGraph *g_vtx_x_L_vs_vtx_x_R;
+	TH1D *h_vtx_LRdiff;
 
 	OpticsMatchingInput()
 	{
@@ -223,6 +225,7 @@ struct OpticsMatchingInput
 
 		// control plot
 		g_vtx_x_L_vs_vtx_x_R = new TGraph(); g_vtx_x_L_vs_vtx_x_R->SetName("g_vtx_x_L_vs_vtx_x_R"); g_vtx_x_L_vs_vtx_x_R->SetTitle(";vtx_x^{R}   (mm);vtx_x^{L}   (mm)");
+		h_vtx_LRdiff = new TH1D("", ";vtx_x^{R} - vtx_x^{L}   (mm)", 100, -0.5, +0.5);
 	}
 
 	void Fill(const HitData &h_al, double thl_x_L, double thl_x_R, double thl_y_L, double thl_y_R, double vtx_x_L, double vtx_x_R)
@@ -246,6 +249,7 @@ struct OpticsMatchingInput
 			g_x_R_220_F_vs_y_R_220_F->SetPoint(idx, h_al.R_2_F.y, h_al.R_2_F.x);
 
 			g_vtx_x_L_vs_vtx_x_R->SetPoint(idx, vtx_x_R, vtx_x_L);
+			h_vtx_LRdiff->Fill(vtx_x_R - vtx_x_L);
 		}
 	}
 
@@ -266,6 +270,7 @@ struct OpticsMatchingInput
 		g_x_R_220_F_vs_y_R_220_F->Write();
 
 		g_vtx_x_L_vs_vtx_x_R->Write();
+		h_vtx_LRdiff->Write("h_vtx_LRdiff");
 	}
 };
 
@@ -836,12 +841,12 @@ int main(int argc, const char **argv)
 	TH1D *h_vtx_x_L = new TH1D("h_vtx_x_L", ";x^{*,L}", 100, -0.5, +0.5); h_vtx_x_L->SetLineColor(2);
 	TH1D *h_vtx_x_R = new TH1D("h_vtx_x_R", ";x^{*,R}", 100, -0.5, +0.5); h_vtx_x_R->SetLineColor(4);
 
-	TH1D *h_vtx_y = new TH1D("h_vtx_y", ";y^{*}", 100, -0.5, +0.5); h_vtx_y->SetLineColor(1);
-	TH1D *h_vtx_y_L = new TH1D("h_vtx_y_L", ";y^{*,L}", 100, -0.5, +0.5); h_vtx_y_L->SetLineColor(2);
-	TH1D *h_vtx_y_R = new TH1D("h_vtx_y_R", ";y^{*,R}", 100, -0.5, +0.5); h_vtx_y_R->SetLineColor(4);
+	TH1D *h_vtx_y = new TH1D("h_vtx_y", ";y^{*}", 100, -1.0, +1.0); h_vtx_y->SetLineColor(1);
+	TH1D *h_vtx_y_L = new TH1D("h_vtx_y_L", ";y^{*,L}", 100, -1.0, +1.0); h_vtx_y_L->SetLineColor(2);
+	TH1D *h_vtx_y_R = new TH1D("h_vtx_y_R", ";y^{*,R}", 100, -1.0, +1.0); h_vtx_y_R->SetLineColor(4);
 
-	TH1D *h_vtx_x_safe = new TH1D("h_vtx_x_safe", ";x^{*}", 100, -0.5, +0.5); h_vtx_x_safe->SetLineColor(6);
-	TH1D *h_vtx_y_safe = new TH1D("h_vtx_y_safe", ";y^{*}", 100, -0.5, +0.5); h_vtx_y_safe->SetLineColor(6);
+	TH1D *h_vtx_x_safe = new TH1D("h_vtx_x_safe", ";x^{*}", 100, -1.0, +1.0); h_vtx_x_safe->SetLineColor(6);
+	TH1D *h_vtx_y_safe = new TH1D("h_vtx_y_safe", ";y^{*}", 100, -1.0, +1.0); h_vtx_y_safe->SetLineColor(6);
 
 	TH2D *h2_vtx_x_L_vs_vtx_x_R = new TH2D("h2_vtx_x_L_vs_vtx_x_R", ";x^{*,R};x^{*,L}", 100, -0.5, +0.5, 100, -1.0, +1.0);
 	TH2D *h2_vtx_y_L_vs_vtx_y_R = new TH2D("h2_vtx_y_L_vs_vtx_y_R", ";y^{*,R};y^{*,L}", 100, -0.5, +0.5, 100, -1.0, +1.0);
@@ -851,8 +856,8 @@ int main(int argc, const char **argv)
 	TH2D *h2_vtx_y_L_vs_th_y_L = new TH2D("h2_vtx_y_L_vs_th_y_L", ";#theta_{y}^{L};y^{*,L}", 100, -600E-6, +600E-6, 100, -1.0, +1.0);
 	TH2D *h2_vtx_y_R_vs_th_y_R = new TH2D("h2_vtx_y_R_vs_th_y_R", ";#theta_{y}^{R};y^{*,R}", 100, -600E-6, +600E-6, 100, -1.0, +1.0);
 
-	TH1D *h_vtx_x_diffLR = new TH1D("h_vtx_x_diffLR", ";x^{*,R} - x^{*,L}", 100, -0.5, +0.5); h_vtx_x_diffLR->Sumw2();
-	TH1D *h_vtx_y_diffLR = new TH1D("h_vtx_y_diffLR", ";y^{*,R} - y^{*,L}", 100, -0.5, +0.5); h_vtx_y_diffLR->Sumw2();
+	TH1D *h_vtx_x_diffLR = new TH1D("h_vtx_x_diffLR", ";x^{*,R} - x^{*,L}", 100, -1.0, +1.0); h_vtx_x_diffLR->Sumw2();
+	TH1D *h_vtx_y_diffLR = new TH1D("h_vtx_y_diffLR", ";y^{*,R} - y^{*,L}", 100, -1.0, +1.0); h_vtx_y_diffLR->Sumw2();
 
 	TH1D *h_vtx_x_diffLR_safe = new TH1D("h_vtx_x_diffLR_safe", ";vtx_{x}^{R} - vtx_{x}^{L}", 100, -0.5, +0.5); h_vtx_x_diffLR_safe->Sumw2(); h_vtx_x_diffLR_safe->SetLineColor(6);
 	TH1D *h_vtx_y_diffLR_safe = new TH1D("h_vtx_y_diffLR_safe", ";vtx_{y}^{R} - vtx_{y}^{L}", 100, -0.5, +0.5); h_vtx_y_diffLR_safe->Sumw2(); h_vtx_y_diffLR_safe->SetLineColor(6);
@@ -887,7 +892,7 @@ int main(int argc, const char **argv)
 	*/
 
 	// input for optics matching
-	OpticsMatchingInput opticsMatchingIntput_full;
+	OpticsMatchingInput opticsMatchingIntput_full, opticsMatchingIntput_vtx_1si, opticsMatchingIntput_vtx_0_1si;
 
 	// time-dependence histograms
 	TProfile *p_diffLR_th_x_vs_time = new TProfile("p_diffLR_th_x_vs_time", ";timestamp;mean of #Delta^{R-L}#theta_{x}", 31, cfg.timestamp_min, cfg.timestamp_max);
@@ -1432,6 +1437,9 @@ int main(int argc, const char **argv)
 			{
 				constexpr double d_RP = (220.000 - 213.000) * 1E3;	// mm
 
+				constexpr double si_vtx_x = 130E-3;
+				constexpr double si_vtx_y = 210E-3;
+
 				const double thl_x_L = (h_al.L_2_F.x - h_al.L_1_F.x) / d_RP;
 				const double thl_x_R = (h_al.R_2_F.x - h_al.R_1_F.x) / d_RP;
 
@@ -1439,6 +1447,12 @@ int main(int argc, const char **argv)
 				const double thl_y_R = (h_al.R_2_F.y - h_al.R_1_F.y) / d_RP;
 
 				opticsMatchingIntput_full.Fill(h_al, thl_x_L, thl_x_R, thl_y_L, thl_y_R, k.vtx_x_L, k.vtx_x_R);
+
+				if (fabs(k.vtx_x) < 1.0 * si_vtx_x && fabs(k.vtx_y) < 1.0 * si_vtx_y)
+					opticsMatchingIntput_vtx_1si.Fill(h_al, thl_x_L, thl_x_R, thl_y_L, thl_y_R, k.vtx_x_L, k.vtx_x_R);
+
+				if (fabs(k.vtx_x) < 0.1 * si_vtx_x && fabs(k.vtx_y) < 0.1 * si_vtx_y)
+					opticsMatchingIntput_vtx_0_1si.Fill(h_al, thl_x_L, thl_x_R, thl_y_L, thl_y_R, k.vtx_x_L, k.vtx_x_R);
 			}
 		}
 
@@ -2144,6 +2158,11 @@ int main(int argc, const char **argv)
 	gDirectory = opticsDir->mkdir("matching input, full");
 	opticsMatchingIntput_full.Write();
 
+	gDirectory = opticsDir->mkdir("matching input, vtx 1si");
+	opticsMatchingIntput_vtx_1si.Write();
+
+	gDirectory = opticsDir->mkdir("matching input, vtx 0.1si");
+	opticsMatchingIntput_vtx_0_1si.Write();
 
 	gDirectory = f_out->mkdir("binning");
 	for (unsigned int bi = 0; bi < binnings.size(); bi++)
