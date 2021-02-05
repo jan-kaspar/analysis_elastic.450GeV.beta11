@@ -45,16 +45,22 @@ for (int dsi : datasets.keys)
 			RootObject fit = RootGetObject(f, base + "|pol1", error=false);
 			if (fit.valid)
 			{
+				real intercept = fit.rExec("GetParameter", 0);
+				real intercept_unc = fit.rExec("GetParError", 0);
+
 				real slope = fit.rExec("GetParameter", 1);
 				real slope_unc = fit.rExec("GetParError", 1);
-				draw(scale(1e6, 1e6), fit, "", blue+2pt, format("slope = $%#+.4f$", slope) + format("$\pm %#.4f$", slope_unc));
+
+				draw(scale(1e6, 1e6), fit, "", blue+2pt, "fit");
+				AddToLegend(format("intercept = $%#+.1f$", intercept*1e6) + format("$\pm %#.1f$", intercept_unc*1e6));
+				AddToLegend(format("slope = $%#+.4f$", slope) + format("$\pm %#.4f$", slope_unc));
 			}
 
 			//if (plot[pi] == "p_th_x_diffLR_vs_th_x")
 			//	xlimits(-100, +100, Crop);
 
 			ylimits(y_min[pi], y_max[pi], Crop);
-			AttachLegend(NW, NW);
+			AttachLegend(S, N);
 		}
 	}
 }

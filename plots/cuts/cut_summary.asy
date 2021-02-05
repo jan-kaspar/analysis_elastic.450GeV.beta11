@@ -68,7 +68,9 @@ for (int dsi : datasets.keys)
 			NewPad(label_x[idx], label_y[idx]);
 			scale(Linear, Linear, Log);
 			string objC = format("elastic cuts/cut %i", cut) + format("/plot_before_cq%i", cut);
-			draw(scale(scale_x[idx], scale_y[idx]), RootGetObject(f, objC+"#0"), "p,d0,bar");
+			RootObject h2 = RootGetObject(f, objC+"#0");
+			h2.vExec("Rebin2D", 3, 3);
+			draw(scale(scale_x[idx], scale_y[idx]), h2, "p,d0,bar");
 			draw(scale(scale_x[idx], scale_y[idx]), RootGetObject(f, objC+"#1"));
 			draw(scale(scale_x[idx], scale_y[idx]), RootGetObject(f, objC+"#2"));
 			limits((-lim_x_high[idx], -lim_y_high[idx]), (-lim_x_low[idx], -lim_y_low[idx]), Crop);
