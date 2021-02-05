@@ -1,6 +1,6 @@
 #!/bin/bash
 
-base_dir="/afs/cern.ch/user/j/jkaspar/public/ForFrici/beta11/version_2020_08_17"
+base_dir="/afs/cern.ch/user/j/jkaspar/public/ForFrici/beta11/version_2021_02_05"
 
 datasets=(
 	"data/fill7301"
