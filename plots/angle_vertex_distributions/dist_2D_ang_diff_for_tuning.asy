@@ -1,5 +1,9 @@
 include "shared.asy";
 
+datasets.delete();
+datasets.push("data/fill7301/Totem1");
+datasets.push("data/fill7302/Totem1");
+
 f_tags.push(""); f_labels.push(""); f_shorts.push("");
 
 //----------------------------------------------------------------------------------------------------

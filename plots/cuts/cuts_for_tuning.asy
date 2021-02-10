@@ -2,7 +2,7 @@ import root;
 import pad_layout;
 include "../common.asy";
 
-string dataset = "data/fill7302/Totem1";
+string dataset = "data/fill7301/Totem1";
 
 string dgns[] = { "45b_56t", "45t_56b" };
 
