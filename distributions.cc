@@ -848,6 +848,8 @@ int main(int argc, const char **argv)
 	TH2D *h2_th_y_diffRL_vs_vtx_x_G = new TH2D("h2_th_y_diffRL_vs_vtx_x_G", ";vtx_{x};#Delta^{R-L} #theta_{y}", 100, vtx_x_min, vtx_x_max, 100, -range, +range);
 	TH2D *h2_th_y_diffRL_vs_vtx_y_G = new TH2D("h2_th_y_diffRL_vs_vtx_y_G", ";vtx_{y};#Delta^{R-L} #theta_{y}", 100, vtx_y_min, vtx_y_max, 100, -range, +range);
 
+	range = 15E-6;
+
 	TH2D *h2_th_y_L_diffFN_vs_th_x_L = new TH2D("h2_th_y_L_diffFN_vs_th_x_L", ";#theta_{x}^{L};#Delta^{F-N} #theta_{y}^{L}", 100, th_x_min, th_x_max, 100, -range, +range);
 	TH2D *h2_th_y_L_diffFN_vs_th_y_L = new TH2D("h2_th_y_L_diffFN_vs_th_y_L", ";#theta_{y}^{L};#Delta^{F-N} #theta_{y}^{L}", 100, th_y_min, th_y_max, 100, -range, +range);
 	TH2D *h2_th_y_L_diffFN_vs_vtx_x_L = new TH2D("h2_th_y_L_diffFN_vs_vtx_x_L", ";vtx_{x}^{L};#Delta^{F-N} #theta_{y}^{L}", 100, vtx_x_min, vtx_x_max, 100, -range, +range);
