@@ -146,15 +146,15 @@ int main(int argc, const char **argv)
 
 	TGraph *g_run_boundaries = (TGraph *) f_in->Get("time dependences/g_run_boundaries");
 	
-	TProfile *p_diffLR_th_x_vs_time = (TProfile *) f_in->Get("time dependences/p_diffLR_th_x_vs_time");
-	TGraphErrors *gRMS_diffLR_th_x_vs_time = (TGraphErrors *) f_in->Get("time dependences/gRMS_diffLR_th_x_vs_time");
+	TProfile *p_diffRL_th_x_vs_time = (TProfile *) f_in->Get("time dependences/p_diffRL_th_x_vs_time");
+	TGraphErrors *gRMS_diffRL_th_x_vs_time = (TGraphErrors *) f_in->Get("time dependences/gRMS_diffRL_th_x_vs_time");
 	
-	TProfile *p_diffLR_th_y_vs_time = (TProfile *) f_in->Get("time dependences/p_diffLR_th_y_vs_time");
-	TGraphErrors *gRMS_diffLR_th_y_vs_time = (TGraphErrors *) f_in->Get("time dependences/gRMS_diffLR_th_y_vs_time");
+	TProfile *p_diffRL_th_y_vs_time = (TProfile *) f_in->Get("time dependences/p_diffRL_th_y_vs_time");
+	TGraphErrors *gRMS_diffRL_th_y_vs_time = (TGraphErrors *) f_in->Get("time dependences/gRMS_diffRL_th_y_vs_time");
 
-	if (!g_run_boundaries || !p_diffLR_th_x_vs_time || !gRMS_diffLR_th_x_vs_time || !p_diffLR_th_y_vs_time || !gRMS_diffLR_th_y_vs_time)
+	if (!g_run_boundaries || !p_diffRL_th_x_vs_time || !gRMS_diffRL_th_x_vs_time || !p_diffRL_th_y_vs_time || !gRMS_diffRL_th_y_vs_time)
 	{
-		printf("ERROR: input not found (%p, %p, %p, %p, %p)\n", g_run_boundaries, p_diffLR_th_x_vs_time, gRMS_diffLR_th_x_vs_time, p_diffLR_th_y_vs_time, gRMS_diffLR_th_y_vs_time);
+		printf("ERROR: input not found (%p, %p, %p, %p, %p)\n", g_run_boundaries, p_diffRL_th_x_vs_time, gRMS_diffRL_th_x_vs_time, p_diffRL_th_y_vs_time, gRMS_diffRL_th_y_vs_time);
 		return 1;
 	}
 	
@@ -164,11 +164,11 @@ int main(int argc, const char **argv)
 	// do fits
 	printf("\n\n---------- d_x ----------\n");
 	gDirectory = f_out->mkdir("d_x");
-	RunOneFit(g_run_boundaries, p_diffLR_th_x_vs_time, gRMS_diffLR_th_x_vs_time, 1E-6);
+	RunOneFit(g_run_boundaries, p_diffRL_th_x_vs_time, gRMS_diffRL_th_x_vs_time, 1E-6);
 
 	printf("\n\n---------- d_y ----------\n");
 	gDirectory = f_out->mkdir("d_y");
-	RunOneFit(g_run_boundaries, p_diffLR_th_y_vs_time, gRMS_diffLR_th_y_vs_time, 1E-6);
+	RunOneFit(g_run_boundaries, p_diffRL_th_y_vs_time, gRMS_diffRL_th_y_vs_time, 1E-6);
 
 	// clean up
 	delete f_out;
