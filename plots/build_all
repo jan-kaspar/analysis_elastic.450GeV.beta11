@@ -17,7 +17,7 @@ function ProcessOneThread()
 
 		cd "$p"
 
-		asy "$f" &> /dev/null
+		asy "$f" -divisor 4 &> /dev/null
 		res="$?"
 
 		cd - > /dev/null

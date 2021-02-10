@@ -12,7 +12,7 @@ string units[], unit_labels[];
 units.push("L_2_F"); unit_labels.push("L-220-fr");
 units.push("L_1_F"); unit_labels.push("L-210-fr");
 units.push("R_1_F"); unit_labels.push("R-210-fr");
-units.push("R_2_F"); unit_labels.push("R-220-fr" );
+units.push("R_2_F"); unit_labels.push("R-220-fr");
 
 xSizeDef = 10cm;
 drawGridDef = true;
@@ -71,6 +71,20 @@ for (int dsi : datasets.keys)
 		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/shift/g_max_diff"), "l,p", heavygreen, mCi+1pt+heavygreen);
 	
 		limits((-2.0, 0), (+2.0, 0.2), Crop);
+		AttachLegend(unit_labels[ui], NE, NE);
+	}
+	
+	//--------------------
+	NewRow();
+	
+	for (int ui : units.keys)
+	{
+		NewPad("$y\ung{mm}$", "");
+	
+		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/fit/y_hist"), "d0,vl", red);
+		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/fit/y_hist|f"), "l", blue);
+	
+		limits((-30, 1e2), (+30, 1e3), Crop);
 		AttachLegend(unit_labels[ui], NE, NE);
 	}
 

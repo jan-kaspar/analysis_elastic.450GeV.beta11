@@ -2,9 +2,9 @@ import root;
 import pad_layout;
 include "../common.asy";
 
-string datasets[], dataset_fills[];
-datasets.push("data/fill7301/Totem1"); dataset_fills.push("7301");
-datasets.push("data/fill7302/Totem1"); dataset_fills.push("7302");
+string datasets[];
+datasets.push("data/fill7301/Totem1");
+datasets.push("data/fill7302/Totem1");
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 

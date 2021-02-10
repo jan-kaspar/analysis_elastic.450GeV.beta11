@@ -17,7 +17,7 @@ real q_maxs[];
 quantities.push("vtx_x"); q_labels.push("x^*"); q_maxs.push(1000.);
 quantities.push("vtx_y"); q_labels.push("y^*"); q_maxs.push(1000.);
 
-xSizeDef = 40cm;
+xSizeDef = 20cm;
 ySizeDef = 6cm;
 
 //xTicksDef = LeftTicks(1., 0.5);

@@ -17,7 +17,7 @@ real q_maxs[], q_Ticks[], q_ticks[];
 quantities.push("th_x"); q_timber.push("bd_comb_h"); q_labels.push("\th^*_x"); q_maxs.push(100.); q_Ticks.push(10.); q_ticks.push(2.);
 quantities.push("th_y"); q_timber.push("bd_comb_v"); q_labels.push("\th^*_y"); q_maxs.push(100.); q_Ticks.push(10.); q_ticks.push(2.);
 
-xSizeDef = 40cm;
+xSizeDef = 20cm;
 ySizeDef = 6cm;
 
 xTicksDef = LeftTicks(1., 0.5);

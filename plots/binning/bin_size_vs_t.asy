@@ -23,11 +23,6 @@ scale(Linear, Log);
 //currentpad.yTicks = RightTicks(0.05, 0.01);
 
 AddToLegend("<{\it resolution considerations:}");
-/*
-draw(scale(1, 1), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), red+longdashed, "1 smearing sigma");
-draw(scale(1, 2), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), blue+longdashed, "2 smearing sigma");
-draw(scale(1, 3), RootGetObject(topDir+"binning/generators.root", "g_rms_t"), heavygreen+longdashed, "3 smearing sigma");
-*/
 draw(shift(0, log10(1)), RootGetObject(topDir+"studies/binning/generators.root", "g_rms_t"), red+longdashed, "1 smearing sigma");
 draw(shift(0, log10(2)), RootGetObject(topDir+"studies/binning/generators.root", "g_rms_t"), blue+longdashed, "2 smearing sigma");
 draw(shift(0, log10(3)), RootGetObject(topDir+"studies/binning/generators.root", "g_rms_t"), heavygreen+longdashed, "3 smearing sigma");

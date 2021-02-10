@@ -41,7 +41,7 @@ for (int dsi : f_datasets.keys)
 		real y_max = 0.3;
 		
 		NewPad("time$\ung{h}$", "destructive pile-up probability");
-		DrawBands(fills[dsi], bands="run", labels="ds", 0, y_max);
+		DrawBands(fills[dsi], bands="run", labels="run", 0, y_max);
 		
 		for (int ci : criteria.keys)
 		{
@@ -50,7 +50,7 @@ for (int dsi : f_datasets.keys)
 
 			RootObject obj = RootGetObject(f, dgn+"/"+element+"/rel", search=false, error=false);
 			if (obj.valid)
-				draw(swToHours, obj, "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
+				draw(swToHours, obj, "p,l", p+dashed, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
 		}
 		
 		ylimits(0, y_max, Crop);

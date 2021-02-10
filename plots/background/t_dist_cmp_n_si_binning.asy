@@ -72,7 +72,6 @@ for (int bi : binnings.keys)
 
 		//--------------------
 
-		/*
 		NewPad("$|t|\ung{GeV^2}$", "$\d\sigma/\d t\ung{mb/GeV^2}$");
 		scale(Linear, Log);
 		for (int ci : combinations.keys)
@@ -88,7 +87,6 @@ for (int bi : binnings.keys)
 		frame fLegend = BuildLegend();
 		
 		limits((0, 1e6), (0.04, 1e8), Crop);
-		*/
 
 		//--------------------
 

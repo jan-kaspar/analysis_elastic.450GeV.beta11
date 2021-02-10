@@ -14,13 +14,14 @@ diagonals.push("45t_56b"); d_labels.push("45t -- 56b"); d_pens.push(blue);
 
 string quantities[], q_timber[], q_labels[];
 real q_maxs[];
-quantities.push("vtx_x"); q_timber.push("vtx_comb_h"); q_labels.push("x^*"); q_maxs.push(1000.);
-quantities.push("vtx_y"); q_timber.push("vtx_comb_v"); q_labels.push("y^*"); q_maxs.push(1000.);
+quantities.push("vtx_x"); q_timber.push("vtx_comb_h"); q_labels.push("x^*"); q_maxs.push(250.);
+quantities.push("vtx_y"); q_timber.push("vtx_comb_v"); q_labels.push("y^*"); q_maxs.push(250.);
 
-xSizeDef = 40cm;
+xSizeDef = 20cm;
 ySizeDef = 6cm;
 
 xTicksDef = LeftTicks(1., 0.5);
+yTicksDef = RightTicks(50., 10.);
 
 TGraph_errorBar = None;
 

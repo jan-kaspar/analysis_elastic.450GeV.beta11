@@ -1,10 +1,9 @@
 import root;
 import pad_layout;
 import common_code;
+include "../common.asy";
 
 AddAllModes();
-
-string topDir = "../../";
 
 string f = topDir + "studies/systematics/matrix.root";
 

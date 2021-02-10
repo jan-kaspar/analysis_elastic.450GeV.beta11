@@ -8,6 +8,8 @@ diagonals.push("45t_56b"); diagLabels.push("45 top -- 56 bot");
 
 drawGridDef = true;
 
+TH1_x_min = t_min;
+
 string binning = "ub";
 
 //----------------------------------------------------------------------------------------------------
@@ -19,7 +21,7 @@ for (int dgni : diagonals.keys)
 	pen p = StdPen(dgni + 1);
 
 	draw(RootGetObject(topDir+"data/merged.root", binning + "/merged/" + diagonals[dgni] + "/h_dsdt"),
-		"d0,eb", p, diagLabels[dgni]);
+		"d0,eb,vl", p, diagLabels[dgni]);
 
 	AddToLegend(format("events $%.2E$", robj.rExec("GetEntries")));
 }
@@ -27,5 +29,7 @@ for (int dgni : diagonals.keys)
 //currentpad.xTicks = LeftTicks(0.002, 0.001);
 //currentpad.yTicks = RightTicks(100., 50.);
 //limits((0, 400), (0.01, 1000), Crop);
+
+yaxis(XEquals(t_min, false), dashed);
 
 AttachLegend();

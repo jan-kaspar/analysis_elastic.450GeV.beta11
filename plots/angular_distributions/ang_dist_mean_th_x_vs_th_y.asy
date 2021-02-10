@@ -56,7 +56,12 @@ for (int dsi : datasets.keys)
 			string base = "selected - angles/g_mode_th_x"+arms[ai]+"_vs_th_y"+arms[ai];
 
 			draw(scale(1e6, 1e6), RootGetObject(f, base), "p", p, mCi+2pt+p, diagonal_labels[dgni]);
-			draw(scale(1e6, 1e6), RootGetObject(f, base + "|pol1"), p + dashed);
+
+			RootObject fit = RootGetObject(f, base + "|pol1");
+			draw(scale(1e6, 1e6), fit, p + dashed);
+
+			real xl = (diagonals[dgni] == "45b_56t") ? +50 : -50;
+			label(format("slope = $%#.2f$", fit.rExec("GetParameter", 1)) + format("$\pm %#.2f$", fit.rExec("GetParError", 1)), (xl, -20), p, Fill(white));
 		}
 
 		limits((-300, -100), (300, 100), Crop);

@@ -24,7 +24,7 @@ xTicksDef = LeftTicks(200., 100.);
 
 int gx=0, gy=0;
 
-TH2_palette = Gradient(blue, heavygreen, yellow, red);
+TH2_palette = Gradient(magenta, magenta, blue, blue, heavygreen, yellow, red);
 TH2_z_min = 0;
 TH2_z_max = 1.;
 
@@ -35,7 +35,9 @@ for (int dsi : datasets.keys)
 	for (int dgi : diagonals.keys)
 	{
 		string f = topDir + datasets[dsi] + "/eff3outof4_" + diagonals[dgi] + ".root";
-		real sgn = +1;
+		string f_dist = topDir + datasets[dsi] + "/distributions_" + diagonals[dgi] + ".root";
+
+		real sgn = (diagonals[dgi] == "45b_56t") ? +1 : -1;
 		string opt = "vl,eb";
 		
 		++gy; gx = 0;
@@ -62,7 +64,9 @@ for (int dsi : datasets.keys)
 
 			++gx;
 			NewPad("$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", gx, gy, axesAbove=true);
-			draw(scale(1e6, 1e6*sgn), RootGetObject(f, d+"/th_x, th_y dependence/h_simple_ratio_vs_th_x_th_y"), "def");
+			draw(scale(1e6, 1e6), RootGetObject(f, d+"/th_x, th_y dependence (unif)/h_simple_ratio_vs_th_x_th_y"), "def");
+
+			draw(scale(1e6, 1e6*sgn), RootGetObject(f_dist, "fiducial cuts/fc_G"), "l", black+1pt);
 
 			limits((-800, 150), (800, 650), Crop);
 		}

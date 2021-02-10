@@ -3,8 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string binnings[] = {
-	"eb",
 	"ub",
+	"eb",
 };
 
 drawGridDef = true;

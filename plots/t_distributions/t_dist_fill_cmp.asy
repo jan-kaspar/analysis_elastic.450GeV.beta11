@@ -28,10 +28,9 @@ for (int dsi : datasets.keys)
 	for (int dgni : diagonals.keys)
 	{
 		pen p = StdPen(dgni + 1);
-		string pth = "normalization/"+binning+"/h_t_normalized";
-		//string pth = "normalization+unfolding/"+binning+"/h_t_normalized_unsmeared";
-		draw(RootGetObject(topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root", pth),
-			"d0,eb", p, diagLabels[dgni]);
+		//string pth = "normalization/"+binning+"/h_t_normalized";
+		string pth = "normalization+unfolding/"+binning+"/h_t_normalized_unsmeared";
+		draw(RootGetObject(topDir+datasets[dsi]+"/distributions_"+diagonals[dgni]+".root", pth), "d0,eb", p, diagLabels[dgni]);
 	}
 
 	limits((0, 1e6), (0.1, 1e8), Crop);

@@ -61,7 +61,6 @@ for (int dsi : datasets.keys)
 
 		//--------------------
 
-		/*
 		NewPad("$|t|\ung{GeV^2}$", "$\d\sigma/\d t\ung{mb/GeV^2}$");
 		currentpad.xTicks = LeftTicks(0.005, 0.001);
 		scale(Linear, Log);
@@ -72,7 +71,6 @@ for (int dsi : datasets.keys)
 		}
 		
 		limits((0, 1e6), (0.04, 1e8), Crop);
-		*/
 
 		//--------------------
 

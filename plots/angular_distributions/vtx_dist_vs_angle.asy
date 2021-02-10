@@ -16,11 +16,11 @@ string lab_v[];
 real x_min[], x_max[];
 real y_min[], y_max[];
 
-plot.push("vtx_x_L_vs_th_x_L"); lab_h.push("$\th_x^{*,L}\ung{\mu rad}$"); lab_v.push("$x^{*,L}\ung{\mu m}$"); x_min.push(-600); x_max.push(+600); y_min.push(-1000); y_max.push(+1000);
-plot.push("vtx_x_R_vs_th_x_R"); lab_h.push("$\th_x^{*,R}\ung{\mu rad}$"); lab_v.push("$x^{*,R}\ung{\mu m}$"); x_min.push(-600); x_max.push(+600); y_min.push(-1000); y_max.push(+1000);
+plot.push("vtx_x_L_vs_th_x_L"); lab_h.push("$\th_x^{*,L}\ung{\mu rad}$"); lab_v.push("$x^{*,L}\ung{\mu m}$"); x_min.push(-700); x_max.push(+700); y_min.push(-1000); y_max.push(+1000);
+plot.push("vtx_x_R_vs_th_x_R"); lab_h.push("$\th_x^{*,R}\ung{\mu rad}$"); lab_v.push("$x^{*,R}\ung{\mu m}$"); x_min.push(-700); x_max.push(+700); y_min.push(-1000); y_max.push(+1000);
 
-plot.push("vtx_y_L_vs_th_y_L"); lab_h.push("$\th_y^{*,L}\ung{\mu rad}$"); lab_v.push("$y^{*,L}\ung{\mu m}$"); x_min.push(-500); x_max.push(+500); y_min.push(-1000); y_max.push(+1000);
-plot.push("vtx_y_R_vs_th_y_R"); lab_h.push("$\th_y^{*,R}\ung{\mu rad}$"); lab_v.push("$y^{*,R}\ung{\mu m}$"); x_min.push(-500); x_max.push(+500); y_min.push(-1000); y_max.push(+1000);
+plot.push("vtx_y_L_vs_th_y_L"); lab_h.push("$\th_y^{*,L}\ung{\mu rad}$"); lab_v.push("$y^{*,L}\ung{\mu m}$"); x_min.push(-700); x_max.push(+700); y_min.push(-1000); y_max.push(+1000);
+plot.push("vtx_y_R_vs_th_y_R"); lab_h.push("$\th_y^{*,R}\ung{\mu rad}$"); lab_v.push("$y^{*,R}\ung{\mu m}$"); x_min.push(-700); x_max.push(+700); y_min.push(-1000); y_max.push(+1000);
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
