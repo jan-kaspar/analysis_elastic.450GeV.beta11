@@ -357,9 +357,11 @@ do
 	echo "<ul>" >> "$report"
 
 	$step
-	if [ "$?" -ne "0" ]
+	rc="$?"
+	if [ "$rc" -ne "0" ]
 	then
 		failure="True"
+		echo "<li>finished with return code $rc</li>" >> "$report"
 		break
 	fi
 
