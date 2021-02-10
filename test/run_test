@@ -91,10 +91,6 @@ function MainAnalysis()
 
 	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 40
 
-	cd "studies/systematics"
-	./run_all "1E6" || return 50
-	cd - &> /dev/null
-
 	echo "<li>OK</li>" >> "$report"
 }
 
@@ -219,6 +215,54 @@ function MainAnalysisComparison()
 
 		MakeOneComparison "data/merged.root" "eb/merged/combined/h_dsdt" "global"
 
+		if [ "$n_diff" -eq "0" ]
+		then
+			echo "<li>OK</li>" >> "$report"
+		else
+			echo "<li>$n_diff differences:</li>" >> "$report"
+			echo "<ul>" >> "$report"
+			echo -e "$failed_comparisons" >> "$report"
+			echo "</ul>" >> "$report"
+
+			return 2
+		fi
+	fi
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function Studies()
+{
+	echo "<li>dataset: $ds</li>" >> "$report"
+
+	cd "studies/reconstruction_formulae"
+	./run_all || return 10
+	cd - &> /dev/null
+
+	cd "studies/systematics"
+	./run_all "1E6" || return 20
+	cd - &> /dev/null
+
+	echo "<li>OK</li>" >> "$report"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+function StudiesComparison()
+{
+	ResetComparisonResults
+
+	if [ "$reference_directory" == "none" ]
+	then
+		echo "<li>not run - missing reference</li>" >> "$report"
+
+		return 1
+	else
+		MakeOneComparison "studies/reconstruction_formulae/test_formulae_graph.root" "theta_x_one_arm_regr, th_x_L/pitch,beamDiv,vertex/g_stddev"
+		MakeOneComparison "studies/reconstruction_formulae/test_formulae_graph.root" "theta_x_two_arm_regr_LRavg, th_x/pitch,beamDiv,vertex/g_stddev"
+		MakeOneComparison "studies/reconstruction_formulae/test_formulae_graph.root" "theta_y_one_arm_regr, th_y_L/pitch,beamDiv,vertex/g_stddev"
+		MakeOneComparison "studies/reconstruction_formulae/test_formulae_graph.root" "theta_y_two_arm_regr_LRavg, th_y/pitch,beamDiv,vertex/g_stddev"
+
 		MakeOneComparison "studies/systematics/matrix.root" "matrices/all-but-norm/eb/h_stddev" "global"
 		MakeOneComparison "studies/systematics/matrix.root" "matrices/all/eb/h_stddev" "global"
 
@@ -249,6 +293,8 @@ steps="
  Compilation
  MainAnalysis
  MainAnalysisComparison
+ Studies
+ StudiesComparison
 "
 reference_directory=""
 report="test.log_short.html"
