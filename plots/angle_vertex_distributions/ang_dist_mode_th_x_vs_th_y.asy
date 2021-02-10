@@ -14,7 +14,7 @@ diagonals.push("45t_56b"); diagonal_labels.push("45 top -- 56 bot"); diagonal_pe
 string arms[], arm_ss[], arm_labels[];
 arms.push("_L"); arm_ss.push("L"); arm_labels.push("left arm");
 arms.push("_R"); arm_ss.push("R"); arm_labels.push("right arm");
-arms.push(""); arm_ss.push(""); arm_labels.push("double arm");
+arms.push("_G"); arm_ss.push(""); arm_labels.push("double arm");
 
 xSizeDef = 12cm;
 //xTicksDef = LeftTicks(Step=1, step=0.5);
