@@ -224,7 +224,8 @@ function MainAnalysisComparison()
 			echo -e "$failed_comparisons" >> "$report"
 			echo "</ul>" >> "$report"
 
-			return 2
+			# not to stop processing in case differences are found
+			return 0
 		fi
 	fi
 }
@@ -275,7 +276,8 @@ function StudiesComparison()
 			echo -e "$failed_comparisons" >> "$report"
 			echo "</ul>" >> "$report"
 
-			return 2
+			# not to stop processing in case differences are found
+			return 0
 		fi
 	fi
 }
