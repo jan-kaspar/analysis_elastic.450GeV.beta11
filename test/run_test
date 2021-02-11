@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Note on step return codes:
+#   0 = no problem
+#   1 to 9 = light problem, process can continue
+#   10 and more = serious problem, process should stop
+
+#----------------------------------------------------------------------------------------------------
+
 function FixmeCheck()
 {
 	output=`grep -RlI "FIXME" . 2> /dev/null  | grep -v "OLD\|.git\|.tex\|.log\|test/run_test"`
@@ -7,7 +14,7 @@ function FixmeCheck()
 	then
 		echo "There are FIXMEs in the code."
 		echo "<li>FAILED</li>" >> "$report"
-		return 1
+		return 10
 	fi
 
 	echo "<li>OK</li>" >> "$report"
@@ -25,6 +32,8 @@ function TodoCheck()
 	else
 		echo "<li>$n_TODO files affected</li>" >> "$report"
 	fi
+
+	return 0
 }
 
 #----------------------------------------------------------------------------------------------------
@@ -45,13 +54,15 @@ function StaticAnalysisCheck()
 	else
 		echo "<li>report <a href=\"$index\">here</a></li>" >> "$report"
 	fi
+
+	return 0
 }
 
 #----------------------------------------------------------------------------------------------------
 
 function Compilation()
 {
-	make -j8 || return 1
+	make -j8 || return 10
 
 	echo "<li>OK</li>" >> "$report"
 }
@@ -92,6 +103,8 @@ function MainAnalysis()
 	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 40
 
 	echo "<li>OK</li>" >> "$report"
+
+	return 0
 }
 
 #----------------------------------------------------------------------------------------------------
@@ -153,7 +166,7 @@ function MainAnalysisComparison()
 {
 	ResetComparisonResults
 
-	if [ "$reference_directory" == "none" ]
+	if [[ "$reference_directory" == *"none" ]]
 	then
 		echo "<li>not run - missing reference</li>" >> "$report"
 
@@ -224,10 +237,11 @@ function MainAnalysisComparison()
 			echo -e "$failed_comparisons" >> "$report"
 			echo "</ul>" >> "$report"
 
-			# not to stop processing in case differences are found
-			return 0
+			return 2
 		fi
 	fi
+
+	return 0
 }
 
 #----------------------------------------------------------------------------------------------------
@@ -241,10 +255,12 @@ function Studies()
 	cd - &> /dev/null
 
 	cd "studies/systematics"
-	./run_all "1E6" || return 20
+	./run_all "1E6" || return 11
 	cd - &> /dev/null
 
 	echo "<li>OK</li>" >> "$report"
+
+	return 0
 }
 
 #----------------------------------------------------------------------------------------------------
@@ -253,7 +269,7 @@ function StudiesComparison()
 {
 	ResetComparisonResults
 
-	if [ "$reference_directory" == "none" ]
+	if [[ "$reference_directory" == *"none" ]]
 	then
 		echo "<li>not run - missing reference</li>" >> "$report"
 
@@ -276,10 +292,11 @@ function StudiesComparison()
 			echo -e "$failed_comparisons" >> "$report"
 			echo "</ul>" >> "$report"
 
-			# not to stop processing in case differences are found
-			return 0
+			return 2
 		fi
 	fi
+
+	return 0
 }
 
 #----------------------------------------------------------------------------------------------------
@@ -362,9 +379,13 @@ do
 	rc="$?"
 	if [ "$rc" -ne "0" ]
 	then
-		failure="True"
 		echo "<li>finished with return code $rc</li>" >> "$report"
-		break
+
+		if [ "$rc" -gt 9 ]
+		then
+			failure="True"
+			break
+		fi
 	fi
 
 	echo "</ul>" >> "$report"
