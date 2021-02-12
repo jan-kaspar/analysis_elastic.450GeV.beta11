@@ -21,7 +21,7 @@ function AddSubTarget()
 	local options="$5"
 
 	local target="$dir/.$tag.target"
-	rm -f "target"
+	rm -f "$target"
 	subtargets="$subtargets $target"
 
 	local deps_expanded=""
@@ -33,7 +33,7 @@ function AddSubTarget()
 	(
 		echo ""
 		echo "$target : $deps_expanded"
-		echo "	./run $program $dir/$stream -doNotCompile -wait $options"
+		echo "	./run $program $dir/$stream -doNotCompile -wait $options && touch $target"
 	) >> "$output"
 }
 
@@ -62,7 +62,7 @@ do
 	AddSubTarget "distributions_bootstrap" "distill_dgn" "distributions.cc" "Totem1" "-O \"-bootstrap 1\""
 	AddSubTarget "eff3outof4" "distill_dgn" "eff3outof4.cc" "Totem1" ""
 
-	AddSubTarget "distributions_anti" "distill_anti" "distributions_anti.cc" "Totem1" "-danti"
+	AddSubTarget "distributions_anti" "distill_anti" "distributions_anti.cc" "Totem1" ""
 
 	AddSubTarget "resolution_fit" "distributions_bootstrap" "resolution_fit.cc" "Totem1" ""
 
@@ -73,7 +73,7 @@ do
 	AddSubTarget "alignment" "distributions_details" "alignment.cc" "Totem1" ""
 	AddSubTarget "alignment_final" "distributions_details" "alignment_final.cc" "Totem1" ""
 
-	AddSubTarget "alignment_fit" "alignment" "alignment.cc" "Totem1" ""
+	AddSubTarget "alignment_fit" "alignment" "alignment_fit.cc" "Totem1" ""
 	AddSubTarget "distributions" "alignment alignment_final" "distributions.cc" "Totem1" ""
 
 	target="data/$tag/.target"
