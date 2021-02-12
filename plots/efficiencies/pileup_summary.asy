@@ -44,7 +44,7 @@ for (int di : diagonals.keys)
 
 			RootObject obj = RootGetObject(f, dgn+"/"+element+"/rel", search=false, error=false);
 			if (obj.valid)
-				draw(swToHours, obj, "p", p, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
+				draw(swToHours, obj, "l,p", p+dashed, mCi+2pt+p, replace(criteria[ci], "_", "\_"));
 		}
 		
 	}
