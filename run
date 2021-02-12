@@ -79,6 +79,8 @@ directories=()
 programs=()
 diagonals=("45b_56t" "45t_56b" "combined")
 
+compile="y"
+
 run_options=""
 
 waitForPrograms="n"
@@ -123,6 +125,10 @@ do
 			run_options="$1"
 			;;
 
+		"-doNotCompile")
+			compile="n"
+			;;
+
 		"-wait")
 			waitForPrograms="y"
 			;;
@@ -157,11 +163,14 @@ do
 done
 
 # compile all programs
-for prog in ${programs}
-do
-	target=".${prog%.*}"
-	make "$target" || exit 3
-done
+if [ "$compile" == "y" ]
+then
+	for prog in ${programs}
+	do
+		target=".${prog%.*}"
+		make "$target" || exit 3
+	done
+fi
 
 binDir=`pwd -P`
 
