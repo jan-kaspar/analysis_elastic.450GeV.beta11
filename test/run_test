@@ -356,9 +356,10 @@ do
 	then
 		echo "<li>finished with return code $rc</li>" >> "$report"
 
+		failure="True"
+
 		if [ "$rc" -gt 9 ]
 		then
-			failure="True"
 			break
 		fi
 	fi
