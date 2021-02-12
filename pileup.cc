@@ -289,6 +289,7 @@ struct Period
 
 	unsigned int arrayIndexBeforeSort;
 	
+	// TODO: change to 100
 	static const time_t width = 300;	// s
 
 	Period(unsigned int _run, signed int _idx, time_t _tsf=0, time_t _tsl=0) :
@@ -369,6 +370,7 @@ int main(int argc, const char **argv)
 	// defaults
 	string cfg_file = "config.py";
 	string diagonal_input = "";
+	bool fast = false;
 
 	// parse command line
 	for (int argi = 1; (argi < argc) && (cl_error == 0); ++argi)
@@ -381,6 +383,8 @@ int main(int argc, const char **argv)
 
 		if (TestStringParameter(argc, argv, argi, "-cfg", cfg_file)) continue;
 		if (TestStringParameter(argc, argv, argi, "-dgn", diagonal_input)) continue;
+
+		if (TestBoolParameter(argc, argv, argi, "-fast", fast)) continue;
 
 		printf("ERROR: unknown option '%s'.\n", argv[argi]);
 		cl_error = 1;
@@ -417,10 +421,13 @@ int main(int argc, const char **argv)
 	signal(SIGINT, SigIntHandler);
 
 	// loop over events
-	unsigned int ev_count = 0;
-	for (event.toBegin(); !event.atEnd() && !interrupt_loop; ++event)
+	unsigned int processed_event_count = 0;
+	const unsigned int ev_idx_inc = (fast) ? 10 : 1;
+	for (long int ev_idx = 0; ev_idx < event.size() && !interrupt_loop; ev_idx += ev_idx_inc)
 	{
-		ev_count++;
+		event.to(ev_idx);
+
+		processed_event_count++;
 
 		const unsigned int ev_run = event.id().run();
 		const unsigned int ev_lumi_section = event.id().luminosityBlock();
@@ -443,7 +450,7 @@ int main(int argc, const char **argv)
 	if (interrupt_loop)
 		printf("WARNING: User interrupt!\n");
 
-	printf("* events processed: %u\n", ev_count);
+	printf("* events processed: %u\n", processed_event_count);
 
 	// sort periods
 	for (unsigned int i = 0; i < periods.size(); ++i)
