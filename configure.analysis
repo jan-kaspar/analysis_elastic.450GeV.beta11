@@ -1,6 +1,50 @@
 #!/bin/bash
 
+#----------------------------------------------------------------------------------------------------
+# defaults
+
 output="makefile.analysis"
+
+fast="n"
+
+#----------------------------------------------------------------------------------------------------
+
+function PrintUsage()
+{
+	echo -e "USAGE: $0 <option> <src file> <option> <dir> <dir> ..."
+	echo -e "OPTIONS"
+
+	echo -e "	-h, --help		print this help and exit"
+	echo -e "	-fast			use reduced statistics for time-consuming tasks"
+}
+
+#----------------------------------------------------------------------------------------------------
+# parse command line
+
+while [ -n "$1" ]
+do
+	case "$1" in
+		"-h" | "--help")
+			PrintUsage
+			exit 1
+			;;
+
+		"-fast")
+			fast="y"
+			;;
+
+		*)
+			echo "ERROR: $1 is not understood."
+			PrintUsage
+			exit 2
+			;;
+	esac
+
+	shift
+done
+
+#----------------------------------------------------------------------------------------------------
+# start processing
 
 rm -f "$output"
 
@@ -45,7 +89,10 @@ do
 
 	subtargets=""
 	
-	AddSubTarget "pileup_ZeroBias" "" "pileup.cc" "ZeroBias" "" # this is the single most time consuming task - that's why it is run first and alone
+	# this is the single most time consuming task - that's why it is run first and alone
+	opt=""
+	if [ "$fast" == "y" ]; then opt="-O \"-fast 1\""; fi
+	AddSubTarget "pileup_ZeroBias" "" "pileup.cc" "ZeroBias" "$opt"
 
 	AddSubTarget "pileup_Totem1" "pileup_ZeroBias" "pileup.cc" "Totem1" ""
 	
