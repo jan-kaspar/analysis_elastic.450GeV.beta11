@@ -9,6 +9,12 @@
 
 # Standard analysis flow
 
+The best way to run the full analysis flow is to do the following:
+ * `./configure.analysis`: prepare the makefile representing the full analysis chain
+ * `make -f "makefile.analysis" -j8`: exucte the analysis chain (beware, this make take some time)
+
+The analysis chain roughly corresponds to the following steps.
+
 1) Prepare skimmed/distilled ntuples:
  * `./run distill.cc data/fill*/Totem1/`
  * `./run distill.cc data/fill*/Totem1/ -danti`
