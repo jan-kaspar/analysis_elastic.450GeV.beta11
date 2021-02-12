@@ -63,8 +63,8 @@ function MakeFiles()
 	fi
 
 	# make per stream configs
-	MakeFilesOne "$dir/Totem1" "$eos_dir_base/Totem1/version3" "$run_sel"
-	MakeFilesOne "$dir/ZeroBias" "$eos_dir_base/ZeroBias/version2" "$run_sel"
+	MakeFilesOne "$dir/Totem1" "$eos_dir_base/Totem1/version5" "$run_sel"
+	MakeFilesOne "$dir/ZeroBias" "$eos_dir_base/ZeroBias/version5" "$run_sel"
 }
 
 #----------------------------------------------------------------------------------------------------
