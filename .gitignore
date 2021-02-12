@@ -13,6 +13,7 @@ plots.local
 
 compile_commands.json
 makefile
+makefile.analysis
 
 !.clang-format
 !.clang-tidy
