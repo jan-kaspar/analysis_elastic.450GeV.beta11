@@ -31,7 +31,7 @@ unique_ptr<TCanvas> NewDefaultCanvas()
 
 //----------------------------------------------------------------------------------------------------
 
-const string title = "(1) blue solid, (2) red dashed";
+const string title = "(test) blue solid, (ref) red dashed";
 
 void SetStyle(TObject *o, unsigned int style)
 {
@@ -107,13 +107,13 @@ int CompareGraphsImp(const TGraph *g1, const TGraph *g2)
         diff_major |= x_diff_major;
         diff_minor |= x_diff_minor;
         if (x_diff_minor != 0)
-            printf("* point %i: difference in x: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", i, x_1, x_2, x_rel_diff);
+            printf("* point %i: difference in x: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", i, x_1, x_2, x_rel_diff);
 
         auto [y_rel_diff, y_diff_major, y_diff_minor] = CompareValues(y_1, y_2);
         diff_major |= y_diff_major;
         diff_minor |= y_diff_minor;
         if (y_diff_minor != 0)
-            printf("* point %i: difference in x: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", i, y_1, y_2, y_rel_diff);
+            printf("* point %i: difference in x: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", i, y_1, y_2, y_rel_diff);
     }
 
     if (diff_major)
@@ -175,19 +175,19 @@ int CompareHistograms1DImp(const TH1 *h1, const TH1 *h2)
         diff_major |= c_diff_major;
         diff_minor |= c_diff_minor;
         if (c_diff_minor != 0)
-            printf("* bin %i: difference in bin center: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
+            printf("* bin %i: difference in bin center: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
 
         auto [w_rel_diff, w_diff_major, w_diff_minor] = CompareValues(w_1, w_2);
         diff_major |= w_diff_major;
         diff_minor |= w_diff_minor;
         if (w_diff_minor != 0)
-            printf("* bin %i: difference in bin width: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
+            printf("* bin %i: difference in bin width: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
 
         auto [v_rel_diff, v_diff_major, v_diff_minor] = CompareValues(v_1, v_2);
         diff_major |= v_diff_major;
         diff_minor |= v_diff_minor;
         if (v_diff_minor != 0)
-            printf("* bin %i: difference in bin content: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, v_1, v_2, v_rel_diff);
+            printf("* bin %i: difference in bin content: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", bi, v_1, v_2, v_rel_diff);
     }
 
     if (diff_major)
@@ -248,13 +248,13 @@ int CompareHistograms2DImp(const TH2 *h_1, const TH2 *h_2)
         diff_major |= c_diff_major;
         diff_minor |= c_diff_minor;
         if (c_diff_minor != 0)
-            printf("* bin x %i: difference in bin center: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
+            printf("* bin x %i: difference in bin center: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
 
         auto [w_rel_diff, w_diff_major, w_diff_minor] = CompareValues(w_1, w_2);
         diff_major |= w_diff_major;
         diff_minor |= w_diff_minor;
         if (w_diff_minor != 0)
-            printf("* bin x %i: difference in bin width: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
+            printf("* bin x %i: difference in bin width: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
     }
 
     // check y bins
@@ -270,13 +270,13 @@ int CompareHistograms2DImp(const TH2 *h_1, const TH2 *h_2)
         diff_major |= c_diff_major;
         diff_minor |= c_diff_minor;
         if (c_diff_minor != 0)
-            printf("* bin y %i: difference in bin center: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
+            printf("* bin y %i: difference in bin center: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", bi, c_1, c_2, c_rel_diff);
 
         auto [w_rel_diff, w_diff_major, w_diff_minor] = CompareValues(w_1, w_2);
         diff_major |= w_diff_major;
         diff_minor |= w_diff_minor;
         if (w_diff_minor != 0)
-            printf("* bin y %i: difference in bin width: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
+            printf("* bin y %i: difference in bin width: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", bi, w_1, w_2, w_rel_diff);
     }
 
     // check bin content
@@ -292,7 +292,7 @@ int CompareHistograms2DImp(const TH2 *h_1, const TH2 *h_2)
             diff_major |= v_diff_major;
             diff_minor |= v_diff_minor;
             if (v_diff_minor != 0)
-                printf("* bin x %i, bin y %i: difference in bin content: (1) = %.3E, (2) = %.3E --> rel. diff. = %.1E\n", bi_x, bi_y, v_1, v_2, v_rel_diff);
+                printf("* bin x %i, bin y %i: difference in bin content: (test) = %.3E, (ref) = %.3E --> rel. diff. = %.1E\n", bi_x, bi_y, v_1, v_2, v_rel_diff);
         }
     }
 
@@ -317,11 +317,11 @@ int CompareHistograms2D(TH2 *h_1, TH2 *h_2, const string &plot_fn)
         c->Divide(2, 1);
 
         c->cd(1);
-        h_1->SetTitle("(1)");
+        h_1->SetTitle("(test)");
         h_1->Draw("colz");
 
         c->cd(2);
-        h_2->SetTitle("(2)");
+        h_2->SetTitle("(ref)");
         h_2->Draw("colz");
 
         c->SaveAs(plot_fn.c_str());
@@ -332,11 +332,19 @@ int CompareHistograms2D(TH2 *h_1, TH2 *h_2, const string &plot_fn)
 
 //----------------------------------------------------------------------------------------------------
 
+void PrintUsage()
+{
+    printf("USAGE: compare <test file> <test object> <ref file> <ref object> [plot file]\n");
+}
+
+//----------------------------------------------------------------------------------------------------
+
 int main(int argc, const char **argv)
 {
     if (argc < 5)
     {
         printf("ERROR: insufficient input.");
+        PrintUsage();
         return 1;
     }
 
@@ -349,9 +357,9 @@ int main(int argc, const char **argv)
     if (argc >= 6)
         plot_file = argv[5];
 
-    printf("comparing (1) to (2):\n");
-    printf("    (1): %s from %s\n", n_obj1.c_str(), n_file1.c_str());
-    printf("    (2): %s from %s\n", n_obj2.c_str(), n_file2.c_str());
+    printf("comparing (test) to (ref):\n");
+    printf("    (test): %s from %s\n", n_obj1.c_str(), n_file1.c_str());
+    printf("    (ref) : %s from %s\n", n_obj2.c_str(), n_file2.c_str());
 
     // load data
     TFile *file1 = TFile::Open(n_file1.c_str());
@@ -400,6 +408,6 @@ int main(int argc, const char **argv)
     if (obj1_histogram && obj2_histogram)
         return CompareHistograms1D((TH1 *) obj1, (TH1 *) obj2, plot_file);
 
-    printf("ERROR: don't know how to compare objects of types %s (1) and %s (2).\n", obj1->ClassName(), obj2->ClassName());
+    printf("ERROR: don't know how to compare objects of types %s (test) and %s (ref).\n", obj1->ClassName(), obj2->ClassName());
     return 10;
 }
