@@ -71,36 +71,12 @@ function Compilation()
 
 function MainAnalysis()
 {
-	echo "<li>dataset: $ds</li>" >> "$report"
+	./configure.analysis || return 10
 
-	./run -wait "distill.cc" "data/$ds" || return 10
-	./run -wait "distill.cc" "data/$ds" -danti || return 11
+	fd="${ds%/*}"
+	make -f "makefile.analysis" "data/$fd/.target" -j8 || 11
 
-	./run -wait "distributions.cc" "data/$ds" -O "-bootstrap 1 -details 5" || return 12
-
-	./run -wait "resolution_fit.cc" "data/$ds" || return 13
-
-	./run -wait "process_timber.cc" "data/$ds" || return 20
-
-	./run -wait "alignment.cc" "data/$ds" || return 21
-	./run -wait "alignment_fit.cc" "data/$ds" || return 22
-
-	./run -wait "eff3outof4.cc" "data/$ds" || return 23
-	./run -wait "eff3outof4_details.cc" "data/$ds" || return 24
-	./run -wait "eff3outof4_fit.cc" "data/$ds" || return 25
-
-	./run -wait "pileup.cc" "data/$ds/../ZeroBias" || return 26
-
-	#./run -wait "unfolding_cf_mc.cc" "data/$ds" || return 27
-	./run -wait "unfolding_cf_ni.cc" "data/$ds" || return 28
-
-	./run -wait "distributions_anti.cc" "data/$ds" -danti || return 29
-
-	./run -wait "distributions.cc" "data/$ds" || return 30
-
-	./run -wait "alignment_final.cc" "data/$ds" || return 31
-
-	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 40
+	data/merge -entry "data/$ds/,1,test,1" -output "data/merged.root" &> "data/merge.log" || return 12
 
 	echo "<li>OK</li>" >> "$report"
 
@@ -248,8 +224,6 @@ function MainAnalysisComparison()
 
 function Studies()
 {
-	echo "<li>dataset: $ds</li>" >> "$report"
-
 	cd "studies/reconstruction_formulae"
 	./run_all || return 10
 	cd - &> /dev/null
@@ -361,6 +335,7 @@ rm -f "$report"
 	echo "<ul>"
 	echo "<li>starting test at: $(pwd -P)</li>"
 	echo "<li>reference directory: $reference_directory</li>"
+	echo "<li>test dataset: $ds</li>" >> "$report"
 ) >> "$report"
 
 # prepare environment
