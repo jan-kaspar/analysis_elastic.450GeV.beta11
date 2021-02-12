@@ -71,7 +71,7 @@ function Compilation()
 
 function MainAnalysis()
 {
-	./configure.analysis || return 10
+	./configure.analysis -fast || return 10
 
 	fd="${ds%/*}"
 	make -f "makefile.analysis" "data/$fd/.target" -j8 || 11
