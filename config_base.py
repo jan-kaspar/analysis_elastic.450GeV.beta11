@@ -27,7 +27,11 @@ cfg = cms.PSet(
   ),
 
   anal = cms.PSet(
-    excl_timeIntervals = cms.VPSet(),
+    excl_timeIntervals = cms.VPSet(
+      # fill 7302
+      cms.PSet(first=cms.uint32(73400), second=cms.uint32(73500)), # high-PU prob
+      cms.PSet(first=cms.uint32(76800), second=cms.uint32(76820)), # rapid rate decrease at the fill end
+    ),
 
     excl_bunches = cms.vuint32(),
 
