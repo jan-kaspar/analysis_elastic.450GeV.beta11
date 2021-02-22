@@ -34,13 +34,13 @@ for c in [cfg_45t_56t, cfg_45b_56t]:
   )
 
   c.anal.cut1_c = -2E-6
-  c.anal.cut2_c = +5E-6
+  c.anal.cut2_c = +0E-6
 
   c.anal.cut5_c = -0.00
   c.anal.cut6_c = +0.00
 
   c.anal.cut7_c = -0.02
-  c.anal.cut8_c = +0.08
+  c.anal.cut8_c = +0.11
 
   c.anal.cut9_c = +0.02
   c.anal.cut10_c = -0.02
@@ -62,13 +62,13 @@ for c in [cfg_45b_56b, cfg_45t_56b]:
   )
 
   c.anal.cut1_c = -2E-6
-  c.anal.cut2_c = -2E-6
+  c.anal.cut2_c = +3E-6
 
   c.anal.cut5_c = -0.04
   c.anal.cut6_c = +0.03
 
   c.anal.cut7_c = -0.01
-  c.anal.cut8_c = +0.26
+  c.anal.cut8_c = +0.22
 
   c.anal.cut9_c = +0.02
   c.anal.cut10_c = +0.00
