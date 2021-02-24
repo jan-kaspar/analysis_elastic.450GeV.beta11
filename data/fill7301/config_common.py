@@ -53,10 +53,10 @@ for c in [cfg_45b_56b, cfg_45t_56b]:
   c.anal.alignment_sources = cms.VPSet(
     cms.PSet(
       data = cms.VPSet(
-        cms.PSet(unit=cms.string("L_2_F"), a = cms.double(0E-3), b = cms.double(+100E-3 - 32E-3), c = cms.double(+250E-3)),
-        cms.PSet(unit=cms.string("L_1_F"), a = cms.double(0E-3), b = cms.double(+450E-3 + 32E-3), c = cms.double( -50E-3)),
-        cms.PSet(unit=cms.string("R_1_F"), a = cms.double(0E-3), b = cms.double(+150E-3 - 10E-3), c = cms.double(-300E-3)),
-        cms.PSet(unit=cms.string("R_2_F"), a = cms.double(0E-3), b = cms.double(+850E-3 + 10E-3), c = cms.double(-200E-3))
+        cms.PSet(unit=cms.string("L_2_F"), a = cms.double(0E-3), b = cms.double(+100E-3 - 32E-3), c = cms.double(+250E-3 - 0.8 * 0.465)),
+        cms.PSet(unit=cms.string("L_1_F"), a = cms.double(0E-3), b = cms.double(+450E-3 + 32E-3), c = cms.double( -50E-3 - 0.8 * 0.422)),
+        cms.PSet(unit=cms.string("R_1_F"), a = cms.double(0E-3), b = cms.double(+150E-3 - 10E-3), c = cms.double(-300E-3 - 1.1 * 0.438)),
+        cms.PSet(unit=cms.string("R_2_F"), a = cms.double(0E-3), b = cms.double(+850E-3 + 10E-3), c = cms.double(-200E-3 - 1.1 * 0.399))
       )
     )
   )
