@@ -168,7 +168,7 @@ struct HistGroup
 		h_th_x = new TH1D("", ";#theta_{x}   (#murad)", 200, -800., +800.);
 		h_th_y = new TH1D("", ";#theta_{y}   (#murad)", 100, -650., +650.);
 
-		h_th_x_th_y = new TH2D("", ";#theta_{x}   (#murad);#theta_{y}   (#murad)", 40, -400., 400., 60, -150., 150.);
+		h_th_x_th_y = new TH2D("", ";#theta_{x}   (#murad);#theta_{y}   (#murad)", 40, -800., 800., 60, -600., 600.);
 	}
 
 	void Fill(double y, double th_x, double th_y)
@@ -248,9 +248,10 @@ void AnalyzeOnePot(const string &pot_excl,
 
 	// can this be elastic event
 	// si_de_... determined by eff3outof4.cc
-	const double si_de_th_x = 110E-6;
-	const double si_de_th_y = 50E-6;
-	const double n_si = 3.;
+	const double si_de_th_x = 160E-6;
+	const double si_de_th_y = 45E-6;
+	const double n_si = 1.;
+	const double n_si_tr_comp = 3.;
 
 	const bool cut_th_x = (fabs(de_th_x_sel) < n_si * si_de_th_x);
 	const bool cut_th_y = (fabs(de_th_y_sel) < n_si * si_de_th_y);
@@ -284,8 +285,8 @@ void AnalyzeOnePot(const string &pot_excl,
 	const bool rp_test_track = flags_test.tr;
 
 	const bool rp_test_track_compatible = rp_test_track
-		&& (fabs(th_x_test - th_x_ref) < n_si * si_de_th_x)
-		&& (fabs(th_y_test - th_y_ref) < n_si * si_de_th_y);
+		&& (fabs(th_x_test - th_x_ref) < n_si_tr_comp * si_de_th_x)
+		&& (fabs(th_y_test - th_y_ref) < n_si_tr_comp * si_de_th_y);
 
 	c[pot_excl]["anything"].Fill(y_ref, th_x_ref, th_y_ref);
 	

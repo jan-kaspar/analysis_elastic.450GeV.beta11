@@ -17,6 +17,7 @@ using namespace std;
 struct HistGroup
 {
 	TH1D *de_th_x, *de_th_y;
+	TH2D *de_th_y_vs_de_th_x;
 	TH1D *th_x;
 	TH1D *th_y;
 	TH2D *th_x_th_y, *th_x_th_y_unif;
@@ -24,8 +25,9 @@ struct HistGroup
 
 	void Init()
 	{
-		de_th_x = new TH1D("", ";#Delta #theta_{x}", 200, -500E-6, +500E-6);
+		de_th_x = new TH1D("", ";#Delta #theta_{x}", 200, -1000E-6, +1000E-6);
 		de_th_y = new TH1D("", ";#Delta #theta_{y}", 200, -500E-6, +500E-6);
+		de_th_y_vs_de_th_x = new TH2D("", ";#Delta #theta_{x};#Delta #theta_{y}", 200, -1000E-6, +1000E-6, 200, -500E-6, +500E-6);
 
 		if (th_x_binning_edges_1d == nullptr)
 			BuildThBinning();
@@ -36,7 +38,7 @@ struct HistGroup
 		th_x_th_y = new TH2D("", ";#theta_{x};#theta_{y}", th_x_binning_n_2d, th_x_binning_edges_2d,
 			th_y_binning_n_2d, th_y_binning_edges_2d);
 
-		th_x_th_y_unif = new TH2D("", ";#theta_{x};#theta_{y}", 40, -400E-6, 400E-6, 60, -150E-6, 150E-6);
+		th_x_th_y_unif = new TH2D("", ";#theta_{x};#theta_{y}", 40, -800E-6, 800E-6, 60, -600E-6, 600E-6);
 
 		unsigned int N_bins;
 		double *bin_edges;
@@ -67,6 +69,8 @@ struct HistGroup
 
 		de_th_x->Fill(dthx);
 		de_th_y->Fill(dthy);
+
+		de_th_y_vs_de_th_x->Fill(dthx, dthy);
 	}
 };
 
@@ -240,8 +244,8 @@ int main(int argc, const char **argv)
 	TFile *outF = new TFile((string("eff3outof4_") + cfg.diagonal_str + ".root").c_str(), "recreate");
 
 	// tolerances (= 1 sigma of left-right difference)
-	double si_de_th_x = 110E-6;
-	double si_de_th_y = 50E-6;
+	const double si_de_th_x = 160E-6;
+	const double si_de_th_y = 45E-6;
 
 	// vector of cut sigma multiples
 	vector<double> n_si;
@@ -354,6 +358,7 @@ int main(int argc, const char **argv)
 			gDirectory = nsiDir;
 			h_sel[rpi][nsi].de_th_x->Write("de_th_x");
 			h_sel[rpi][nsi].de_th_y->Write("de_th_y");
+			h_sel[rpi][nsi].de_th_y_vs_de_th_x->Write("de_th_y_vs_de_th_x");
 
 			TCanvas *c;
 

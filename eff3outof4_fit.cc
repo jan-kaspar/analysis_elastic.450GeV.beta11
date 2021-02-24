@@ -99,7 +99,7 @@ int main(int argc, const char **argv)
 		gDirectory = d_unit;
 
 		// get input
-		TH2D *h_eff = (TH2D *) f_in->Get(("excluded RPs "+units[ui]+"/n_si 3.0/th_x, th_y dependence (unif)/h_simple_ratio_vs_th_x_th_y").c_str());
+		TH2D *h_eff = (TH2D *) f_in->Get(("excluded RPs "+units[ui]+"/n_si 1.0/th_x, th_y dependence (unif)/h_simple_ratio_vs_th_x_th_y").c_str());
 		if (h_eff == nullptr)
 		{
 			printf("ERROR: can't load h_eff for unit '%s'.\n", units[ui].c_str());
