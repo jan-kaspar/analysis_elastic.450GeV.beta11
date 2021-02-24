@@ -34,8 +34,6 @@ TF1_nPoints = 4;
 for (int dsi : datasets.keys)
 {
 	real rp_eff_cen[] = { 0.98, 0.98, 0.98, 0.98};
-	//if (datasets[dsi] == "DS2a")
-	//	rp_eff_cen = new real[] { 0.95, 0.98, 0.98, 0.96 };
 
 	for (int dgi : diagonals.keys)
 	{
@@ -70,8 +68,12 @@ for (int dsi : datasets.keys)
 				draw(scale(1e6, 100), RootGetObject(f, "excluded RPs "+rps[rpi]+"/n_si " + n_si[nsi] + "/th_y dependence/h_simple_ratio.th_y"),
 					opt, p, "$n_\si = " + n_si[nsi] + "$");
 			}
+	
+			real eff_cen = rp_eff_cen[rpi]; 
+			if (fills[dsi] == "7302" && diagonals[dgi] == "45t_56b" && rps[rpi] == "L_1_F")
+				eff_cen = 0.85;
 
-			limits((150, 100*rp_eff_cen[rpi] - 10), (650, 100*rp_eff_cen[rpi] + 2), Crop);
+			limits((150, 100*eff_cen - 10), (550, 100*eff_cen + 2), Crop);
 			fLegend = BuildLegend();
 		}
 

@@ -28,7 +28,7 @@ cuts.push("10"); c_units.push("mm"); c_scales.push(1); c_rms_min.push(0.10); c_r
 
 string quantities[], q_options[], q_labels[];
 //quantities.push("p_cq_time"); q_options.push("eb,d0"); q_labels.push("mean vs.~time");
-quantities.push("g_cq_RMS"); q_options.push("p,d0"); q_labels.push("RMS vs.~time");
+quantities.push("g_cq_RMS"); q_options.push("p,l,d0"); q_labels.push("RMS vs.~time");
 
 xSizeDef = 10cm;
 ySizeDef = 6cm;
@@ -43,7 +43,7 @@ TGraph_errorBar = None;
 
 void SetPadWidth()
 {
-	real factorHoursToSize = 6cm / 3;
+	real factorHoursToSize = 12cm / 3;
 
 	real timespan = currentpicture.userMax2().x - currentpicture.userMin2().x;
 	currentpad.xSize = timespan * factorHoursToSize;

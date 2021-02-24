@@ -55,7 +55,7 @@ for (int dsi : datasets.keys)
 			draw(scale(sgn, 100), RootGetObject(f, d+"/track/th_y : rel"), opt, cyan, "track");
 			draw(scale(sgn, 100), RootGetObject(f, d+"/track_compatible/th_y : rel"), opt, magenta, "compatible track");
 
-			limits((150, 80), (650, 100), Crop);
+			limits((150, 80), (550, 100), Crop);
 		}
 
 		frame f_legend = BuildLegend();
@@ -73,7 +73,7 @@ for (int dsi : datasets.keys)
 			draw(scale(sgn, 100), RootGetObject(f, d+"/pl_suff_no_track/th_y : rel"), opt, blue, "pl suff no track");
 			draw(scale(sgn, 100), RootGetObject(f, d+"/pat_more/th_y : rel"), opt, heavygreen, "pat more");
 
-			limits((150, 0), (650, 20), Crop);
+			limits((150, 0), (550, 20), Crop);
 		}
 
 		frame f_legend = BuildLegend();

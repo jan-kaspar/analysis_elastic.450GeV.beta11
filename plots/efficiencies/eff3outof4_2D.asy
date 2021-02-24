@@ -57,14 +57,14 @@ for (int dsi : datasets.keys)
 
 		for (int rpi : rps.keys)
 		{
-			string d = "excluded RPs " + rps[rpi] + "/n_si 3.0";
+			string d = "excluded RPs " + rps[rpi] + "/n_si 1.0";
 
 			TH2_z_min = 0.75; TH2_z_max = 1.0;
 			TH2_paletteTicks = PaletteTicks(Step=0.02, step=0.01);
 
 			++gx;
 			NewPad("$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", gx, gy, axesAbove=true);
-			draw(scale(1e6, 1e6), RootGetObject(f, d+"/th_x, th_y dependence (unif)/h_simple_ratio_vs_th_x_th_y"), "def");
+			draw(scale(1e6, 1e6), RootGetObject(f, d+"/th_x, th_y dependence/h_simple_ratio_vs_th_x_th_y"), "def");
 
 			draw(scale(1e6, 1e6*sgn), RootGetObject(f_dist, "fiducial cuts/fc_G"), "l", black+1pt);
 

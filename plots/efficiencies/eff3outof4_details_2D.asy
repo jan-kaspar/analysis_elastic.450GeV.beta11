@@ -50,7 +50,7 @@ for (int dsi : datasets.keys)
 		label(replace("\vbox{\SetFontSizesXX\hbox{dataset: "+datasets[dsi]+"}\hbox{diagonal: "+diagonals[dgi]+"}}", "_", "\_"));
 
 		++gy; gx = 0;
-		NewPad(false, -1, gy);	
+		NewPad(false, -1, gy);
 		label("{\SetFontSizesXX efficiency}");
 
 		for (int rpi : rps.keys)
