@@ -38,7 +38,7 @@ struct HistGroup
 		th_x_th_y = new TH2D("", ";#theta_{x};#theta_{y}", th_x_binning_n_2d, th_x_binning_edges_2d,
 			th_y_binning_n_2d, th_y_binning_edges_2d);
 
-		th_x_th_y_unif = new TH2D("", ";#theta_{x};#theta_{y}", 40, -800E-6, 800E-6, 60, -600E-6, 600E-6);
+		th_x_th_y_unif = new TH2D("", ";#theta_{x};#theta_{y}", 40, -800E-6, 800E-6, 120, -600E-6, 600E-6);
 
 		unsigned int N_bins;
 		double *bin_edges;

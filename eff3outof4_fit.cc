@@ -132,11 +132,13 @@ int main(int argc, const char **argv)
 		if (cfg.diagonal_str == "45b_56t" && units[ui] == "L_1_F")
 		{
 			ff = new TF2("ff", "[0]/2 * (1. + TMath::Erf( (x*cos([1]) + y*sin([1]) - [2])/[3] ))");
-			ff->SetParameters(0.97, 1.67, -32E-6, 55E-6);
+			ff->SetParameters(0.96, 1.67, -32E-6, 55E-6);
+			/*
 			ff->SetParLimits(0, 0.9, 1.0);
 			ff->SetParLimits(1, 1.64, 1.70);
 			ff->SetParLimits(2, -20E-6, +44E-6);
 			ff->SetParLimits(3, 45E-6, 65E-6);
+			*/
 			h_eff_for_fit->Fit(ff);
 		} else {
 			ff = new TF2("ff", "[0]");
@@ -147,12 +149,14 @@ int main(int argc, const char **argv)
 
 		// save slices
 		const vector<tuple<double, double>> th_x_slices = {
-			{-250E-6, -200E-6},
+			{-400E-6, -300E-6},
+			{-300E-6, -200E-6},
 			{-200E-6, -100E-6},
 			{-100E-6, 0E-6},
 			{0E-6, +100E-6},
 			{+100E-6, +200E-6},
-			{+200E-6, +250E-6},
+			{+200E-6, +300E-6},
+			{+300E-6, +400E-6},
 		};
 
 		for (const auto [th_x_min, th_x_max] : th_x_slices)
