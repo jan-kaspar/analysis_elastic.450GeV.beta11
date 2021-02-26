@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "TDirectory.h"
 #include "TFile.h"
 #include "TTree.h"
@@ -10,6 +11,19 @@
 #include "DataFormats/CTPPSReco/interface/CTPPSLocalTrackLite.h"
 
 using namespace std;
+
+//----------------------------------------------------------------------------------------------------
+
+struct Range
+{
+	double min = +1E100, max = -1E100;
+
+	void fill(double v)
+	{
+		min = std::min(min, v);
+		max = std::max(max, v);
+	}
+};
 
 //----------------------------------------------------------------------------------------------------
 
@@ -50,9 +64,17 @@ int main()
 	// prepare data structures
 	map<unsigned int, map<unsigned int, map<unsigned int, unsigned int>>> data; // data[rp id][run][ls] = number of tracks
 
+	map<unsigned int, map<unsigned int, Range>> timestamps; // data[rp id][run][ls] = timestamp range
+
 	// loop over the chain entries
 	for (event.toBegin(); ! event.atEnd(); ++event)
 	{
+		// metadata
+		const int timestamp0 = 1539468000;
+		int timestamp = event.time().unixTime() - timestamp0;
+
+		timestamps[event.id().run()][event.id().luminosityBlock()].fill(timestamp);
+
 		// load track data
 		fwlite::Handle< vector<CTPPSLocalTrackLite> > tracks;
 		tracks.getByLabel(event, "ctppsLocalTrackLiteProducer");
@@ -69,26 +91,52 @@ int main()
 	}
 
 	// save plots
+	char buf[100];
+
 	for (const auto &rpIt : data)
 	{
-		char buf[100];
-
 		sprintf(buf, "RP %i", rpIt.first);
 		TDirectory *d_rp = f_out->mkdir(buf);
 
-		gDirectory = d_rp;
-
 		for (const auto &runIt : rpIt.second)
 		{
-			TGraph *g = new TGraph();
 			sprintf(buf, "run %i", runIt.first);
-			g->SetName(buf);
+			TDirectory *d_run = d_rp->mkdir(buf);
+		
+			gDirectory = d_run;
+
+			TGraph *g_rate = new TGraph();
+			g_rate->SetName("g_rate");
 
 			for (const auto &it : runIt.second)
-				g->SetPoint(g->GetN(), it.first, it.second);
+				g_rate->SetPoint(g_rate->GetN(), it.first, it.second);
 
-			g->Write();
+			g_rate->Write();
 		}
+	}
+
+	TDirectory *d_timestamps = f_out->mkdir("timestamps");
+
+	for (const auto &runIt : timestamps)
+	{
+		sprintf(buf, "run %i", runIt.first);
+		TDirectory *d_run = d_timestamps->mkdir(buf);
+	
+		gDirectory = d_run;
+
+		TGraph *g_rate = new TGraph();
+		g_rate->SetName("g_rate");
+
+		TGraph *g_timestamps = new TGraph();
+		g_timestamps->SetName("g_timestamps");
+
+		for (const auto &it : runIt.second)
+		{
+			g_timestamps->SetPoint(g_timestamps->GetN(), it.first, it.second.min);
+			g_timestamps->SetPoint(g_timestamps->GetN(), it.first, it.second.max);
+		}
+
+		g_timestamps->Write();
 	}
 
 	// clean up

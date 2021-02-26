@@ -36,7 +36,7 @@ for (int runi : runs.keys)
 	{
 		NewPad("ls", "tracks per ls");
 
-		RootObject g = RootGetObject(f, "RP " + rps[rpi] + "/run " + runs[runi]);
+		RootObject g = RootGetObject(f, "RP " + rps[rpi] + "/run " + runs[runi] + "/g_rate");
 		if (g.valid)
 			draw(g, "l,p", red, mCi+2pt+red);
 
