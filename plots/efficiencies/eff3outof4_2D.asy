@@ -64,11 +64,11 @@ for (int dsi : datasets.keys)
 
 			++gx;
 			NewPad("$\th_x^*\ung{\mu rad}$", "$\th_y^*\ung{\mu rad}$", gx, gy, axesAbove=true);
-			draw(scale(1e6, 1e6), RootGetObject(f, d+"/th_x, th_y dependence/h_simple_ratio_vs_th_x_th_y"), "def");
+			draw(scale(1e6, 1e6), RootGetObject(f, d+"/th_x, th_y dependence (unif)/h_simple_ratio_vs_th_x_th_y"), "def");
 
 			draw(scale(1e6, 1e6*sgn), RootGetObject(f_dist, "fiducial cuts/fc_G"), "l", black+1pt);
 
-			limits((-800, 150), (800, 650), Crop);
+			limits((-800, 100), (800, 600), Crop);
 		}
 	}
 }

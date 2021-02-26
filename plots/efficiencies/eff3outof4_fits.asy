@@ -17,12 +17,14 @@ rps.push("R_1_F"); rp_labels.push("56-210-fr");
 rps.push("R_2_F"); rp_labels.push("56-220-fr" );
 
 string slices[], s_labels[];
-slices.push("slice_th_x_-250_-200"); s_labels.push("$-250 < \th^*_x < -200\un{\mu rad}$");
+slices.push("slice_th_x_-400_-300"); s_labels.push("$-400 < \th^*_x < -300\un{\mu rad}$");
+slices.push("slice_th_x_-300_-200"); s_labels.push("$-300 < \th^*_x < -200\un{\mu rad}$");
 slices.push("slice_th_x_-200_-100"); s_labels.push("$-200 < \th^*_x < -100\un{\mu rad}$");
 slices.push("slice_th_x_-100_+0"); s_labels.push("$-100 < \th^*_x < 0\un{\mu rad}$");
 slices.push("slice_th_x_+0_+100"); s_labels.push("$0 < \th^*_x < +100\un{\mu rad}$");
 slices.push("slice_th_x_+100_+200"); s_labels.push("$+100 < \th^*_x < +200\un{\mu rad}$");
-slices.push("slice_th_x_+200_+250"); s_labels.push("$+200 < \th^*_x < +250\un{\mu rad}$");
+slices.push("slice_th_x_+200_+300"); s_labels.push("$+200 < \th^*_x < +300\un{\mu rad}$");
+slices.push("slice_th_x_+300_+400"); s_labels.push("$+300 < \th^*_x < +400\un{\mu rad}$");
 
 xSizeDef = 6cm;
 ySizeDef = 5cm;
@@ -32,7 +34,7 @@ yTicksDef = RightTicks(5., 1.);
 
 for (int dsi : datasets.keys)
 {
-	real rp_eff_cen[] = { 0.96, 0.98, 0.97, 0.98};
+	real rp_eff_cen[] = { 0.98, 0.98, 0.98, 0.98};
 
 	for (int dgi : diagonals.keys)
 	{
@@ -63,10 +65,17 @@ for (int dsi : datasets.keys)
 				string p_base = rps[rpi] + "/" + slices[sli] + "/cmp";
 
 				draw(scale(1e6, 100), RootGetObject(f, p_base+"|h_th_y_slice"), "vl,eb", blue, "efficiency histogram");
-				draw(scale(1e6, 100), RootGetObject(f, p_base+"|g_fit"), "l", red, "fit");
 
-				//limits((0, 100*rp_eff_cen[rpi] - 2), (150, 100*rp_eff_cen[rpi] + 2), Crop);
-				limits((200, 90), (550, 100), Crop);
+				RootObject g_fit = RootGetObject(f, p_base+"|g_fit");
+				draw(shift(0, +2) * scale(1e6, 100), g_fit, "l", red+dashed);
+				draw(shift(0, +0) * scale(1e6, 100), g_fit, "l", red+1pt, "fit");
+				draw(shift(0, -2) * scale(1e6, 100), g_fit, "l", red+dashed);
+
+				real eff_cen = rp_eff_cen[rpi]; 
+				if (fills[dsi] == "7302" && diagonals[dgi] == "45t_56b" && rps[rpi] == "L_1_F")
+					eff_cen = 0.85;
+
+				limits((200, 100*eff_cen - 10), (550, 100*eff_cen + 2), Crop);
 				fLegend = BuildLegend();
 			}
 		}

@@ -7,8 +7,9 @@ string fills[], f_datasets[];
 fills.push("7301"); f_datasets.push("data/fill7301/ZeroBias");
 fills.push("7302"); f_datasets.push("data/fill7302/ZeroBias");
 
-string diagonals[] = { "45b_56t", "45t_56b" };
-string dgn_labels[] = { "45 bot -- 56 top", "45 top -- 56 bot" };
+string diagonals[], dgn_labels[];
+diagonals.push("45b_56t"); dgn_labels.push("45 bot -- 56 top");
+diagonals.push("45t_56b"); dgn_labels.push("45 top -- 56 bot");
 
 string elements[][] = {
 	{ "L_1_F/#", "L_2_F/#", "L_1_F, L_2_F/# && #" },
