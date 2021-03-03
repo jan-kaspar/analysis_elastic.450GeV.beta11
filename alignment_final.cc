@@ -56,35 +56,22 @@ double S2_FCN::f(double x, double y, const double* par)
 	const double &si_1_x = par[3];
 	const double &si_1_y = par[4];
 
-	const double &A_2 = par[5];
-	const double &si_2_x = par[6];
-	const double &si_2_y = par[7];
-		
 	const double de_1_x = (x - mu_x) / si_1_x;
 	const double de_1_y = (y - mu_y) / si_1_y;
 
-	const double de_2_x = (x - mu_x) / si_2_x;
-	const double de_2_y = (y - mu_y) / si_2_y;
-
-	return
-		A_1 * exp(- (de_1_x*de_1_x + de_1_y*de_1_y) / 2.)
-		+ A_2 * exp(- (de_2_x*de_2_x + de_2_y*de_2_y) / 2.);
+	return A_1 * exp(- (de_1_x*de_1_x + de_1_y*de_1_y) / 2.);
 }
 
 //----------------------------------------------------------------------------------------------------
 
-void S2_FCN::InitFit(ROOT::Fit::FitConfig &cfg, double v_min, double v_max)
+void S2_FCN::InitFit(ROOT::Fit::FitConfig &cfg, double /*v_min*/, double v_max)
 {
 	cfg.ParSettings(0).Set("mu_x", 0E-6, 1E-6);	// in rad
 	cfg.ParSettings(1).Set("mu_y", 0E-6, 1E-6);
 
-	cfg.ParSettings(2).Set("A_1", v_min, v_min/10);
-	cfg.ParSettings(3).Set("si_1_x", 20E-6, 1E-6);
-	cfg.ParSettings(4).Set("si_1_y", 20E-6, 1E-6);
-
-	cfg.ParSettings(5).Set("A_2", v_max*10, v_max*10/10);
-	cfg.ParSettings(6).Set("si_2_x", 5E-6, 1E-6);
-	cfg.ParSettings(7).Set("si_2_y", 5E-6, 1E-6);
+	cfg.ParSettings(2).Set("A_1", v_max*2, v_max/5);
+	cfg.ParSettings(3).Set("si_1_x", 200E-6, 10E-6);
+	cfg.ParSettings(4).Set("si_1_y", 200E-6, 10E-6);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -97,10 +84,6 @@ void S2_FCN::PrintResults(const double *params)
 	printf("A_1 = %.3E\n", params[2]);
 	printf("si_1_x = %.1f urad\n", params[3]*1E6);
 	printf("si_1_y = %.1f urad\n", params[4]*1E6);
-
-	printf("A_2 = %.3E\n", params[5]);
-	printf("si_2_x = %.1f urad\n", params[6]*1E6);
-	printf("si_2_y = %.1f urad\n", params[7]*1E6);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -109,10 +92,8 @@ TGraph* S2_FCN::GetResultGraph(const ROOT::Fit::FitResult &r)
 {
 	TGraph *g = new TGraph();
 
-	for (int i = 0; i < 8; ++i)
-	{
+	for (int i = 0; i < 5; ++i)
 		g->SetPoint(i, r.GetParams()[i], r.GetErrors()[i]);
-	}
 
 	return g;
 }
@@ -183,7 +164,7 @@ TGraph* GetFitProjectionY(const double *params, const vector<double> &th_x_bin_c
 {
 	TGraph *g = new TGraph();
 
-	for (double th_y = -200E-6; th_y <= +200E-6; th_y += 5E-6)
+	for (double th_y = -500E-6; th_y <= +500E-6; th_y += 10E-6)
 	{
 		double sum = 0.;
 		for (const auto &th_x : th_x_bin_centers)
@@ -247,8 +228,8 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 	unique_ptr<S2_FCN> s2_fcn(new S2_FCN);
 	unique_ptr<ROOT::Fit::Fitter> fitter(new ROOT::Fit::Fitter);
 
-	constexpr unsigned int n_params = 8;
-	double pStart[] = {0, 0, 0, 0, 0, 0, 0, 0};
+	constexpr unsigned int n_params = 5;
+	double pStart[] = {0, 0, 0, 0, 0};
 	fitter->SetFCN(n_params, *s2_fcn, pStart, 0, true);
 
 	// set initial parameters
@@ -294,18 +275,16 @@ void MakeFit(TH2D *h_45b, TH2D *h_45t)
 	gDirectory = gDirectory->mkdir("th_x slices");
 
 	vector<pair<double, double>> th_x_slices = {
-		{ -200E-6, -150E-6 },
-		{ -150E-6, -100E-6 },
-		{ -100E-6, -75E-6 },
-		{ -75E-6, -50E-6 },
-		{ -50E-6, -25E-6 },
-		{ -25E-6, -0E-6 },
-		{ 0E-6, 25E-6 },
-		{ 25E-6, 50E-6 },
-		{ 50E-6, 75E-6 },
-		{ 75E-6, 100E-6 },
-		{ 100E-6, 150E-6 },
-		{ 150E-6, 200E-6 },
+		{ -500E-6, -400E-6 },
+		{ -400E-6, -300E-6 },
+		{ -300E-6, -200E-6 },
+		{ -200E-6, -100E-6 },
+		{ -100E-6, -0E-6 },
+		{ 0E-6, 100E-6 },
+		{ 100E-6, 200E-6 },
+		{ 200E-6, 300E-6 },
+		{ 300E-6, 400E-6 },
+		{ 400E-6, 500E-6 },
 	};
 
 	for (const auto &slice : th_x_slices)
