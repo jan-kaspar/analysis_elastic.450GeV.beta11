@@ -41,17 +41,17 @@ for c in [cfg_45t_56t, cfg_45b_56t]:
     )
   )
 
-  c.anal.cut1_c = -2.1E-6
-  c.anal.cut2_c = +2.8E-6
+  c.anal.cut1_c = +17.1E-6
+  c.anal.cut2_c = +23.0E-6
 
-  c.anal.cut5_c = -0.00
+  c.anal.cut5_c = +0.045
   c.anal.cut6_c = +0.00
 
-  c.anal.cut7_c = -0.02
-  c.anal.cut8_c = +0.01
+  c.anal.cut7_c = +0.075
+  c.anal.cut8_c = -0.13
 
-  c.anal.cut9_c = +0.01
-  c.anal.cut10_c = -0.02
+  c.anal.cut9_c = -0.03
+  c.anal.cut10_c = +0.07
 
   c.anal.L_int = 1
 
@@ -69,16 +69,16 @@ for c in [cfg_45b_56b, cfg_45t_56b]:
     )
   )
 
-  c.anal.cut1_c = -1.3E-6
-  c.anal.cut2_c = -0.1E-6
+  c.anal.cut1_c = +11.0E-6
+  c.anal.cut2_c = +20.1E-6
 
-  c.anal.cut5_c = -0.00
-  c.anal.cut6_c = +0.00
+  c.anal.cut5_c = +0.01
+  c.anal.cut6_c = +0.03
 
-  c.anal.cut7_c = -0.01
-  c.anal.cut8_c = +0.09
+  c.anal.cut7_c = +0.08
+  c.anal.cut8_c = +0.15
 
-  c.anal.cut9_c = +0.02
-  c.anal.cut10_c = +0.00
+  c.anal.cut9_c = -0.02
+  c.anal.cut10_c = +0.085
 
   c.anal.L_int = 1
