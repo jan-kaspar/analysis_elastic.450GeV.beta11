@@ -315,7 +315,7 @@ double dist_t_reco(double t_p)
 			integralSum += RealIntegrate(IntegOverPhi, param, nullptr, -phi_end, -phi_start, 0., rel_precision, int_ws_phi_size, int_ws_phi, "dist_reco_t");
 	}
 
-	return integralSum / phiSum;
+	return (phiSum > 0) ? integralSum / phiSum : 0.;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -470,7 +470,7 @@ int main(int argc, const char **argv)
 	TGraph *g_dsdt_true = new TGraph(); g_dsdt_true->SetName("g_dsdt_true"); g_dsdt_true->SetLineColor(1);
 	TGraph *g_dsdt_reco = new TGraph(); g_dsdt_reco->SetName("g_dsdt_reco"); g_dsdt_reco->SetLineColor(4);
 
-	for (double t = 2.1E-4; t <= 2.9E-2;)
+	for (double t = 1E-2; t <= 10E-2;)
 	{
 		const double v_true = dist_t_true(t);
 		const double v_reco = dist_t_reco(t);
@@ -483,7 +483,6 @@ int main(int argc, const char **argv)
 
 		// advance t
 		double dt = 1E-3;
-		if (t < 3E-3) dt = 3e-5;
 		t += dt;
 	}
 

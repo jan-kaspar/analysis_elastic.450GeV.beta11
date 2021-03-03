@@ -302,8 +302,8 @@ int main(int argc, const char **argv)
 	string dir_mc = "data-mc/1E9";
 	string dir_ni = "data-ni";
 
-	t_min = 1E-4;
-	t_max = 4E-2;
+	t_min = 1E-2;
+	t_max = 8E-2;
 
 	string outputFile = "matrix.root";
 
@@ -346,6 +346,7 @@ int main(int argc, const char **argv)
 	// list of binnings
 	vector<string> binnings;
 	binnings.push_back("eb");
+	binnings.push_back("ub");
 
 	// list of modes
 	vector<Mode> modes = {

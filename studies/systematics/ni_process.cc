@@ -228,7 +228,7 @@ int main(int argc, const char **argv)
 		return 1;
 	}
 
-	// output file	
+	// output file
 	TFile *f_out = new TFile(outFileName.c_str(), "recreate");
 
 	// process all scenarios
