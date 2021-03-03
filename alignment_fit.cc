@@ -27,11 +27,11 @@ TGraph* WriteFitGraph(TGraph *gi, TF1 *f)
 	double x_min, ex_min, x_max, ex_max, dummy;
 	gi->GetPoint(0, x_min, dummy);
 	ex_min = gi->GetErrorX(0);
-	x_min -= 5.*ex_min;
+	x_min -= 1.1*ex_min;
 
 	gi->GetPoint(gi->GetN()-1, x_max, dummy);
 	ex_max = gi->GetErrorX(gi->GetN()-1);
-	x_max += 5.*ex_max;
+	x_max += 1.1*ex_max;
 
 	double x[2] = { x_min, x_max };
 	double y[2] = { f->Eval(x_min), f->Eval(x_max) };
