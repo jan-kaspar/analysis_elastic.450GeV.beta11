@@ -7,6 +7,8 @@ string datasets[];
 string periods[];
 datasets.push("data/fill7301/Totem1"); periods.push("0");
 datasets.push("data/fill7302/Totem1"); periods.push("0");
+datasets.push("data/fill7302/Totem1"); periods.push("2");
+datasets.push("data/fill7302/Totem1"); periods.push("3");
 
 string units[], unit_labels[];
 units.push("L_2_F"); unit_labels.push("L-220-fr");
@@ -23,10 +25,14 @@ TGraph_errorBar = None;
 
 for (int dsi : datasets.keys)
 {
+	NewPage();
+
 	string dataset = datasets[dsi];
 	string period = "period " + periods[dsi];
 
 	write(dataset);
+
+	NewPadLabel("\vbox{\hbox{" + dataset + "}\hbox{" + period + "}}");
 
 	//--------------------
 	NewRow();
@@ -84,11 +90,9 @@ for (int dsi : datasets.keys)
 		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/fit/y_hist"), "d0,vl", red);
 		draw(RootGetObject(topDir+dataset+"/alignment.root", period + "/unit "+units[ui]+"/vertical/fit/y_hist|f"), "l", blue);
 	
-		limits((-30, 1e2), (+30, 1e3), Crop);
+		//limits((-30, 1e2), (+30, 1e3), Crop);
 		AttachLegend(unit_labels[ui], NE, NE);
 	}
-
-	//--------------------
-	
-	GShipout("alignment_details");
 }
+
+GShipout("alignment_details");
