@@ -90,7 +90,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 	{
 		// v = sigma that corresponds to modes (L, R) = (+1, +1) or (+1, -1)
 		// here, conversion from single-arm sigma:
-		const double v = 10E-6 / sqrt(2);
+		const double v = 11E-6 / sqrt(2);
 
 		if (scenario == "sh-thx")
 		{
@@ -120,14 +120,13 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	{
 		// sigma of the TB correlated, LR symmetric mode
-		const double v = 15E-6 / sqrt(2);
+		const double v = 20E-6 / sqrt(2);
 
 		// sigma of the TB correlated, LR anti-symmetric mode
-		const double v_LR_asym = 15E-6 / sqrt(2);
+		const double v_LR_asym = 20E-6 / sqrt(2);
 
 		// sigma for the TB uncorrelated modes (L, R) = (+1, +1) or (+1, -1)
-		// TODO: update
-		const double v_TB_uncorr = 0.4E-6 / sqrt(2.);
+		const double v_TB_uncorr = 10E-6 / sqrt(2.);
 
 		if (scenario == "sh-thy")
 		{
@@ -181,8 +180,8 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 	{
 		// v = sigma that corresponds to modes (L, R) = (+1, +1) or (+1, -1)
 		// division by sqrt(2) is conversion from single-arm sigmas
-		const double C = 6E-3 / sqrt(2.);
-		const double D = 8E-3 / sqrt(2.);
+		const double C = 0.02 / sqrt(2.);
+		const double D = 0.01 / sqrt(2.);
 
 		if (scenario.compare("tilt-thx-thy") == 0)
 		{
