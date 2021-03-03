@@ -8,10 +8,10 @@ datasets.push("data/fill7301/Totem1"); fills.push("7301");
 datasets.push("data/fill7302/Totem1"); fills.push("7302");
 
 string units[], unit_labels[];
-units.push("L_2_F"); unit_labels.push("L-220-fr");
-units.push("L_1_F"); unit_labels.push("L-210-fr");
-units.push("R_1_F"); unit_labels.push("R-210-fr");
-units.push("R_2_F"); unit_labels.push("R-220-fr");
+units.push("L_2_F"); unit_labels.push("45-220-fr");
+units.push("L_1_F"); unit_labels.push("45-210-fr");
+units.push("R_1_F"); unit_labels.push("56-210-fr");
+units.push("R_2_F"); unit_labels.push("56-220-fr");
 
 xSizeDef = 10cm;
 xTicksDef = LeftTicks(Step=1., step=0.5);
