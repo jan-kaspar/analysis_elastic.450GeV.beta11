@@ -297,7 +297,11 @@ void AnalyzeMode(TH2D *h2_input, const string &name)
 		f_gauss->SetParameters(100, 0E-6, 20E-6);
 		slice->Fit(f_gauss, "Q", "", -200E-6, +200E-6);
 
-		//slice->Write("slice");
+		/*
+		char buf[100];
+		sprintf(buf, "h_slice_%u", byi);
+		slice->Write(buf);
+		*/
 
 		if (fabs(f_gauss->GetParameter(1)) > 200E-6)
 			continue;
