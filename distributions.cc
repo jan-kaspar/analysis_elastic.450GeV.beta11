@@ -1245,7 +1245,7 @@ int main(int argc, const char **argv)
 		if (anal.use_pileup_efficiency_fits)
 			inefficiency_pile_up = g_input_pileup_ineff->Eval(ev.timestamp);
 
-		double norm_corr =
+		const double norm_corr =
 			1./(1. - (inefficiency_3outof4 + anal.inefficiency_shower_near))
 			* 1./(1. - inefficiency_pile_up)
 			* 1./(1. - anal.inefficiency_trigger)
@@ -1254,7 +1254,7 @@ int main(int argc, const char **argv)
 		p_norm_corr->Fill(ev.timestamp, norm_corr);
 		p_3outof4_corr->Fill(k.th_y, inefficiency_3outof4);
 
-		double normalization = anal.bckg_corr * norm_corr / anal.L_int;
+		const double normalization = anal.bckg_corr * norm_corr / anal.L_int;
 
 		// data for alignment
 		// (SHOULD use hit positions WITHOUT alignment corrections, i.e. ev.h)
