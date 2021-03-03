@@ -22,7 +22,7 @@ for (int dsi : datasets.keys)
 	real ySize = 6cm;
 
 	NewPad("$\th_x^{*}\ung{\mu rad}$", "$\th_y^{*}\ung{\mu rad}$", ySize/150*150, ySize, axesAbove=true);
-	//currentpad.xTicks = LeftTicks(50., 10.);
+	currentpad.xTicks = LeftTicks(500., 100.);
 	scale(Linear, Linear, Log);
 	//TH2_zLabel = "(corrected) events per bin";
 	TH2_paletteBarWidth = 0.05;

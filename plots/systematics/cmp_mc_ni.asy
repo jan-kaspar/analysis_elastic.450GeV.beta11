@@ -12,7 +12,7 @@ diagonals.push("45t_56b"); diagonal_labels.push("45 top -- 56 bot");
 real z_t_maxs[], z_t_Steps[], z_t_steps[], z_e_maxs[], z_e_Steps[], z_e_steps[];
 //z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.04); z_e_Steps.push(0.01); z_e_steps.push(0.005);
 //z_t_maxs.push(0.2); z_t_Steps.push(0.05); z_t_steps.push(0.01); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
-z_t_maxs.push(0.10); z_t_Steps.push(0.02); z_t_steps.push(0.01); z_e_maxs.push(0.04); z_e_Steps.push(0.01); z_e_steps.push(0.005);
+z_t_maxs.push(0.10); z_t_Steps.push(0.02); z_t_steps.push(0.01); z_e_maxs.push(0.06); z_e_Steps.push(0.01); z_e_steps.push(0.005);
 
 string mc_source = "studies/systematics/data-mc/1E6";
 string mc_binning = "ub";

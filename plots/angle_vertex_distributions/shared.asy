@@ -82,10 +82,16 @@ void PlotOne(string fn)
 						real slope = fit.rExec("GetParameter", 1) * y_scales[pi] / x_scales[pi];
 						real slope_unc = fit.rExec("GetParError", 1) * y_scales[pi] / x_scales[pi];
 
+						real fit_x_min = fit.rExec("GetXmin");
+						real fit_x_max = fit.rExec("GetXmax");
+						real intercept_mid = fit.rExec("Eval", (fit_x_min + fit_x_max)/2.) * y_scales[pi];
+
 						draw(scale(x_scales[pi], y_scales[pi]), fit, "l", cyan+2pt, "linear fit:");
 
-						AddToLegend(format("intercept = $%#+.4f$", intercept) + format("$\pm %#.4f$", intercept_unc));
 						AddToLegend(format("slope = $%#+.4f$", slope) + format("$\pm %#.4f$", slope_unc));
+
+						AddToLegend(format("intercept at 0 = $%#+.4f$", intercept) + format("$\pm %#.4f$", intercept_unc));
+						AddToLegend(format("intercept at range mid = $%#+.4f$", intercept_mid));
 					}
 
 					//ylimits(y_mins[pi], y_maxs[pi], Crop);

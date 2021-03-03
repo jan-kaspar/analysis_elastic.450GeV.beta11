@@ -3,14 +3,8 @@ import pad_layout;
 include "../common.asy";
 
 string datasets[], fills[];
-datasets.push("data/fill7280/Totem1"); fills.push("7280");
-datasets.push("data/fill7281/Totem1"); fills.push("7281");
-datasets.push("data/fill7282/Totem1"); fills.push("7282");
-datasets.push("data/fill7283/Totem1"); fills.push("7283");
-datasets.push("data/fill7284/Totem1"); fills.push("7284");
-datasets.push("data/fill7285/Totem1"); fills.push("7285");
-datasets.push("data/fill7289/Totem1"); fills.push("7289");
-datasets.push("data/fill7291/Totem1"); fills.push("7291");
+datasets.push("data/fill7301/Totem1"); fills.push("7301");
+datasets.push("data/fill7302/Totem1"); fills.push("7302");
 
 //----------------------------------------------------------------------------------------------------
 

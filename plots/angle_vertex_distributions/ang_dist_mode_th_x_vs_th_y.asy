@@ -17,7 +17,7 @@ arms.push("_R"); arm_ss.push("R"); arm_labels.push("right arm");
 arms.push("_G"); arm_ss.push(""); arm_labels.push("double arm");
 
 xSizeDef = 12cm;
-//xTicksDef = LeftTicks(Step=1, step=0.5);
+xTicksDef = LeftTicks(100., 50.);
 
 TGraph_errorBar = None;
 
@@ -60,11 +60,11 @@ for (int dsi : datasets.keys)
 			RootObject fit = RootGetObject(f, base + "|pol1");
 			draw(scale(1e6, 1e6), fit, p + dashed);
 
-			real xl = (diagonals[dgni] == "45b_56t") ? +50 : -50;
-			label(format("slope = $%#.2f$", fit.rExec("GetParameter", 1)) + format("$\pm %#.2f$", fit.rExec("GetParError", 1)), (xl, -20), p, Fill(white));
+			real xl = (diagonals[dgni] == "45b_56t") ? +300 : -300;
+			label(format("slope = $%#.2f$", fit.rExec("GetParameter", 1)) + format("$\pm %#.2f$", fit.rExec("GetParError", 1)), (xl, +50), p, Fill(white));
 		}
 
-		limits((-300, -100), (300, 100), Crop);
+		limits((-500, -100), (500, 100), Crop);
 	}
 	
 	f_legend = BuildLegend();
