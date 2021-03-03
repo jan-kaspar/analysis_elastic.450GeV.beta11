@@ -142,6 +142,7 @@ void DoHorizontalProfileMax(TGraph *g_t, TGraph *g_b,
 	ff->FixParameter(1, 0.);
 	g_x_max_vs_y->Fit(ff, "Q", "");
 	g_x_max_vs_y->Write("g_x_max_vs_y");
+	ff->SetParError(1, 1E-3);
 
 	printf("\ta = %.2f +- %.2f mrad\n", ff->GetParameter(1)*1E3, ff->GetParError(1)*1E3);
 	printf("\tb = %.1f +- %.1f um\n", ff->GetParameter(0)*1E3, ff->GetParError(0)*1E3);
@@ -399,15 +400,13 @@ bool operator< (entry &e1, entry &e2)
 
 void DoVerticalAlignmentFit(TH1D *y_hist, map<string, map<signed int, result> > &results, signed int period)
 {
-	TF1 *ff = new TF1("f", "[n1]*exp(-(x-[cen])*(x-[cen])/2./[si1]/[si1]) + [n2]*exp(-(x-[cen])*(x-[cen])/2./[si2]/[si2])");
+	TF1 *ff = new TF1("f", "[n1]*exp(-(x-[cen])*(x-[cen])/2./[si1]/[si1])");
 
-	const double n1 = y_hist->GetBinContent(y_hist->FindBin(10.));
+	const double eta = y_hist->GetBinContent(y_hist->FindBin(8.));
 
 	ff->SetParameter("cen", 0.);
-	ff->SetParameter("n1", n1);
-	ff->SetParameter("si1", 20.);
-	ff->SetParameter("n2", 10. * n1);
-	ff->SetParameter("si2", 5.);
+	ff->SetParameter("n1", 2*eta);
+	ff->SetParameter("si1", 8.);
 
 	y_hist->Fit(ff, "Q");
 
@@ -424,7 +423,7 @@ void DoVerticalAlignmentFit(TH1D *y_hist, map<string, map<signed int, result> > 
 //----------------------------------------------------------------------------------------------------
 
 void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
-	const Analysis::AlignmentYRange &r, double c_exp,
+	const Analysis::AlignmentYRange &r, const string &unit, double c_exp,
 	map<string, map<signed int, result> > &results, signed int period)
 {
 	printf(">> DoVerticalAlignment\n");
@@ -432,7 +431,11 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	TDirectory *d_top = gDirectory;
 
 	// horizontal selection
-	const double x_min = -5., x_max = +5.;	// mm
+	double x_min = -50., x_max = +50.;	// mm
+	if (unit == "L_2_F") { x_min = -2.0; x_max = +1.7; };
+	if (unit == "L_1_F") { x_min = -2.5; x_max = +2.5; };
+	if (unit == "R_1_F") { x_min = -3.5; x_max = +3.0; };
+	if (unit == "R_2_F") { x_min = -2.5; x_max = +2.0; };
 
 	// rely entirely on user-provided cuts
 	double bs_y_cut = 0.;
@@ -510,24 +513,26 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 	printf("\t\ty_max_b = %.3f mm, y_max_t = %.3f mm\n", y_max_b, y_max_t);
 
 	// build y distribution respecting ranges
-	for (auto entry : sample_t)
-		if (entry.v > y_min_t && entry.v < y_max_t)
-			y_hist_range->Fill(entry.v);
+	for (const auto &e : sample_t)
+		if (e.v > y_min_t && e.v < y_max_t)
+			y_hist_range->Fill(e.v, e.w);
 
-	for (auto entry : sample_b)
-		if (entry.v > y_min_b && entry.v < y_max_b)
-			y_hist_range->Fill(-entry.v);
-
-	// save histograms
-	TCanvas *c = new TCanvas();
-	c->SetName("y_hist");
-	c->SetLogy(1);
-	y_hist->Draw();
-	y_hist_range->Draw("same");
-	c->Write();
+	for (const auto &e : sample_b)
+		if (e.v > y_min_b && e.v < y_max_b)
+			y_hist_range->Fill(-e.v, e.w);
 
 	// remove potentially non-completely-filled bins
 	{
+		for (int bi = y_hist_range->FindBin(-29.); bi <= y_hist_range->GetNbinsX(); ++bi)
+		{
+			if (y_hist_range->GetBinContent(bi) > 0)
+			{
+				y_hist_range->SetBinContent(bi, 0.);
+				y_hist_range->SetBinError(bi, 0.);
+				break;
+			}
+		}
+
 		int bi0 = y_hist_range->FindBin(0.);
 
 		for (int bi = bi0; bi >= 1; --bi)
@@ -549,7 +554,25 @@ void DoVerticalAlignment(TGraph *g_t, TGraph *gw_t, TGraph *g_b, TGraph *gw_b,
 				break;
 			}
 		}
+
+		for (int bi = y_hist_range->FindBin(+29.); bi >= 1; --bi)
+		{
+			if (y_hist_range->GetBinContent(bi) > 0)
+			{
+				y_hist_range->SetBinContent(bi, 0.);
+				y_hist_range->SetBinError(bi, 0.);
+				break;
+			}
+		}
 	}
+
+	// save histograms
+	TCanvas *c = new TCanvas();
+	c->SetName("y_hist");
+	c->SetLogy(1);
+	y_hist->Draw();
+	y_hist_range->Draw("same");
+	c->Write();
 
 	// run "fit" method
 	gDirectory = d_top->mkdir("fit");
@@ -1063,7 +1086,7 @@ int main(int argc, const char **argv)
 			DoHorizontalAlignment(g_t, g_b, r, units[ui], results[units[ui]], periods[pi]);
 			
 			gDirectory = unitDir->mkdir("vertical");
-			DoVerticalAlignment(g_t, gw_t, g_b, gw_b, r, deYExp[ui], results[units[ui]], periods[pi]);
+			DoVerticalAlignment(g_t, gw_t, g_b, gw_b, r, units[ui], deYExp[ui], results[units[ui]], periods[pi]);
 		}
 	}
 
