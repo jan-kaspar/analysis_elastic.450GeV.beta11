@@ -16,6 +16,8 @@ TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
 string dir = "selected - angles";
 
+bool rebin = true;
+
 //----------------------------------------------------------------------------------------------------
 
 string plots[];
@@ -64,7 +66,8 @@ void PlotOne(string fn)
 
 					string base = dir + "/h2_" + plot;
 					RootObject h2 = RootGetObject(f, base);
-					h2.vExec("Rebin2D", 4, 4);
+					if (rebin)
+						h2.vExec("Rebin2D", 4, 4);
 
 					draw(scale(x_scales[pi], y_scales[pi]), h2, "def");
 

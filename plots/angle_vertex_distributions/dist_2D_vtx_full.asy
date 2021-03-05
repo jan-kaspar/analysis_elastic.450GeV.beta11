@@ -6,6 +6,8 @@ f_tags.push("_L"); f_labels.push("left arm"); f_shorts.push("L");
 f_tags.push("_R"); f_labels.push("right arm"); f_shorts.push("R");
 f_tags.push("_G"); f_labels.push("both arms"); f_shorts.push("G");
 
+//rebin = false;
+
 //----------------------------------------------------------------------------------------------------
 
 ResetPlots();
