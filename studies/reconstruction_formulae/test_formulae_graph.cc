@@ -135,7 +135,7 @@ int main()
 
 	// nominal environment
 	env_nom.InitNominal();
-	//env_nom.UseMatchedOptics();
+	env_nom.UseMatchedOptics();
 
 	env_nom.Print();
 

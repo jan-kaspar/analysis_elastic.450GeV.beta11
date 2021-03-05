@@ -74,7 +74,7 @@ int main()
 	// nominal environment
 	Environment env;
 	env.InitNominal();
-	//env.UseMatchedOptics();
+	env.UseMatchedOptics();
 
 	env.Print();
 
