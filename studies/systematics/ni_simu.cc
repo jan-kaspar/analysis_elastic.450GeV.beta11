@@ -217,11 +217,8 @@ double IntegOverDX(double d_x, double *param, const void *)
 	const double th_x_p_R = th_x_p + d_x/2. + abias_sh_th_x;
 
 	// since the cuts are made in the primed coordinates, it is correct to use the anal_rec (not anal_sim)
-	double th_y_L_cut_l, th_y_L_cut_h;
-	anal_rec.fc_L.GetThYRange(th_x_p_L, th_y_L_cut_l, th_y_L_cut_h);
-
-	double th_y_R_cut_l, th_y_R_cut_h;
-	anal_rec.fc_R.GetThYRange(th_x_p_R, th_y_R_cut_l, th_y_R_cut_h);
+	const auto [th_y_L_cut_l, th_y_L_cut_h] = anal_rec.fc_L.GetThYRange(th_x_p_L);
+	const auto [th_y_R_cut_l, th_y_R_cut_h] = anal_rec.fc_R.GetThYRange(th_x_p_R);
 
 	double th_y_abs = cfg.th_y_sign * th_y_p;
 	double d_y_min = 2. * max( th_y_R_cut_l - th_y_abs, th_y_abs - th_y_L_cut_h );

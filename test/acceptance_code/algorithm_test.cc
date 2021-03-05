@@ -16,8 +16,7 @@ void test_Satisfied(const FiducialCut &fc, double th_x, double th_y, bool exp)
 
 void test_GetThYRange(const FiducialCut &fc, double th_x, double exp_th_y_min, bool exp_th_y_max)
 {
-	double th_y_min, th_y_max;
-	fc.GetThYRange(th_x, th_y_min, th_y_max);
+	const auto [th_y_min, th_y_max] = fc.GetThYRange(th_x);
 
 	const bool ok = (fabs(th_y_min - exp_th_y_min) < 1E-10 && fabs(th_y_max - exp_th_y_max));
 

@@ -8,6 +8,7 @@ namespace edm
 
 #include <vector>
 #include <set>
+#include <tuple>
 
 using namespace std;
 
@@ -43,7 +44,7 @@ struct FiducialCut
 
 	bool Satisfied(double th_x, double th_y) const;
 
-	void GetThYRange(double th_x, double &th_y_min, double &th_y_max) const;
+	tuple<double /*th_y_min*/, double /*th_y_max*/> GetThYRange(double th_x) const;
 
 	vector<Point> GetIntersectionPhis(double th) const;
 };

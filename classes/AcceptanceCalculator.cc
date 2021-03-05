@@ -65,11 +65,8 @@ double AcceptanceCalculator::IntegOverDX(double x, double *par, const void* obj)
 	const double th_x_p_R = th_x_p + d_x/2.;
 	const double th_x_p_L = th_x_p - d_x/2.;
 
-	double th_y_L_cut_l, th_y_L_cut_h;
-	ac->anal.fc_L.GetThYRange(th_x_p_L, th_y_L_cut_l, th_y_L_cut_h);
-
-	double th_y_R_cut_l, th_y_R_cut_h;
-	ac->anal.fc_R.GetThYRange(th_x_p_R, th_y_R_cut_l, th_y_R_cut_h);
+	const auto [th_y_L_cut_l, th_y_L_cut_h] = ac->anal.fc_L.GetThYRange(th_x_p_L);
+	const auto [th_y_R_cut_l, th_y_R_cut_h] = ac->anal.fc_R.GetThYRange(th_x_p_R);
 
 	if (ac->debug)
 		printf("         th_y_L_cut_l = %E, th_y_R_cut_l = %E\n", th_y_L_cut_l, th_y_R_cut_l);

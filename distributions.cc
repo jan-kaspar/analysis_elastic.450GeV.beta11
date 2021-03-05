@@ -327,8 +327,7 @@ void RemovePartiallyFilledBinsThetaXY(TH2D *h)
 {
 	for (double th_x = -400E-6; th_x < 400E-6; th_x += 1E-6)
 	{
-		double th_y_min, th_y_max;
-		anal.fc_G.GetThYRange(th_x, th_y_min, th_y_max);
+		const auto [th_y_min, th_y_max] = anal.fc_G.GetThYRange(th_x);
 
 		for (const auto th_y : { th_y_min, th_y_max})
 		{
@@ -1301,8 +1300,7 @@ int main(int argc, const char **argv)
 		}
 
 		// define safe flag
-		double safe_th_y_min, safe_th_y_max;
-		anal.fc_G.GetThYRange(0E-6, safe_th_y_min, safe_th_y_max);
+		auto [safe_th_y_min, safe_th_y_max] = anal.fc_G.GetThYRange(0E-6);
 		safe_th_y_min += 10E-6;
 		safe_th_y_max -= 10E-6;
 
