@@ -930,6 +930,11 @@ int main(int argc, const char **argv)
 	TH1D *h_vtx_x_diffRL_safe_corr = new TH1D("h_vtx_x_diffRL_safe_corr", ";vtx_{x}^{R} - vtx_{x}^{L}", 100, -0.5, +0.5); h_vtx_x_diffRL_safe_corr->Sumw2(); h_vtx_x_diffRL_safe_corr->SetLineColor(6);
 	TH1D *h_vtx_y_diffRL_safe_corr = new TH1D("h_vtx_y_diffRL_safe_corr", ";vtx_{y}^{R} - vtx_{y}^{L}", 100, -1.5, +1.5); h_vtx_y_diffRL_safe_corr->Sumw2(); h_vtx_y_diffRL_safe_corr->SetLineColor(6);
 
+	TH2D *h2_vtx_y_diffRL_vs_th_y_diffRL = new TH2D("h2_vtx_y_diffRL_vs_th_y_diffRL", ";#theta_{y}^{R} - #theta_{y}^{L};vtx_{y}^{R} - vtx_{y}^{L}", 100, -250E-6, +250E-6, 100, -1.5, +1.5);
+
+	TH2D *h2_vtx_x_L_vs_vtx_x_R = new TH2D("h2_vtx_x_L_vs_vtx_x_R", ";vtx_{x}^{R};vtx_{x}^{L}", 100, 0E-6, 0E-6, 100, 0., 0.);
+	TH2D *h2_vtx_y_L_vs_vtx_y_R = new TH2D("h2_vtx_y_L_vs_vtx_y_R", ";vtx_{y}^{R};vtx_{y}^{L}", 100, 0E-6, 0E-6, 100, 0., 0.);
+
 	range = 400E-3;
 
 	TH2D *h2_vtx_x_G_vs_th_x_G = new TH2D("h2_vtx_x_G_vs_th_x_G", ";#theta_{x};vtx_{x}", 100, th_x_min, th_x_max, 100, -range, +range);
@@ -1519,6 +1524,10 @@ int main(int argc, const char **argv)
 
 		h_vtx_x_diffRL->Fill(k.vtx_x_R - k.vtx_x_L);
 		h_vtx_y_diffRL->Fill(k.vtx_y_R - k.vtx_y_L);
+
+		h2_vtx_y_diffRL_vs_th_y_diffRL->Fill(k.th_y_R - k.th_y_L, k.vtx_y_R - k.vtx_y_L);
+		h2_vtx_x_L_vs_vtx_x_R->Fill(k.vtx_x_R, k.vtx_x_L);
+		h2_vtx_y_L_vs_vtx_y_R->Fill(k.vtx_y_R, k.vtx_y_L);
 
 		h2_vtx_x_G_vs_th_x_G->Fill(k.th_x, k.vtx_x);
 		h2_vtx_x_G_vs_th_y_G->Fill(k.th_y, k.vtx_x);
@@ -2220,6 +2229,11 @@ int main(int argc, const char **argv)
 
 	h_vtx_x_diffRL_safe_corr->Write();
 	h_vtx_y_diffRL_safe_corr->Write();
+
+	h2_vtx_y_diffRL_vs_th_y_diffRL->Write();
+
+	h2_vtx_x_L_vs_vtx_x_R->Write();
+	h2_vtx_y_L_vs_vtx_y_R->Write();
 
 	FitAndWriteHistAndProf(h2_vtx_x_G_vs_th_x_G, th_x_low_bound, th_x_high_bound);
 	FitAndWriteHistAndProf(h2_vtx_x_G_vs_th_y_G, th_y_low_bound, th_y_high_bound);
