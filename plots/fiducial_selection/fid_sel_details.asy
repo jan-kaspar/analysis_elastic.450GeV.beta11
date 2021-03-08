@@ -4,12 +4,12 @@ include "../common.asy";
 
 string datasets[] = {
 	"data/fill7301/Totem1",
-	"data/fill7302/Totem1",
+	//"data/fill7302/Totem1",
 };
 
 string diagonals[], diagonal_labels[];
 diagonals.push("45b_56t"); diagonal_labels.push("45 bot -- 56 top");
-diagonals.push("45t_56b"); diagonal_labels.push("45 top -- 56 bot");
+//diagonals.push("45t_56b"); diagonal_labels.push("45 top -- 56 bot");
 
 TH2_palette = Gradient(blue, heavygreen, yellow, red);
 
@@ -34,9 +34,9 @@ for (int dsi : datasets.keys)
 		if (diagonals[dgni] == "45b_56t")
 		{
 			TH2_y_min = +30e-6;
-			TH2_y_max = +550e-6;
+			TH2_y_max = +650e-6;
 		} else {
-			TH2_y_min = -550e-6;
+			TH2_y_min = -650e-6;
 			TH2_y_max = -30e-6;
 		}
 
@@ -57,7 +57,7 @@ for (int dsi : datasets.keys)
 		scale(Linear, Linear, Log);
 		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_L_vs_th_x_L"), "def");
 
-		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_L"), "l", black+1pt);
+		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_L/g_th_x_vs_th_y_at_vtx_y_+0"), "l", black+1pt);
 		//draw(scale(1e6, -1e6) * cnt, black+1pt);
 
 		limits((TH2_x_min*1e6, TH2_y_min*1e6), (TH2_x_max*1e6, TH2_y_max*1e6), Crop);
@@ -69,7 +69,7 @@ for (int dsi : datasets.keys)
 		scale(Linear, Linear, Log);
 		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_R_vs_th_x_R"), "def");
 
-		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_R"), "l", black+2pt);
+		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_R/g_th_x_vs_th_y_at_vtx_y_+0"), "l", black+2pt);
 		//draw(scale(1e6, -1e6) * cnt, black+1pt);
 
 		limits((TH2_x_min*1e6, TH2_y_min*1e6), (TH2_x_max*1e6, TH2_y_max*1e6), Crop);
@@ -81,7 +81,7 @@ for (int dsi : datasets.keys)
 		scale(Linear, Linear, Log);
 		draw(scale(1e6, 1e6), RootGetObject(f, "selected - angles/h2_th_y_G_vs_th_x_G"), "def");
 
-		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_G"), "l", black+2pt);
+		draw(scale(1e6, 1e6), RootGetObject(f, "fiducial cuts/fc_G/g_th_x_vs_th_y_at_vtx_y_+0"), "l", black+2pt);
 		//draw(scale(1e6, -1e6) * cnt, dashed);
 		//draw(scale(1e6, -1e6) * cnt_gl, black+2pt);
 

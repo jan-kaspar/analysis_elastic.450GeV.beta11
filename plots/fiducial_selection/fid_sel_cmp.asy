@@ -39,9 +39,9 @@ for (int dsi : datasets.keys)
 		if (diagonals[dgni] == "45b_56t")
 		{
 			TH2_y_min = +100e-6;
-			TH2_y_max = +550e-6;
+			TH2_y_max = +650e-6;
 		} else {
-			TH2_y_min = -550e-6;
+			TH2_y_min = -650e-6;
 			TH2_y_max = -100e-6;
 		}
 
@@ -52,7 +52,7 @@ for (int dsi : datasets.keys)
 
 		for (int ci : cuts.keys)
 		{
-			RootObject obj = RootGetObject(f, "fiducial cuts/fc_"+cuts[ci]);
+			RootObject obj = RootGetObject(f, "fiducial cuts/fc_" + cuts[ci] + "/g_th_x_vs_th_y_at_vtx_y_+0");
 			draw(scale(1e6, 1e6), obj, "l", cut_pens[ci], cut_labels[ci]);
 
 			if (cuts[ci] != "G")
