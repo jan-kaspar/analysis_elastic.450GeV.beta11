@@ -164,7 +164,7 @@ void PlotFiductialCut(const FiducialCut &fc, double th_y_sign, const string &lab
 		g_th_y_max->Write();
 	}
 
-	for (const double &vtx_y : { -550E-3, -450E-3, -350E-3, -250E-3, -150E-3, -50E-3, +50E-3, +150E-3, +250E-3, +350E-3, +450E-3, +550E-3 } )
+	for (const double &vtx_y : { -550E-3, -450E-3, -350E-3, -250E-3, -150E-3, -50E-3, 0E-3, +50E-3, +150E-3, +250E-3, +350E-3, +450E-3, +550E-3 } )
 	{
 		TGraph *g = new TGraph();
 		sprintf(buf, "g_th_x_vs_th_y_at_vtx_y_%+.0f", vtx_y*1E3);
