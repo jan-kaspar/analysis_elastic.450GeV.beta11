@@ -305,10 +305,12 @@ double dist_t_reco(double t_p)
 	const double rel_precision = 1E-3;
 	double phiSum = 0.;
 	double integralSum = 0.;
-	for (const auto &segment : anal_rec.fc_G.GetIntersectionPhis(th_p))
+	// TODO: improve
+	const double vtx_y = 0;
+	for (const auto &segment : anal_rec.fc_G.GetIntersectionPhis(th_p, vtx_y))
 	{
-		const double phi_start = segment.x;
-		const double phi_end = segment.y;
+		const double phi_start = segment.first;
+		const double phi_end = segment.second;
 
 		phiSum += phi_end - phi_start;
 

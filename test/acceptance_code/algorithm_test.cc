@@ -16,13 +16,13 @@ void test_Satisfied(const FiducialCut &fc, double th_x, double th_y, bool exp)
 
 //----------------------------------------------------------------------------------------------------
 
-void test_GetThYRange(const FiducialCut &fc, double th_x, double exp_th_y_min, bool exp_th_y_max)
+void test_GetThYRange(const FiducialCut &fc, double th_x, double exp_th_y_min, double exp_th_y_max)
 {
 	// TODO: improve
 	const double vtx_y = 0;
 	const auto [th_y_min, th_y_max] = fc.GetThYRange(th_x, vtx_y);
 
-	const bool ok = (fabs(th_y_min - exp_th_y_min) < 1E-10 && fabs(th_y_max - exp_th_y_max));
+	const bool ok = (fabs(th_y_min - exp_th_y_min) < 1E-10 && fabs(th_y_max - exp_th_y_max) < 1E-10);
 
 	printf("* th_x = %.1f urad: th_y min = %.1f, max = %.1f --> %s\n", th_x*1E6, th_y_min*1E6, th_y_max*1E6, (ok) ? "OK" : "FAIL");
 }
@@ -31,7 +31,9 @@ void test_GetThYRange(const FiducialCut &fc, double th_x, double exp_th_y_min, b
 
 void test_GetIntersectionPhis(const FiducialCut &fc, double th, unsigned int exp_n_segments)
 {
-	const auto &segments = fc.GetIntersectionPhis(th);
+	// TODO: improve
+	const double vtx_y = 0;
+	const auto &segments = fc.GetIntersectionPhis(th, vtx_y);
 
 	const bool ok = (segments.size() == exp_n_segments);
 
@@ -57,9 +59,11 @@ void test_GetIntersectionPhis(const FiducialCut &fc, double th, unsigned int exp
 
 int main()
 {
-	FiducialCut fc1({{-350E-6, 32E-6}, {0E-6, 32E-6}, {250E-6, 40E-6}, {390E-6, 80E-6}, {270E-6, 127E-6}, {-280E-6, 132E-6}, {-390E-6, 60E-6}});
+	using P = FiducialCut::Point;
 
-	FiducialCut fc2({{-350E-6, 33E-6}, {0E-6, 33E-6}, {250E-6, 42E-6}, {385E-6, 80E-6}, {270E-6, 124E-6}, {-280E-6, 129E-6}, {-385E-6, 60E-6}});
+	FiducialCut fc1({P(-350E-6, 32E-6, false), P(0E-6, 32E-6, false), P(250E-6, 40E-6, false), P(390E-6, 80E-6, false), P(270E-6, 127E-6, false), P(-280E-6, 132E-6, false), P(-390E-6, 60E-6, false)});
+
+	FiducialCut fc2({P(-350E-6, 33E-6, false), P(0E-6, 33E-6, false), P(250E-6, 42E-6, false), P(385E-6, 80E-6, false), P(270E-6, 124E-6, false), P(-280E-6, 129E-6, false), P(-385E-6, 60E-6, false)});
 
 	printf("\n>> test Satisfied, not at borders\n");
 

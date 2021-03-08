@@ -5,6 +5,24 @@
 
 //----------------------------------------------------------------------------------------------------
 
+void AcceptanceCalculator::Init(double _th_y_sign, const Analysis &_anal)
+{
+	th_y_sign = _th_y_sign;
+	anal = _anal;
+
+	gaussianOptimisation = true;
+
+	integ_workspace_size_d_x = 1000;
+	integ_workspace_d_x = gsl_integration_workspace_alloc(integ_workspace_size_d_x);
+
+	integ_workspace_size_d_y = 1000;
+	integ_workspace_d_y = gsl_integration_workspace_alloc(integ_workspace_size_d_y);
+
+	debug = false;
+}
+
+//----------------------------------------------------------------------------------------------------
+
 double AcceptanceCalculator::dist_d_x(double d_x) const
 {
 	const double si_d_x = anal.si_th_x_LRdiff;
@@ -123,12 +141,12 @@ bool AcceptanceCalculator::PhiComponentCut(double th_x, double th_y, double vtx_
 
 //----------------------------------------------------------------------------------------------------
 
-double AcceptanceCalculator::PhiFactor(double th) const
+double AcceptanceCalculator::PhiFactor(double th, double vtx_y) const
 {
 	// calculate arc-length in within acceptance
 	double phiSum = 0.;
-	for (const auto &segment : anal.fc_G.GetIntersectionPhis(th))
-		phiSum += segment.y - segment.x;
+	for (const auto &segment : anal.fc_G.GetIntersectionPhis(th, vtx_y))
+		phiSum += segment.second - segment.first;
 
 	return 2. * M_PI / phiSum;
 }
@@ -154,7 +172,7 @@ bool AcceptanceCalculator::Calculate(const Kinematics &k, double &phi_corr, doub
 
 	// ----- phi component, correction -----
 
-	phi_corr = PhiFactor(k.th);
+	phi_corr = PhiFactor(k.th, k.vtx_y);
 
 	return false;
 }

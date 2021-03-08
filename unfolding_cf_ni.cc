@@ -135,10 +135,13 @@ double dist_t_sm(double t)
 	double phiSum = 0.;
 	double integralSum = 0.;
 
-	for (const auto &segment : anal.fc_G.GetIntersectionPhis(th))
+	// TODO: improve
+	double vtx_y = 0;
+
+	for (const auto &segment : anal.fc_G.GetIntersectionPhis(th, vtx_y))
 	{
-		const double phi_start = segment.x;
-		const double phi_end = segment.y;
+		const double phi_start = segment.first;
+		const double phi_end = segment.second;
 
 		phiSum += phi_end - phi_start;
 

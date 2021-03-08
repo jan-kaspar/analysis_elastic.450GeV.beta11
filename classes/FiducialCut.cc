@@ -6,11 +6,22 @@
 
 //----------------------------------------------------------------------------------------------------
 
+tuple<double /*x*/, double /*y*/>  FiducialCut::Point::Resolve(double vtx_y) const
+{
+	// TODO: improve
+	return { x, y };
+}
+
+//----------------------------------------------------------------------------------------------------
+
 void FiducialCut::Init(const std::vector<edm::ParameterSet> &input)
 {
 	points.clear();
 	for (const auto &p : input)
-		points.emplace_back(Point{p.getParameter<double>("x"), p.getParameter<double>("y")});
+	{
+		// TODO: improve
+		points.emplace_back(Point(p.getParameter<double>("x"), p.getParameter<double>("y"), false));
+	}
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -18,7 +29,10 @@ void FiducialCut::Init(const std::vector<edm::ParameterSet> &input)
 void FiducialCut::Print() const
 {
 	for (const auto &p : points)
-		printf("(%.3E, %.3E)-", p.x, p.y);
+	{
+		p.Write();
+		printf("-");
+	}
 	printf("\n");
 }
 
@@ -27,10 +41,7 @@ void FiducialCut::Print() const
 void FiducialCut::Shift(double x, double y)
 {
 	for (auto &p : points)
-	{
-		p.x += x;
-		p.y += y;
-	}	
+		p.ApplyShift(x, y);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -38,11 +49,7 @@ void FiducialCut::Shift(double x, double y)
 void FiducialCut::ApplyCDTransform(double C, double D)
 {
 	for (auto &p : points)
-	{
-		const auto &p_orig = p;
-		p.x += C * p_orig.y;
-		p.y += D * p_orig.x;
-	}
+		p.ApplyCDTransform(C, D);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -55,12 +62,15 @@ bool FiducialCut::Satisfied(double th_x, double th_y, double vtx_y) const
 	{
 		const unsigned int j = (i + 1) % points.size();
 
-		const bool hasIntersection = (points[i].x < points[j].x) ? (points[i].x <= th_x && th_x < points[j].x) : (points[j].x <= th_x && th_x < points[i].x);
+		const auto [pi_x, pi_y] = points[i].Resolve(vtx_y);
+		const auto [pj_x, pj_y] = points[j].Resolve(vtx_y);
+
+		const bool hasIntersection = (pi_x < pj_x) ? (pi_x <= th_x && th_x < pj_x) : (pj_x <= th_x && th_x < pi_x);
 		if (!hasIntersection)
 			continue;
 
-		const double a = (points[j].y - points[i].y) / (points[j].x - points[i].x);
-		const double th_y_int = points[j].y + a * (th_x - points[j].x);
+		const double a = (pj_y - pi_y) / (pj_x - pi_x);
+		const double th_y_int = pj_y + a * (th_x - pj_x);
 
 		if (th_y_int < th_y)
 			n_le++;
@@ -85,12 +95,15 @@ tuple<double /*th_y_min*/, double /*th_y_max*/> FiducialCut::GetThYRange(double 
 	{
 		const unsigned int j = (i + 1) % points.size();
 
-		const bool hasIntersection = (points[i].x < points[j].x) ? (points[i].x <= th_x && th_x <= points[j].x) : (points[j].x <= th_x && th_x <= points[i].x);
+		const auto [pi_x, pi_y] = points[i].Resolve(vtx_y);
+		const auto [pj_x, pj_y] = points[j].Resolve(vtx_y);
+
+		const bool hasIntersection = (pi_x < pj_x) ? (pi_x <= th_x && th_x <= pj_x) : (pj_x <= th_x && th_x <= pi_x);
 		if (!hasIntersection)
 			continue;
 
-		const double a = (points[j].y - points[i].y) / (points[j].x - points[i].x);
-		const double th_y_int = points[j].y + a * (th_x - points[j].x);
+		const double a = (pj_y - pi_y) / (pj_x - pi_x);
+		const double th_y_int = pj_y + a * (th_x - pj_x);
 
 		th_y_min = min(th_y_int, th_y_min);
 		th_y_max = max(th_y_int, th_y_max);
@@ -101,7 +114,7 @@ tuple<double /*th_y_min*/, double /*th_y_max*/> FiducialCut::GetThYRange(double 
 
 //----------------------------------------------------------------------------------------------------
 
-vector<FiducialCut::Point> FiducialCut::GetIntersectionPhis(double th) const
+vector<pair<double, double>> FiducialCut::GetIntersectionPhis(double th, double vtx_y) const
 {
 	set<double> phis;
 
@@ -112,8 +125,11 @@ vector<FiducialCut::Point> FiducialCut::GetIntersectionPhis(double th) const
 	{
 		const unsigned int j = (i + 1) % points.size();
 
-		const double a = (points[j].y - points[i].y) / (points[j].x - points[i].x);
-		const double b = points[j].y - a * points[j].x;
+		const auto [pi_x, pi_y] = points[i].Resolve(vtx_y);
+		const auto [pj_x, pj_y] = points[j].Resolve(vtx_y);
+
+		const double a = (pj_y - pi_y) / (pj_x - pi_x);
+		const double b = pj_y - a * pj_x;
 
 		const double A = 1. + a*a;
 		const double B = 2. * a * b;
@@ -132,10 +148,10 @@ vector<FiducialCut::Point> FiducialCut::GetIntersectionPhis(double th) const
 
 		for (const double &x : {x1, x2})
 		{
-			if (points[i].x <= points[j].x && (x < points[i].x || x >= points[j].x))
+			if (pi_x <= pj_x && (x < pi_x || x >= pj_x))
 				continue;
 
-			if (points[j].x <= points[i].x && (x < points[j].x || x >= points[i].x))
+			if (pj_x <= pi_x && (x < pj_x || x >= pi_x))
 				continue;
 
 			const double y = a*x + b;
@@ -144,11 +160,11 @@ vector<FiducialCut::Point> FiducialCut::GetIntersectionPhis(double th) const
 			phis.insert(phi);
 
 			if (debug)
-				printf("    add phi: i=%i (x=%.1f), j=%i (x=%.1f), D=%.1E, x=%.1f | phi=%.4f\n", i, points[i].x*1e6, j, points[j].x*1e6, D, x*1e6, phi);
+				printf("    add phi: i=%i (x=%.1f), j=%i (x=%.1f), D=%.1E, x=%.1f | phi=%.4f\n", i, pi_x*1e6, j, pj_x*1e6, D, x*1e6, phi);
 		}
 	}
 
-	vector<Point> segments; // x = start phi, y = end phi
+	vector<pair<double, double>> segments;
 
 	if ((phis.size() % 2) != 0)
 	{
@@ -158,10 +174,10 @@ vector<FiducialCut::Point> FiducialCut::GetIntersectionPhis(double th) const
 
 	for (set<double>::iterator it = phis.begin(); it != phis.end(); ++it)
 	{
-		Point p;
-		p.x = *it;
+		pair<double, double> p;
+		p.first = *it;
 		++it;
-		p.y = *it;
+		p.second = *it;
 		segments.push_back(p);
 	}
 

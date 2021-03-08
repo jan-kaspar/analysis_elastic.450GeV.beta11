@@ -126,11 +126,20 @@ TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
 {
 	TGraph *g = new TGraph();
 
+	// TODO: improve
+	const double vtx_y = 0;
+
 	for (const auto &p : fc.points)
-		g->SetPoint(g->GetN(), p.x, p.y * th_y_sign);
+	{
+		const auto [x, y] = p.Resolve(vtx_y);
+		g->SetPoint(g->GetN(), x, y * th_y_sign);
+	}
 
 	if (!fc.points.empty())
-		g->SetPoint(g->GetN(), fc.points[0].x, fc.points[0].y * th_y_sign);
+	{
+		const auto [x, y] = fc.points[0].Resolve(vtx_y);
+		g->SetPoint(g->GetN(), x, y * th_y_sign);
+	}
 
 	return g;
 }
@@ -141,21 +150,23 @@ void PlotFiductialArcs(const FiducialCut &fc, double th_y_sign)
 {
 	for (double th : { 100E-6, 200E-6, 300E-6, 400E-6, 500E-6, 600E-6, 700E-6 })
 	{
-		const auto &segments = fc.GetIntersectionPhis(th);
+		// TODO: improve
+		const double vtx_y = 0;
+		const auto &segments = fc.GetIntersectionPhis(th, vtx_y);
 
 		const double target_de_phi = M_PI / 100;
 
 		unsigned int s_idx = 0;
 		for (const auto &s : segments)
 		{
-			const double de_phi = (s.y - s.x) / ceil((s.y - s.x) / target_de_phi);
+			const double de_phi = (s.second - s.first) / ceil((s.second - s.first) / target_de_phi);
 
 			TGraph *g = new TGraph();
 			char buf[100];
 			sprintf(buf, "arc_%.0f_%u", th*1E6, s_idx);
 			g->SetName(buf);
 
-			for (double phi = s.x; phi <= s.y * 1.0001; phi += de_phi)
+			for (double phi = s.first; phi <= s.second * 1.0001; phi += de_phi)
 			{
 				const double x = th * cos(phi);
 				const double y = th * sin(phi);

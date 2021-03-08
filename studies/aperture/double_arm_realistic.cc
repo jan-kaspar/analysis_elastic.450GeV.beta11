@@ -19,11 +19,20 @@ TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
 {
 	TGraph *g = new TGraph();
 
+	// TODO: improve
+	const double vtx_y = 0;
+
 	for (const auto &p : fc.points)
-		g->SetPoint(g->GetN(), p.x, p.y * th_y_sign);
+	{
+		const auto [x, y] = p.Resolve(vtx_y);
+		g->SetPoint(g->GetN(), x, y * th_y_sign);
+	}
 
 	if (!fc.points.empty())
-		g->SetPoint(g->GetN(), fc.points[0].x, fc.points[0].y * th_y_sign);
+	{
+		const auto [x, y] = fc.points[0].Resolve(vtx_y);
+		g->SetPoint(g->GetN(), x, y * th_y_sign);
+	}
 
 	return g;
 }

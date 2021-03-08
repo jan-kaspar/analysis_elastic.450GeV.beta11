@@ -19,21 +19,7 @@ struct AcceptanceCalculator
 
 	bool debug;
 
-	void Init(double _th_y_sign, const Analysis &_anal)
-	{
-		th_y_sign = _th_y_sign;
-		anal = _anal;
-
-		gaussianOptimisation = true;
-
-		integ_workspace_size_d_x = 1000;
-		integ_workspace_d_x = gsl_integration_workspace_alloc(integ_workspace_size_d_x);
-
-		integ_workspace_size_d_y = 1000;
-		integ_workspace_d_y = gsl_integration_workspace_alloc(integ_workspace_size_d_y);
-
-		debug = false;
-	}
+	void Init(double _th_y_sign, const Analysis &_anal);
 
 	/// evaluates PDF of d_x, i.e. de_th_x_R - de_th_x_L
 	double dist_d_x(double d_x) const;
@@ -60,7 +46,7 @@ struct AcceptanceCalculator
 	bool PhiComponentCut(double th_x_p, double th_y_p, double vtx_y) const;
 
 	/// returns phi-acceptance factor
-	double PhiFactor(double th) const;
+	double PhiFactor(double th, double vtx_y) const;
 
 	/// calculates the smearing corrections, for the event described by k
 	/// returns flag whether the event should be skipped

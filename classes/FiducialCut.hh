@@ -9,6 +9,7 @@ namespace edm
 #include <vector>
 #include <set>
 #include <tuple>
+#include <cstdio>
 
 using namespace std;
 
@@ -18,7 +19,25 @@ struct FiducialCut
 {
 	struct Point
 	{
-		double x, y;
+		private:
+			double x, y;
+			bool evolve;
+
+		public:
+			Point(double _x, double _y, bool _e) : x(_x), y(_y), evolve(_e) {}
+
+			void Write() const { printf("(%.3E, %.3E, %i)", x, y, evolve); }
+
+			tuple<double /*x*/, double /*y*/> Resolve(double vtx_y) const;
+
+			void ApplyShift(double dx, double dy) { x += dx; y += dy; }
+
+			void ApplyCDTransform(double C, double D)
+			{
+				double x_orig = x, y_orig = y;
+				x += C * y_orig;
+				y += D * x_orig;
+			}
 	};
 
 	vector<Point> points;
@@ -46,7 +65,7 @@ struct FiducialCut
 
 	tuple<double /*th_y_min*/, double /*th_y_max*/> GetThYRange(double th_x, double vtx_y) const;
 
-	vector<Point> GetIntersectionPhis(double th) const;
+	vector<pair<double, double>> GetIntersectionPhis(double th, double vtx_y) const;
 };
 
 #endif

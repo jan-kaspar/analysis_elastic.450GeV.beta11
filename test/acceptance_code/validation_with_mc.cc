@@ -319,7 +319,7 @@ int main(int argc, char **argv)
 		const double corr_smear = 1. / accCalc.SmearingFactor(k_re.th_x, k_re.th_y, k_re.vtx_y_L, k_re.vtx_y_R);
 
 		const bool skip_phi = accCalc.PhiComponentCut(k_re.th_x, k_re.th_y, k_re.vtx_y);
-		const double corr_phi = accCalc.PhiFactor(k_re.th);
+		const double corr_phi = accCalc.PhiFactor(k_re.th, k_re.vtx_y);
 
 		const bool skip = (skip_smear || skip_phi);
 
