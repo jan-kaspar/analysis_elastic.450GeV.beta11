@@ -21,6 +21,15 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------------------
 
+template <class C>
+struct LRGStruct
+{
+	C *L, *R, *G;
+	LRGStruct(C *l = nullptr, C *r = nullptr, C *g = nullptr) : L(l), R(r), G(g) {}
+};
+
+//----------------------------------------------------------------------------------------------------
+
 string replace(const string &orig, const string &w, const string &r)
 {
 	string text = orig;
@@ -122,26 +131,62 @@ void HideLowTBins(TH1D *h, double threshold)
 
 //----------------------------------------------------------------------------------------------------
 
-TGraph* PlotFiductialCut(const FiducialCut &fc, double th_y_sign)
+void PlotFiductialCut(const FiducialCut &fc, double th_y_sign, const string &label)
 {
-	TGraph *g = new TGraph();
+	TDirectory *d_top = gDirectory;
 
-	// TODO: improve
-	const double vtx_y = 0;
+	char buf[100];
 
-	for (const auto &p : fc.points)
+	gDirectory = gDirectory->mkdir(label.c_str());
+
+	for (const double &th_x : {-500E-6, -400E-6, 0E-6, +350E-6, +450E-6})
 	{
-		const auto [x, y] = p.Resolve(vtx_y);
-		g->SetPoint(g->GetN(), x, y * th_y_sign);
+		TGraph *g_th_y_min = new TGraph();
+		sprintf(buf, "g_th_y_min_at_th_x_%+.0f", th_x*1E6);
+		g_th_y_min->SetName(buf);
+		g_th_y_min->SetTitle(";#theta_{y};vtx_{y}");
+
+		TGraph *g_th_y_max = new TGraph();
+		sprintf(buf, "g_th_y_max_at_th_x_%+.0f", th_x*1E6);
+		g_th_y_max->SetName(buf);
+		g_th_y_max->SetTitle(";#theta_{y};vtx_{y}");
+
+		for (double vtx_y = -1000E-3; vtx_y <= +1000E-3; vtx_y += 100E-3)
+		{
+			const auto [ th_y_min, th_y_max ] = fc.GetThYRange(th_x, vtx_y);
+
+			const int idx = g_th_y_min->GetN();
+			g_th_y_min->SetPoint(idx, th_y_min, vtx_y);
+			g_th_y_max->SetPoint(idx, th_y_max, vtx_y);
+		}
+
+		g_th_y_min->Write();
+		g_th_y_max->Write();
 	}
 
-	if (!fc.points.empty())
+	for (const double &vtx_y : { -550E-3, -450E-3, -350E-3, -250E-3, -150E-3, -50E-3, +50E-3, +150E-3, +250E-3, +350E-3, +450E-3, +550E-3 } )
 	{
-		const auto [x, y] = fc.points[0].Resolve(vtx_y);
-		g->SetPoint(g->GetN(), x, y * th_y_sign);
+		TGraph *g = new TGraph();
+		sprintf(buf, "g_th_x_vs_th_y_at_vtx_y_%+.0f", vtx_y*1E3);
+		g->SetName(buf);
+		g->SetTitle(";#theta_{x};#theta_{y}");
+
+		for (const auto &p : fc.points)
+		{
+			const auto [x, y] = p.Resolve(vtx_y);
+			g->SetPoint(g->GetN(), x, y * th_y_sign);
+		}
+
+		if (!fc.points.empty())
+		{
+			const auto [x, y] = fc.points[0].Resolve(vtx_y);
+			g->SetPoint(g->GetN(), x, y * th_y_sign);
+		}
+
+		g->Write();
 	}
 
-	return g;
+	gDirectory = d_top;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -988,6 +1033,16 @@ int main(int argc, const char **argv)
 	TH2D *h2_vtx_y_R_vs_vtx_x_R = new TH2D("h2_vtx_y_R_vs_vtx_x_R", ";vtx_{x}^{R};vtx_{x}^{R}", 100, vtx_x_min, vtx_x_max, 100, -range, +range);
 	TH2D *h2_vtx_y_R_vs_vtx_y_R = new TH2D("h2_vtx_y_R_vs_vtx_y_R", ";vtx_{y}^{R};vtx_{x}^{R}", 100, vtx_y_min, vtx_y_max, 100, -range, +range);
 
+	map<pair<double, double>, LRGStruct<TH2D>> m_th_x_h2_vtx_y_vs_th_y;
+	for (const double &th_x : {-500E-6, -400E-6, 0E-6, +350E-6, +450E-6})
+	{
+		m_th_x_h2_vtx_y_vs_th_y[{th_x, 50E-6}] = LRGStruct(
+			new TH2D("", ";#theta_{y}^{L};vtx_{y}^{L}", 100, th_y_min, th_y_max, 100, -range, +range),
+			new TH2D("", ";#theta_{y}^{R};vtx_{y}^{R}", 100, th_y_min, th_y_max, 100, -range, +range),
+			new TH2D("", ";#theta_{y}^{G};vtx_{y}^{G}", 100, th_y_min, th_y_max, 100, -range, +range)
+		);
+	}
+
 	range = 800E-3;
 
 	TH2D *h2_vtx_y_diffRL_vs_th_x_G = new TH2D("h2_vtx_y_diffRL_vs_th_x_G", ";#theta_{x};#Delta^{R-L} vtx_{y}", 100, th_x_min, th_x_max, 100, -range, +range);
@@ -1579,6 +1634,16 @@ int main(int argc, const char **argv)
 		h2_vtx_y_diffRL_vs_th_y_G->Fill(k.th_y, k.vtx_y_R-k.vtx_y_L);
 		h2_vtx_y_diffRL_vs_vtx_x_G->Fill(k.vtx_x, k.vtx_y_R-k.vtx_y_L);
 		h2_vtx_y_diffRL_vs_vtx_y_G->Fill(k.vtx_y, k.vtx_y_R-k.vtx_y_L);
+
+		for (auto &it : m_th_x_h2_vtx_y_vs_th_y)
+		{
+			if (k.th_x > it.first.first - it.first.second && k.th_x <= it.first.first + it.first.second)
+			{
+				it.second.L->Fill(k.th_y_L, k.vtx_y_L);
+				it.second.R->Fill(k.th_y_R, k.vtx_y_R);
+				it.second.G->Fill(k.th_y, k.vtx_y);
+			}
+		}
 
 		if (safe)
 		{
@@ -2220,7 +2285,9 @@ int main(int argc, const char **argv)
 	h_th_y_L->Write();
 	h_th_y_R->Write();
 
-	gDirectory = f_out->mkdir("selected - vertex");
+	TDirectory *d_vertex = f_out->mkdir("selected - vertex");
+	gDirectory = d_vertex;
+
 	h_vtx_x->Write();
 	h_vtx_x_L->Write();
 	h_vtx_x_R->Write();
@@ -2285,6 +2352,17 @@ int main(int argc, const char **argv)
 	FitAndWriteHistAndProf(h2_vtx_y_diffRL_vs_th_y_G, th_y_low_bound, th_y_high_bound);
 	FitAndWriteHistAndProf(h2_vtx_y_diffRL_vs_vtx_x_G, vtx_x_low_bound, vtx_x_high_bound);
 	FitAndWriteHistAndProf(h2_vtx_y_diffRL_vs_vtx_y_G, vtx_y_low_bound, vtx_y_high_bound);
+
+	for (const auto &it : m_th_x_h2_vtx_y_vs_th_y)
+	{
+		char buf[100];
+		sprintf(buf, "slice th_x=%+.0f", it.first.first * 1E6);
+		gDirectory = d_vertex->mkdir(buf);
+
+		it.second.L->Write("h2_vtx_y_L_vs_th_y_L");
+		it.second.R->Write("h2_vtx_y_R_vs_th_y_R");
+		it.second.G->Write("h2_vtx_y_G_vs_th_y_G");
+	}
 
 	TDirectory *opticsDir = f_out->mkdir("optics");
 
@@ -2405,9 +2483,9 @@ int main(int argc, const char **argv)
 
 	TDirectory *fidCutDir = f_out->mkdir("fiducial cuts");
 	gDirectory = fidCutDir;
-	PlotFiductialCut(anal.fc_L, cfg.th_y_sign)->Write("fc_L");
-	PlotFiductialCut(anal.fc_R, cfg.th_y_sign)->Write("fc_R");
-	PlotFiductialCut(anal.fc_G, cfg.th_y_sign)->Write("fc_G");
+	PlotFiductialCut(anal.fc_L, cfg.th_y_sign, "fc_L");
+	PlotFiductialCut(anal.fc_R, cfg.th_y_sign, "fc_R");
+	PlotFiductialCut(anal.fc_G, cfg.th_y_sign, "fc_G");
 
 	PlotFiductialArcs(anal.fc_G, cfg.th_y_sign);
 
