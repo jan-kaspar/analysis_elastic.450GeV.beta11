@@ -313,10 +313,12 @@ int main(int argc, char **argv)
 
 		// ----- acceptance correction -----
 
-		const bool skip_smear = accCalc.SmearingComponentCut(k_re.th_x_L, k_re.th_x_R, k_re.th_y_L, k_re.th_y_R);
-		const double corr_smear = 1. / accCalc.SmearingFactor(k_re.th_x, k_re.th_y);
+		// TODO: make sure that vtx_y is generated correctly
 
-		const bool skip_phi = accCalc.PhiComponentCut(k_re.th_x, k_re.th_y);
+		const bool skip_smear = accCalc.SmearingComponentCut(k_re.th_x_L, k_re.th_x_R, k_re.th_y_L, k_re.th_y_R, k_re.vtx_y_L, k_re.vtx_y_R);
+		const double corr_smear = 1. / accCalc.SmearingFactor(k_re.th_x, k_re.th_y, k_re.vtx_y_L, k_re.vtx_y_R);
+
+		const bool skip_phi = accCalc.PhiComponentCut(k_re.th_x, k_re.th_y, k_re.vtx_y);
 		const double corr_phi = accCalc.PhiFactor(k_re.th);
 
 		const bool skip = (skip_smear || skip_phi);
@@ -466,7 +468,9 @@ int main(int argc, char **argv)
 		TGraph *g_acc_smear_vs_th_y = new TGraph();
 		for (double th_y = 30E-6; th_y <= 140E-6; )
 		{
-			const double acc = accCalc.SmearingFactor(th_x_ref, th_y);
+			const double vtx_y_L = 0;
+			const double vtx_y_R = 0;
+			const double acc = accCalc.SmearingFactor(th_x_ref, th_y, vtx_y_L, vtx_y_R);
 			const int idx = g_acc_smear_vs_th_y->GetN();
 			g_acc_smear_vs_th_y->SetPoint(idx, th_y, acc);
 

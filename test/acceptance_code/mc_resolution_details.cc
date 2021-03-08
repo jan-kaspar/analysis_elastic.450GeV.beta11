@@ -244,7 +244,8 @@ int main(int argc, char **argv)
 		// ----- fiducial cuts -----
 
 		//double corr_phi = 0.;
-		const bool skip = accCalc.PhiComponentCut(k_re.th_x, k_re.th_y);
+		// TODO: make sure that vertex is simulated correctly
+		const bool skip = accCalc.PhiComponentCut(k_re.th_x, k_re.th_y, k_re.vtx_y);
 
 		//corr_phi /= 2.;	// simulated just one hemishpere
 

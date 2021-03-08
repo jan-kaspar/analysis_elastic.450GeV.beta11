@@ -8,8 +8,7 @@
 double AcceptanceCalculator::dist_d_x(double d_x) const
 {
 	const double si_d_x = anal.si_th_x_LRdiff;
-
-	double r = d_x / si_d_x;
+	const double r = d_x / si_d_x;
 	return exp(-r*r/2.) / sqrt(2. * M_PI) / si_d_x;
 }
 
@@ -18,14 +17,13 @@ double AcceptanceCalculator::dist_d_x(double d_x) const
 double AcceptanceCalculator::dist_d_y(double d_y) const
 {
 	const double si_d_y = anal.si_th_y_LRdiff;
-
-	double r = d_y / si_d_y;
+	const double r = d_y / si_d_y;
 	return exp(-r*r/2.) / sqrt(2. * M_PI) / si_d_y;
 }
 
 //----------------------------------------------------------------------------------------------------
 
-double AcceptanceCalculator::Condition(double th_x_p, double d_x, double th_y_p, double d_y) const
+double AcceptanceCalculator::Condition(double th_x_p, double d_x, double th_y_p, double d_y, double vtx_y_L_p, double vtx_y_R_p) const
 {
 	const double th_x_p_R = th_x_p + d_x/2.;
 	const double th_x_p_L = th_x_p - d_x/2.;
@@ -33,7 +31,7 @@ double AcceptanceCalculator::Condition(double th_x_p, double d_x, double th_y_p,
 	const double th_y_p_R = th_y_p + d_y/2.;
 	const double th_y_p_L = th_y_p - d_y/2.;
 
-	if (anal.fc_L.Satisfied(th_x_p_L, th_y_p_L) && anal.fc_R.Satisfied(th_x_p_R, th_y_p_R))
+	if (anal.fc_L.Satisfied(th_x_p_L, th_y_p_L, vtx_y_L_p) && anal.fc_R.Satisfied(th_x_p_R, th_y_p_R, vtx_y_R_p))
 		return 1.;
 
 	return 0;
@@ -56,6 +54,8 @@ double AcceptanceCalculator::IntegOverDX(double x, double *par, const void* obj)
 
 	const double &th_x_p = par[0];
 	const double &th_y_p = par[1];
+	const double &vtx_y_L_p = par[2];
+	const double &vtx_y_R_p = par[3];
 
 	AcceptanceCalculator *ac = (AcceptanceCalculator *) obj;
 
@@ -65,8 +65,8 @@ double AcceptanceCalculator::IntegOverDX(double x, double *par, const void* obj)
 	const double th_x_p_R = th_x_p + d_x/2.;
 	const double th_x_p_L = th_x_p - d_x/2.;
 
-	const auto [th_y_L_cut_l, th_y_L_cut_h] = ac->anal.fc_L.GetThYRange(th_x_p_L);
-	const auto [th_y_R_cut_l, th_y_R_cut_h] = ac->anal.fc_R.GetThYRange(th_x_p_R);
+	const auto [th_y_L_cut_l, th_y_L_cut_h] = ac->anal.fc_L.GetThYRange(th_x_p_L, vtx_y_L_p);
+	const auto [th_y_R_cut_l, th_y_R_cut_h] = ac->anal.fc_R.GetThYRange(th_x_p_R, vtx_y_R_p);
 
 	if (ac->debug)
 		printf("         th_y_L_cut_l = %E, th_y_R_cut_l = %E\n", th_y_L_cut_l, th_y_R_cut_l);
@@ -97,9 +97,9 @@ double AcceptanceCalculator::IntegOverDX(double x, double *par, const void* obj)
 
 //----------------------------------------------------------------------------------------------------
 
-double AcceptanceCalculator::SmearingFactor(double th_x_p, double th_y_p) const
+double AcceptanceCalculator::SmearingFactor(double th_x_p, double th_y_p, double vtx_y_L_p, double vtx_y_R_p) const
 {
-	double par[2] = { th_x_p, th_y_p };
+	double par[4] = { th_x_p, th_y_p, vtx_y_L_p, vtx_y_R_p };
 
 	const double si_d_x = anal.si_th_x_LRdiff;
 
@@ -109,16 +109,16 @@ double AcceptanceCalculator::SmearingFactor(double th_x_p, double th_y_p) const
 
 //----------------------------------------------------------------------------------------------------
 
-bool AcceptanceCalculator::SmearingComponentCut(double th_x_L, double th_x_R, double th_y_L, double th_y_R) const
+bool AcceptanceCalculator::SmearingComponentCut(double th_x_L, double th_x_R, double th_y_L, double th_y_R, double vtx_y_L_p, double vtx_y_R_p) const
 {
-	return (!anal.fc_L.Satisfied(th_x_L, th_y_sign * th_y_L) || !anal.fc_R.Satisfied(th_x_R, th_y_sign * th_y_R));
+	return (!anal.fc_L.Satisfied(th_x_L, th_y_sign * th_y_L, vtx_y_L_p) || !anal.fc_R.Satisfied(th_x_R, th_y_sign * th_y_R, vtx_y_R_p));
 }
 
 //----------------------------------------------------------------------------------------------------
 
-bool AcceptanceCalculator::PhiComponentCut(double th_x, double th_y) const
+bool AcceptanceCalculator::PhiComponentCut(double th_x, double th_y, double vtx_y) const
 {
-	return (!anal.fc_G.Satisfied(th_x, th_y_sign * th_y));
+	return (!anal.fc_G.Satisfied(th_x, th_y_sign * th_y, vtx_y));
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -139,17 +139,17 @@ bool AcceptanceCalculator::Calculate(const Kinematics &k, double &phi_corr, doub
 {
 	// ----- smearing component, cut -----
 
-	if (SmearingComponentCut(k.th_x_L, k.th_x_R, k.th_y_L, k.th_y_R))
+	if (SmearingComponentCut(k.th_x_L, k.th_x_R, k.th_y_L, k.th_y_R, k.vtx_y_L, k.vtx_y_R))
 		return true;
 
 	// ----- phi component, cut -----
 
-	if (PhiComponentCut(k.th_x, k.th_y))
+	if (PhiComponentCut(k.th_x, k.th_y, k.vtx_y))
 		return true;
 
 	// ----- smearing component, correction -----
 
-	const double F = SmearingFactor(k.th_x, k.th_y);
+	const double F = SmearingFactor(k.th_x, k.th_y, k.vtx_y_L, k.vtx_y_R);
 	div_corr = 1. / F;
 
 	// ----- phi component, correction -----

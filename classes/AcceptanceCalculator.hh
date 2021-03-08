@@ -42,7 +42,7 @@ struct AcceptanceCalculator
 	double dist_d_y(double d_y) const;
 
 	/// evaluates the acceptance condition
-	double Condition(double th_x_p, double d_x, double th_y_p, double d_y) const;
+	double Condition(double th_x_p, double d_x, double th_y_p, double d_y, double vtx_y_L_p, double vtx_y_R_p) const;
 
 	/// caculates the smearing integral over d_y
 	static double IntegOverDY(double x, double *par, const void* obj);
@@ -50,14 +50,14 @@ struct AcceptanceCalculator
 	/// caculates the smearing integral over d_x
 	static double IntegOverDX(double x, double *par, const void* obj);
 
-	/// calculates the "smearing" component of the acceptance correction
-	double SmearingFactor(double th_x_p, double th_y_p) const;
-
 	/// returns true if event outside left, right fiducial cuts
-	bool SmearingComponentCut(double th_x_L, double th_x_R, double th_y_L, double th_y_R) const;
+	bool SmearingComponentCut(double th_x_L, double th_x_R, double th_y_L, double th_y_R, double vtx_y_L_p, double vtx_y_R_p) const;
+
+	/// calculates the "smearing" component of the acceptance correction
+	double SmearingFactor(double th_x_p, double th_y_p, double vtx_y_L_p, double vtx_y_R_p) const;
 
 	/// returns true if event outside global fiducial cuts
-	bool PhiComponentCut(double th_x_p, double th_y_p) const;
+	bool PhiComponentCut(double th_x_p, double th_y_p, double vtx_y) const;
 
 	/// returns phi-acceptance factor
 	double PhiFactor(double th) const;

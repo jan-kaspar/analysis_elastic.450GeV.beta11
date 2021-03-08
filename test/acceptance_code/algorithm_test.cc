@@ -7,7 +7,9 @@
 
 void test_Satisfied(const FiducialCut &fc, double th_x, double th_y, bool exp)
 {
-	const bool r = fc.Satisfied(th_x, th_y);
+	// TODO: improve
+	const double vtx_y = 0;
+	const bool r = fc.Satisfied(th_x, th_y, vtx_y);
 
 	printf("* th_x = %.1f urad, th_y = %.1f urad: satisfied = %u --> %s\n", th_x*1E6, th_y*1E6, r, (r == exp) ? "OK" : "FAIL");
 }
@@ -16,7 +18,9 @@ void test_Satisfied(const FiducialCut &fc, double th_x, double th_y, bool exp)
 
 void test_GetThYRange(const FiducialCut &fc, double th_x, double exp_th_y_min, bool exp_th_y_max)
 {
-	const auto [th_y_min, th_y_max] = fc.GetThYRange(th_x);
+	// TODO: improve
+	const double vtx_y = 0;
+	const auto [th_y_min, th_y_max] = fc.GetThYRange(th_x, vtx_y);
 
 	const bool ok = (fabs(th_y_min - exp_th_y_min) < 1E-10 && fabs(th_y_max - exp_th_y_max));
 

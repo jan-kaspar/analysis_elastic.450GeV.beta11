@@ -47,7 +47,7 @@ void FiducialCut::ApplyCDTransform(double C, double D)
 
 //----------------------------------------------------------------------------------------------------
 
-bool FiducialCut::Satisfied(double th_x, double th_y) const
+bool FiducialCut::Satisfied(double th_x, double th_y, double vtx_y) const
 {
 	unsigned int n_le = 0, n_gr = 0;
 
@@ -76,7 +76,7 @@ bool FiducialCut::Satisfied(double th_x, double th_y) const
 
 //----------------------------------------------------------------------------------------------------
 
-tuple<double /*th_y_min*/, double /*th_y_max*/> FiducialCut::GetThYRange(double th_x) const
+tuple<double /*th_y_min*/, double /*th_y_max*/> FiducialCut::GetThYRange(double th_x, double vtx_y) const
 {
 	double th_y_min = pl_inf;
 	double th_y_max = mi_inf;

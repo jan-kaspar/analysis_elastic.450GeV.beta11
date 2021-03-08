@@ -114,8 +114,9 @@ int main(int argc, const char **argv)
 			{
 				const double th_x = h_eff_for_fit->GetXaxis()->GetBinCenter(bi_x);
 				const double th_y = h_eff_for_fit->GetYaxis()->GetBinCenter(bi_y);
+				const double vtx_y = 0;
 
-				bool discard = (th_y < th_y_min || th_y > th_y_max || !anal.fc_G.Satisfied(th_x, th_y));
+				bool discard = (th_y < th_y_min || th_y > th_y_max || !anal.fc_G.Satisfied(th_x, th_y, vtx_y));
 
 				if (discard)
 				{

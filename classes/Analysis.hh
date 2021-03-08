@@ -82,6 +82,10 @@ struct Analysis
 	double si_th_y_LRdiff;
 	double si_th_y_LRdiff_unc;
 
+	// TODO: remove if unused
+	double si_vtx_y;
+	double si_vtx_y_LRdiff;
+
 	// efficiency parameters
 	bool use_resolution_fits;				// whether to use time-dependent fits of resolution curves
 	bool use_3outof4_efficiency_fits;		// whether to use time-dependent fits of 3-out-of-4 efficiency

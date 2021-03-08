@@ -217,8 +217,11 @@ double IntegOverDX(double d_x, double *param, const void *)
 	const double th_x_p_R = th_x_p + d_x/2. + abias_sh_th_x;
 
 	// since the cuts are made in the primed coordinates, it is correct to use the anal_rec (not anal_sim)
-	const auto [th_y_L_cut_l, th_y_L_cut_h] = anal_rec.fc_L.GetThYRange(th_x_p_L);
-	const auto [th_y_R_cut_l, th_y_R_cut_h] = anal_rec.fc_R.GetThYRange(th_x_p_R);
+	// TODO: this may need improving
+	const double vtx_y_L_p = 0;
+	const double vtx_y_R_p = 0;
+	const auto [th_y_L_cut_l, th_y_L_cut_h] = anal_rec.fc_L.GetThYRange(th_x_p_L, vtx_y_L_p);
+	const auto [th_y_R_cut_l, th_y_R_cut_h] = anal_rec.fc_R.GetThYRange(th_x_p_R, vtx_y_R_p);
 
 	double th_y_abs = cfg.th_y_sign * th_y_p;
 	double d_y_min = 2. * max( th_y_R_cut_l - th_y_abs, th_y_abs - th_y_L_cut_h );
@@ -263,7 +266,10 @@ double acceptance_smea(double th_x_p, double th_y_p)
 double dist_th_x_th_y_reco(double th_x_p, double th_y_p)
 {
 	// evaluate smearing acceptance correction as in the analysis
-	const double F = accCalc.SmearingFactor(th_x_p, th_y_p);
+	// TODO: this needs improving
+	const double vtx_y_L = 0;
+	const double vtx_y_R = 0;
+	const double F = accCalc.SmearingFactor(th_x_p, th_y_p, vtx_y_L, vtx_y_R);
 	const double corr_acc_sm = (F == 0.) ? 0. : 1. / F;
 
 	return dist_th_x_th_y_smea(th_x_p, th_y_p) * acceptance_smea(th_x_p, th_y_p) * corr_acc_sm;

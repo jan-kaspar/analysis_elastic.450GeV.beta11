@@ -42,9 +42,9 @@ struct FiducialCut
 
 	void ApplyCDTransform(double C, double D);
 
-	bool Satisfied(double th_x, double th_y) const;
+	bool Satisfied(double th_x, double th_y, double vtx_y) const;
 
-	tuple<double /*th_y_min*/, double /*th_y_max*/> GetThYRange(double th_x) const;
+	tuple<double /*th_y_min*/, double /*th_y_max*/> GetThYRange(double th_x, double vtx_y) const;
 
 	vector<Point> GetIntersectionPhis(double th) const;
 };

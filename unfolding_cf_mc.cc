@@ -227,13 +227,15 @@ int main(int argc, const char **argv)
 		k_sm.ThetasToTPhi(env);
 
 		// phi acceptance correction
-		bool skip = accCalc.PhiComponentCut(k_sm.th_x, k_sm.th_y);
+		// TODO: make sure that vtx_y is simulated correctly
+		bool skip = accCalc.PhiComponentCut(k_sm.th_x, k_sm.th_y, k_sm.vtx_y);
 		double phiFactor = 0.;
 		if (!skip)
 			phiFactor = accCalc.PhiFactor(k_sm.th) / 2.;
 
 		// calculate event weights
 		vector<double> ws;
+		ws.reserve(modelSplines.size());
 		for (const auto spline : modelSplines)
 			ws.push_back(spline->Eval(k_tr.t) / sw);
 
