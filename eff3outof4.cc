@@ -42,7 +42,7 @@ struct HistGroup
 
 		unsigned int N_bins;
 		double *bin_edges;
-		BuildBinning(anal, "eb", bin_edges, N_bins);
+		BuildBinning(anal, "sb1", bin_edges, N_bins);
 		t = new TH1D("", ";|t|", N_bins, bin_edges);
 		delete [] bin_edges;
 	}

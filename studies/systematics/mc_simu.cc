@@ -211,8 +211,9 @@ int main(int argc, const char **argv)
 
 	// list of binnings
 	vector<string> binnings;
-	binnings.push_back("eb");
-	binnings.push_back("ub");
+	binnings.push_back("sb1");
+	binnings.push_back("sb2");
+	binnings.push_back("sb3");
 
 	// book histograms
 	vector<TH1D*> bh_t_tr, bh_t_re;

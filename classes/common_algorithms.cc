@@ -7,6 +7,9 @@
 
 #include <deque>
 
+#include <TFile.h>
+#include <TH1D.h>
+
 using namespace std;
 
 //----------------------------------------------------------------------------------------------------
@@ -70,7 +73,7 @@ Kinematics DoReconstruction(const HitData &h, const Environment & env)
 
 //----------------------------------------------------------------------------------------------------
 
-void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, unsigned int &bins)
+void BuildBinning(const Analysis & /*anal*/, const string &type, double* &binEdges, unsigned int &bins)
 {
 	bool verbose = false;
 
@@ -79,56 +82,20 @@ void BuildBinning(const Analysis &anal, const string &type, double* &binEdges, u
 
 	std::vector<double> be;
 
-	// low-|t| part
-	double t = anal.t_min;
-
-	// central part
-	if (type.compare("ub") == 0)
+	if (type.find("sb") == 0)
 	{
-		double w = 2E-3;
-		for (; t <= anal.t_max; t += w)
-			be.push_back(t);
+		string fn = string(getenv("BASE_DIR")) + "/studies/binning/reference.root";
+		TFile *f = TFile::Open(fn.c_str());
+		TH1D *h = (TH1D*) f->Get(type.c_str()); 
+
+		for (int bi = 1; bi <= h->GetNbinsX(); ++bi)
+			be.push_back(h->GetBinLowEdge(bi));
+
+		const int bi_max = h->GetNbinsX();
+		be.push_back(h->GetBinLowEdge(bi_max) + h->GetBinWidth(bi_max));
+
+		delete f;
 	}
-
-	if (type.compare("eb") == 0)
-	{
-		double w = 0.2E-3;
-		for (; t < 0.6E-3; t += w)
-			be.push_back(t);
-
-		w = 0.2E-3;
-		for (; t < 0.02; t += w)
-			be.push_back(t);
-
-		for (; t < anal.t_max; t += w)
-		{
-			be.push_back(t);
-			w *= 1.05;
-		}
-	}
-
-	if (type.compare("ob-0-1") == 0)
-	{
-		double t = anal.t_min;
-		while (t < anal.t_max)
-		{
-			be.push_back(t);
-
-			double w = 0.01;
-			if (t >= 0.00) w = 2E-4;
-			if (t >= 5E-4) w = (t - 0.00) / (0.01 - 0.00) * (0.0037 - 0.0001) + 0.0001;
-			if (t >= 0.01) w = (t - 0.01) / (0.06 - 0.01) * (0.0100 - 0.0037) + 0.0037;
-			if (t >= 0.06) w = 0.01;
-
-			t += w;
-		}
-	}
-
-	// high-|t| part
-	unsigned int N_bins_high = 10;
-	double w = (anal.t_max_full - anal.t_max) / N_bins_high;
-	for (unsigned int i = 0; i <= N_bins_high; i++)
-		be.push_back(anal.t_max + w * i);
 
 	bins = be.size() - 1;
 	binEdges = new double[be.size()];

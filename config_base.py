@@ -112,7 +112,7 @@ cfg = cms.PSet(
     alignment_t0 = cms.double(0.),
     alignment_ts = cms.double(15*60),
 
-    binnings = cms.vstring("ub", "eb"),
+    binnings = cms.vstring("sb1", "sb2", "sb3"),
 
     unsmearing_file = cms.string("unfolding_cf_ni_<diagonal>.root"),
     unsmearing_object = cms.string("fit-1/<binning>"),
@@ -164,8 +164,8 @@ cfg_45b_56t = cfg.clone(
 	cut10_a = -0.564, cut10_si = 0.26,
 
     # TODO: jsut test
-    fc_L = FiducialCut([[-200e-6, 550e-6], [-500e-6, 500e-6], [-560e-6, 220e-6], [-400e-6, 170e-6], [+200e-6, 170e-6], [+440e-6, 260e-6], [+340e-6, 550e-6]]), #, -145E-6),
-    fc_R = FiducialCut([[-200e-6, 550e-6], [-500e-6, 500e-6], [-560e-6, 220e-6], [-400e-6, 200e-6], [+200e-6, 200e-6], [+440e-6, 260e-6], [+340e-6, 550e-6]]), #, +164E-6),
+    fc_L = FiducialCut([[-200e-6, 550e-6], [-500e-6, 500e-6], [-560e-6, 220e-6], [-400e-6, 170e-6], [+200e-6, 170e-6], [+440e-6, 260e-6], [+340e-6, 550e-6]], -145E-6),
+    fc_R = FiducialCut([[-200e-6, 550e-6], [-500e-6, 500e-6], [-560e-6, 220e-6], [-400e-6, 200e-6], [+200e-6, 200e-6], [+440e-6, 260e-6], [+340e-6, 550e-6]], +164E-6),
     fc_G = FiducialCut([[-200e-6, 540e-6], [-480e-6, 495e-6], [-540e-6, 225e-6], [-400e-6, 210e-6], [+200e-6, 210e-6], [+410e-6, 260e-6], [+320e-6, 540e-6]])
   )
 )

@@ -201,7 +201,7 @@ int main(int argc, char **argv)
 
 	// list of binnings
 	vector<string> binnings;
-	binnings.push_back("eb");
+	binnings.push_back("sb1");
 
 	// theta_x ranges
 	vector< pair<double, double> > th_x_ranges = {

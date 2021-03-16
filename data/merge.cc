@@ -165,8 +165,9 @@ int main(int argc, const char **argv)
 	diagonals.push_back("45t_56b");
 
 	vector<string> binnings;
-	binnings.push_back("ub");
-	binnings.push_back("eb");
+	binnings.push_back("sb1");
+	binnings.push_back("sb2");
+	binnings.push_back("sb3");
 
 	// print info
 	printf("* %lu entries:\n", entries.size());

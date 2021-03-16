@@ -6,8 +6,7 @@
 int main()
 {
 	TFile *f_in = new TFile("../../data/merged.root");
-	TH1D *h_in = (TH1D *) f_in->Get("ub/merged/combined/h_dNdt");
-	//TH1D *h_in = (TH1D *) f_in->Get("ub/merged/45t_56b/h_dsdt");
+	TH1D *h_in = (TH1D *) f_in->Get("sb1/merged/combined/h_dNdt");
 
 	TF1 *ff = new TF1("ff", "[0] * exp(-[1]*x)", 1E-6, 0.02);
 

@@ -3,12 +3,12 @@
 2. Run "./get_acceptance_correction" which will extract from
 		"../DS-XXX/XXX/distributions_XXX.root"
 	object
-		"acceptance correction/eb/p_t_full_corr"
+		"acceptance correction/sb1/p_t_full_corr"
 	and save it as
 		"acceptance_correction.root"
 
 3. Run "./make_fit" which will fit histogram
-		"eb/merged/45b_56t/h_dNdt"
+		"sb1/merged/45b_56t/h_dNdt"
 	from
 		"../DS-merged/merged.root"
 	and save into

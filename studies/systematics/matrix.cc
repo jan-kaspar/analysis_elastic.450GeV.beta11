@@ -345,8 +345,9 @@ int main(int argc, const char **argv)
 
 	// list of binnings
 	vector<string> binnings;
-	binnings.push_back("eb");
-	binnings.push_back("ub");
+	binnings.push_back("sb1");
+	binnings.push_back("sb2");
+	binnings.push_back("sb3");
 
 	// list of modes
 	vector<Mode> modes = {

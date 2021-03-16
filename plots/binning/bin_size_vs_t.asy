@@ -10,8 +10,9 @@ string dataset = "data/fill7302/Totem1";
 //----------------------------------------------------------------------------------------------------
 
 string binnings[] = {
-	"ub",
-	"eb",
+	"sb1",
+	"sb2",
+	"sb3",
 };
 
 //----------------------------------------------------------------------------------------------------
@@ -35,7 +36,7 @@ draw(RootGetObject(topDir+"studies/binning/generators.root", "g_bs_stat_unc_0.00
 AddToLegend("<{\it binnings in analysis:}");
 for (int bi : binnings.keys)
 {
-	pen p = StdPen(bi);
+	pen p = StdPen(bi+1);
 	draw(RootGetObject(topDir + dataset + "/distributions_45b_56t.root", "binning/g_binning_"+binnings[bi]), "p,l,d0", p+0.2pt, mCi+0.8pt+p, binnings[bi]);
 }
 
