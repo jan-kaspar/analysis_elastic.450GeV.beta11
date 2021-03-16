@@ -218,10 +218,14 @@ void BuildMatrix(const string &label, const vector<string> &contributions, const
 
 		// collect contributing histograms
 		vector<TH1D *> hists;
+		vector<bool> hist_correlation;
 		for (const auto sm : sel_modes)
 		{
 			for (const auto &h : sm->vh_combined[bidx])
+			{
 				hists.push_back(h);
+				hist_correlation.push_back((sm->tag == "others") ? false : true);
+			}
 		}
 
 		// extract binning information
@@ -240,8 +244,19 @@ void BuildMatrix(const string &label, const vector<string> &contributions, const
 				int bj = j + 1;
 
 				double S = 0.;
-				for (const auto hist : hists)
-					S += hist->GetBinContent(bi) * hist->GetBinContent(bj);
+				for (unsigned int hi = 0; hi < hists.size(); ++hi)
+				{
+					const auto *hist = hists[hi];
+					bool corr = hist_correlation[hi];
+
+					if (corr)
+					{
+						S += hist->GetBinContent(bi) * hist->GetBinContent(bj);
+					} else {
+						if (bi == bj)
+							S += hist->GetBinContent(bi) * hist->GetBinContent(bj);
+					}
+				}
 
 				cov_mat(i, j) = S;
 			}
@@ -388,11 +403,14 @@ int main(int argc, const char **argv)
 		*/
 
 		Mode("norm", Mode::sExt, Mode::coFull),
+
+		Mode("others", Mode::sExt, Mode::coFull),
 	};
 
 	// normalisation uncertainty
 	// TODO: update
 	const double norm_unc = 0.10;
+	const double others_unc = 0.04;
 
 	// load binning-reference histograms
 	vector<TH1D *> v_binning_h;
@@ -469,16 +487,20 @@ int main(int argc, const char **argv)
 			}
 		}
 
-		if (mode.source == Mode::sExt && mode.tag == "norm")
+		if (mode.source == Mode::sExt)
 		{
+			double rel_eff = 0.;
+			if (mode.tag == "norm") rel_eff = norm_unc;
+			if (mode.tag == "others") rel_eff = others_unc;
+
 			for (unsigned int dgni = 0; dgni < diagonals.size(); ++dgni)
 			{
 				vector<TH1D *> v;
 				for (unsigned int bi = 0; bi < binnings.size(); bi++)
 				{
 					TGraph *g = new TGraph();
-					g->SetPoint(0, 0., 1. + norm_unc);
-					g->SetPoint(1, 1., 1. + norm_unc);
+					g->SetPoint(0, 0., 1. + rel_eff);
+					g->SetPoint(1, 1., 1. + rel_eff);
 
 					v.push_back(BuildHistogramFromGraph(g, v_binning_h[bi]));
 
@@ -628,6 +650,8 @@ int main(int argc, const char **argv)
 		"my-sigma",
 		"unsmearing-model",
 		*/
+
+		"others",
 	};
 
 	BuildMatrix("all-but-norm", contributions, modes, binnings);

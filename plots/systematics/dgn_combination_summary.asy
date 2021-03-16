@@ -7,7 +7,7 @@ AddAllModes();
 
 string f = topDir + "studies/systematics/matrix.root";
 
-string binning = "eb";
+string binning = "sb1";
 
 string objects[] = {
 //	"input/45b_56t/<binning>",
@@ -26,7 +26,7 @@ string object_labels[] = {
 real z_t_maxs[], z_t_Steps[], z_t_steps[], z_e_maxs[], z_e_Steps[], z_e_steps[];
 //z_t_maxs.push(0.004); z_t_Steps.push(0.002); z_t_steps.push(0.001); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
 //z_t_maxs.push(0.2); z_t_Steps.push(0.05); z_t_steps.push(0.01); z_e_maxs.push(0.02); z_e_Steps.push(0.005); z_e_steps.push(0.001);
-z_t_maxs.push(0.10); z_t_Steps.push(0.02); z_t_steps.push(0.01); z_e_maxs.push(0.06); z_e_Steps.push(0.01); z_e_steps.push(0.005);
+z_t_maxs.push(0.10); z_t_Steps.push(0.02); z_t_steps.push(0.01); z_e_maxs.push(0.08); z_e_Steps.push(0.02); z_e_steps.push(0.01);
 
 //----------------------------------------------------------------------------------------------------
 

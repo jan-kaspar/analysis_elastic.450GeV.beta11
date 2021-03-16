@@ -7,7 +7,7 @@ AddAllModes();
 
 string f = topDir + "studies/systematics/matrix.root";
 
-string binning = "eb";
+string binning = "sb1";
 
 string collection = "all-but-norm";
 
