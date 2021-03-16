@@ -113,10 +113,7 @@ function MakeOneComparison()
 	plot_file="${plot_file// /_}"
 	plot_file="${plot_file}.png"
 
-	# TODO: remove
-	obj2=${obj/sb1/eb}
-
-	test/compare "$file1" "$obj" "$file2" "$obj2" "$plot_file"
+	test/compare "$file1" "$obj" "$file2" "$obj" "$plot_file"
 	res="$?"
 
 	if [ ! "$res" -eq "0" ]
