@@ -9,6 +9,7 @@
 #include "TFile.h"
 #include "TH1D.h"
 #include "TProfile.h"
+#include "TProfile2D.h"
 #include "TH2D.h"
 #include "TGraph.h"
 #include "TGraphErrors.h"
@@ -1099,7 +1100,18 @@ int main(int argc, const char **argv)
 	TProfile *p_input_beam_div_y_vs_time = new TProfile("p_input_beam_div_y_vs_time", ";timestamp", 31, cfg.timestamp_min, cfg.timestamp_max);
 
 	// book acceptance-correction histograms
-	TProfile *p_t_ub_div_corr = new TProfile("p_t_ub_div_corr", ";t_ub_{y}", 2000., 0., 0.2);
+	TProfile *p_div_corr_vs_th_x = new TProfile("p_div_corr_vs_th_x", ";#theta_{x}", 1000., 0., 0.);
+	TProfile *p_div_corr_vs_th_y = new TProfile("p_div_corr_vs_th_y", ";#theta_{y}", 1000., 0., 0.);
+	TProfile *p_div_corr_vs_vtx_x = new TProfile("p_div_corr_vs_vtx_x", ";vtx_{x}", 1000., 0., 0.);
+	TProfile *p_div_corr_vs_vtx_y = new TProfile("p_div_corr_vs_vtx_y", ";vtx_{y}", 1000., 0., 0.);
+	TProfile *p_div_corr_vs_vtx_y_L = new TProfile("p_div_corr_vs_vtx_y_L", ";vtx_{y}^{L}", 1000., 0., 0.);
+	TProfile *p_div_corr_vs_vtx_y_R = new TProfile("p_div_corr_vs_vtx_y_R", ";vtx_{y}^{R}", 1000., 0., 0.);
+
+	TProfile2D *p2_div_corr_vs_th_x_th_y = new TProfile2D("p2_div_corr_vs_th_x_th_y", ";#theta_{x};#theta_{y}", 50, -700E-6, +700E-6, 50, -600E-6, +600E-6);
+	TProfile2D *p2_div_corr_vs_th_y_vtx_y = new TProfile2D("p2_div_corr_vs_th_y_vtx_y", ";#theta_{y};vtx_{y}", 50, -600E-6, +600E-6	, 50, -1.2, +1.2);
+	TProfile2D *p2_div_corr_vs_th_y_L_vtx_y_L = new TProfile2D("p2_div_corr_vs_th_y_L_vtx_y_L", ";#theta_{y};vtx_{y}^{L}", 50, -600E-6, +600E-6, 50, -1.2, +1.2);
+	TProfile2D *p2_div_corr_vs_th_y_R_vtx_y_R = new TProfile2D("p2_div_corr_vs_th_y_R_vtx_y_R", ";#theta_{y};vtx_{y}^{R}", 50, -600E-6, +600E-6, 50, -1.2, +1.2);
+	TProfile2D *p2_div_corr_vs_vtx_y_L_vtx_y_R = new TProfile2D("p2_div_corr_vs_vtx_y_L_vtx_y_R", ";vtx_{y}^{L};vtx_{y}^{R}", 50, -1.2, +1.2, 50, -1.2, +1.2);
 
 	map<unsigned int, TH1D*> bh_t_Nev_before, bh_t_Nev_after_no_corr;
 	map<unsigned int, TH1D*> bh_t_before, bh_t_after_no_corr, bh_t_after;
@@ -1737,7 +1749,7 @@ int main(int argc, const char **argv)
 
 		// calculate acceptance divergence correction
 		double phi_corr = 0., div_corr = 0.;
-		bool skip = accCalc.Calculate(k, phi_corr, div_corr);
+		const bool skip = accCalc.Calculate(k, phi_corr, div_corr);
 
 		for (unsigned int bi = 0; bi < binnings.size(); bi++)
 		{
@@ -1750,12 +1762,23 @@ int main(int argc, const char **argv)
 		if (skip)
 			continue;
 
-		double corr = div_corr * phi_corr;
+		const double corr = div_corr * phi_corr;
 
 		th_min = min(th_min, k.th);
 
 		// fill acceptance histograms
-		p_t_ub_div_corr->Fill(k.t_y, div_corr);
+		p_div_corr_vs_th_x->Fill(k.th_x, div_corr);
+		p_div_corr_vs_th_y->Fill(k.th_y, div_corr);
+		p_div_corr_vs_vtx_x->Fill(k.vtx_x, div_corr);
+		p_div_corr_vs_vtx_y->Fill(k.vtx_y, div_corr);
+		p_div_corr_vs_vtx_y_L->Fill(k.vtx_y_L, div_corr);
+		p_div_corr_vs_vtx_y_R->Fill(k.vtx_y_R, div_corr);
+
+		p2_div_corr_vs_th_x_th_y->Fill(k.th_x, k.th_y , div_corr);
+		p2_div_corr_vs_th_y_vtx_y->Fill(k.th_y, k.vtx_y , div_corr);
+		p2_div_corr_vs_th_y_L_vtx_y_L->Fill(k.th_y_L, k.vtx_y_L , div_corr);
+		p2_div_corr_vs_th_y_R_vtx_y_R->Fill(k.th_y_R, k.vtx_y_R , div_corr);
+		p2_div_corr_vs_vtx_y_L_vtx_y_R->Fill(k.vtx_y_L, k.vtx_y_R, div_corr);
 
 		for (unsigned int bi = 0; bi < binnings.size(); bi++)
 		{
@@ -2510,7 +2533,18 @@ int main(int argc, const char **argv)
 
 	gDirectory = accDir;
 
-	p_t_ub_div_corr->Write();
+	p_div_corr_vs_th_x->Write();
+	p_div_corr_vs_th_y->Write();
+	p_div_corr_vs_vtx_x->Write();
+	p_div_corr_vs_vtx_y->Write();
+	p_div_corr_vs_vtx_y_L->Write();
+	p_div_corr_vs_vtx_y_R->Write();
+
+	p2_div_corr_vs_th_x_th_y->Write();
+	p2_div_corr_vs_th_y_vtx_y->Write();
+	p2_div_corr_vs_th_y_L_vtx_y_L->Write();
+	p2_div_corr_vs_th_y_R_vtx_y_R->Write();
+	p2_div_corr_vs_vtx_y_L_vtx_y_R->Write();
 
 	h2_th_y_vs_th_x_before->Write();
 	h2_th_y_vs_th_x_after->Write();
