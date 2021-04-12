@@ -46,7 +46,7 @@ function RunOneDiagonal()
 
 		*)
 			echo "$label > run error ($errCode)"
-			tail -n 5 "$log"
+			tail -n 10 "$log"
 			return 1
 			;;
 	esac
