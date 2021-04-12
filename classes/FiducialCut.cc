@@ -8,7 +8,10 @@
 
 tuple<double /*x*/, double /*y*/>  FiducialCut::Point::Resolve(double vtx_y) const
 {
-	return { x, y + slope * vtx_y};
+	if (vtx_y >= 0.)
+		return { x, y + slope_pos * vtx_y};
+	else
+		return { x, y + slope_neg * vtx_y};
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -17,7 +20,8 @@ void FiducialCut::Init(const std::vector<edm::ParameterSet> &input)
 {
 	points.clear();
 	for (const auto &p : input)
-		points.emplace_back(Point(p.getParameter<double>("x"), p.getParameter<double>("y"), p.getParameter<double>("slope")));
+		points.emplace_back(Point(p.getParameter<double>("x"), p.getParameter<double>("y"),
+			p.getParameter<double>("slope_pos"), p.getParameter<double>("slope_neg")));
 }
 
 //----------------------------------------------------------------------------------------------------

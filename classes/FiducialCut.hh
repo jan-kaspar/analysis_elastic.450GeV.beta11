@@ -21,12 +21,14 @@ struct FiducialCut
 	{
 		private:
 			double x, y;
-			double slope;	// slope of th_y cut wrt. vtx_y [rad/mm]
+
+			// slopes of th_y cut wrt. vtx_y [rad/mm], separately for positive and negative values of vtx_y
+			double slope_pos, slope_neg;
 
 		public:
-			Point(double _x, double _y, double _s) : x(_x), y(_y), slope(_s) {}
+			Point(double _x, double _y, double _sp, double _sn) : x(_x), y(_y), slope_pos(_sp), slope_neg(_sn) {}
 
-			void Write() const { printf("(%.3E, %.3E, %.3E)", x, y, slope); }
+			void Write() const { printf("(%.3E, %.3E, %.3E, %.3E)", x, y, slope_pos, slope_neg); }
 
 			tuple<double /*x*/, double /*y*/> Resolve(double vtx_y) const;
 

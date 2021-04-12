@@ -61,9 +61,9 @@ int main()
 {
 	using P = FiducialCut::Point;
 
-	FiducialCut fc1({P(-350E-6, 32E-6, false), P(0E-6, 32E-6, false), P(250E-6, 40E-6, false), P(390E-6, 80E-6, false), P(270E-6, 127E-6, false), P(-280E-6, 132E-6, false), P(-390E-6, 60E-6, false)});
+	FiducialCut fc1({P(-350E-6, 32E-6, 0., 0.), P(0E-6, 32E-6, 0., 0.), P(250E-6, 40E-6, 0., 0.), P(390E-6, 80E-6, 0., 0.), P(270E-6, 127E-6, 0., 0.), P(-280E-6, 132E-6, 0., 0.), P(-390E-6, 60E-6, 0., 0.)});
 
-	FiducialCut fc2({P(-350E-6, 33E-6, false), P(0E-6, 33E-6, false), P(250E-6, 42E-6, false), P(385E-6, 80E-6, false), P(270E-6, 124E-6, false), P(-280E-6, 129E-6, false), P(-385E-6, 60E-6, false)});
+	FiducialCut fc2({P(-350E-6, 33E-6, 0., 0.), P(0E-6, 33E-6, 0., 0.), P(250E-6, 42E-6, 0., 0.), P(385E-6, 80E-6, 0., 0.), P(270E-6, 124E-6, 0., 0.), P(-280E-6, 129E-6, 0., 0.), P(-385E-6, 60E-6, 0., 0.)});
 
 	printf("\n>> test Satisfied, not at borders\n");
 
