@@ -1107,11 +1107,15 @@ int main(int argc, const char **argv)
 	TProfile *p_div_corr_vs_vtx_y_L = new TProfile("p_div_corr_vs_vtx_y_L", ";vtx_{y}^{L}", 1000., 0., 0.);
 	TProfile *p_div_corr_vs_vtx_y_R = new TProfile("p_div_corr_vs_vtx_y_R", ";vtx_{y}^{R}", 1000., 0., 0.);
 
-	TProfile2D *p2_div_corr_vs_th_x_th_y = new TProfile2D("p2_div_corr_vs_th_x_th_y", ";#theta_{x};#theta_{y}", 50, -700E-6, +700E-6, 50, -600E-6, +600E-6);
-	TProfile2D *p2_div_corr_vs_th_y_vtx_y = new TProfile2D("p2_div_corr_vs_th_y_vtx_y", ";#theta_{y};vtx_{y}", 50, -600E-6, +600E-6	, 50, -1.2, +1.2);
-	TProfile2D *p2_div_corr_vs_th_y_L_vtx_y_L = new TProfile2D("p2_div_corr_vs_th_y_L_vtx_y_L", ";#theta_{y};vtx_{y}^{L}", 50, -600E-6, +600E-6, 50, -1.2, +1.2);
-	TProfile2D *p2_div_corr_vs_th_y_R_vtx_y_R = new TProfile2D("p2_div_corr_vs_th_y_R_vtx_y_R", ";#theta_{y};vtx_{y}^{R}", 50, -600E-6, +600E-6, 50, -1.2, +1.2);
-	TProfile2D *p2_div_corr_vs_vtx_y_L_vtx_y_R = new TProfile2D("p2_div_corr_vs_vtx_y_L_vtx_y_R", ";vtx_{y}^{L};vtx_{y}^{R}", 50, -1.2, +1.2, 50, -1.2, +1.2);
+	TProfile2D *p2_div_corr_vs_th_x_th_y = new TProfile2D("p2_div_corr_vs_th_x_th_y", ";#theta_{x};#theta_{y}", 100, -700E-6, +700E-6, 100, -600E-6, +600E-6);
+	TProfile2D *p2_div_corr_vs_th_y_vtx_y = new TProfile2D("p2_div_corr_vs_th_y_vtx_y", ";#theta_{y};vtx_{y}", 100, -600E-6, +600E-6	, 100, -1.2, +1.2);
+	TProfile2D *p2_div_corr_vs_th_y_L_vtx_y_L = new TProfile2D("p2_div_corr_vs_th_y_L_vtx_y_L", ";#theta_{y};vtx_{y}^{L}", 100, -600E-6, +600E-6, 100, -1.2, +1.2);
+	TProfile2D *p2_div_corr_vs_th_y_R_vtx_y_R = new TProfile2D("p2_div_corr_vs_th_y_R_vtx_y_R", ";#theta_{y};vtx_{y}^{R}", 100, -600E-6, +600E-6, 100, -1.2, +1.2);
+	TProfile2D *p2_div_corr_vs_vtx_y_L_vtx_y_R = new TProfile2D("p2_div_corr_vs_vtx_y_L_vtx_y_R", ";vtx_{y}^{L};vtx_{y}^{R}", 100, -1.2, +1.2, 100, -1.2, +1.2);
+
+	TProfile2D *p2_phi_corr_vs_th_x_th_y = new TProfile2D("p2_phi_corr_vs_th_x_th_y", ";#theta_{x};#theta_{y}", 100, -700E-6, +700E-6, 100, -600E-6, +600E-6);
+	TProfile2D *p2_phi_corr_vs_th_y_vtx_y = new TProfile2D("p2_phi_corr_vs_th_y_vtx_y", ";#theta_{y};vtx_{y}", 100, -600E-6, +600E-6	, 100, -1.2, +1.2);
+	TProfile2D *p2_phi_corr_vs_vtx_y_L_vtx_y_R = new TProfile2D("p2_phi_corr_vs_vtx_y_L_vtx_y_R", ";vtx_{y}^{L};vtx_{y}^{R}", 100, -1.2, +1.2, 100, -1.2, +1.2);
 
 	map<unsigned int, TH1D*> bh_t_Nev_before, bh_t_Nev_after_no_corr;
 	map<unsigned int, TH1D*> bh_t_before, bh_t_after_no_corr, bh_t_after;
@@ -1779,6 +1783,10 @@ int main(int argc, const char **argv)
 		p2_div_corr_vs_th_y_L_vtx_y_L->Fill(k.th_y_L, k.vtx_y_L , div_corr);
 		p2_div_corr_vs_th_y_R_vtx_y_R->Fill(k.th_y_R, k.vtx_y_R , div_corr);
 		p2_div_corr_vs_vtx_y_L_vtx_y_R->Fill(k.vtx_y_L, k.vtx_y_R, div_corr);
+
+		p2_phi_corr_vs_th_x_th_y->Fill(k.th_x, k.th_y , phi_corr);
+		p2_phi_corr_vs_th_y_vtx_y->Fill(k.th_y, k.vtx_y , phi_corr);
+		p2_phi_corr_vs_vtx_y_L_vtx_y_R->Fill(k.vtx_y_L, k.vtx_y_R, phi_corr);
 
 		for (unsigned int bi = 0; bi < binnings.size(); bi++)
 		{
@@ -2545,6 +2553,10 @@ int main(int argc, const char **argv)
 	p2_div_corr_vs_th_y_L_vtx_y_L->Write();
 	p2_div_corr_vs_th_y_R_vtx_y_R->Write();
 	p2_div_corr_vs_vtx_y_L_vtx_y_R->Write();
+
+	p2_phi_corr_vs_th_x_th_y->Write();
+	p2_phi_corr_vs_th_y_vtx_y->Write();
+	p2_phi_corr_vs_vtx_y_L_vtx_y_R->Write();
 
 	h2_th_y_vs_th_x_before->Write();
 	h2_th_y_vs_th_x_after->Write();
