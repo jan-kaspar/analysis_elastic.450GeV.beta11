@@ -87,9 +87,11 @@ int main()
 
 	test_GetThYRange(fc1, -500E-6, 10., -10.);
 	test_GetThYRange(fc1, -390E-6, 60E-6, 60E-6);
-	test_GetThYRange(fc1, -350E-6, 32E-6, 86.2E-6);
-	test_GetThYRange(fc1, -200E-6, 32E-6, 131.3E-6);
-	test_GetThYRange(fc1, 0E-6, 32E-6, 129.5E-6);
+
+	test_GetThYRange(fc1, -350E-6, 32E-6, 86.181818E-6);
+	test_GetThYRange(fc1, -200E-6, 32E-6, 131.27273E-6);
+	test_GetThYRange(fc1, 0E-6, 32E-6, 129.45455E-6);
+
 	test_GetThYRange(fc1, +500E-6, 10., -10.);
 
 	printf("\n>> test GetIntersectionPhis\n");
