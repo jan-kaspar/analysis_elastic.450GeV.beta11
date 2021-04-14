@@ -206,9 +206,9 @@ int main(int argc, char **argv)
 	// theta_x ranges
 	vector< pair<double, double> > th_x_ranges = {
 		{ -1E0, +1E0 },
-		{ -0.5E-6, +0.5E-6 },
-		{ +100E-6, +101E-6 },
-		{ +200E-6, +201E-6 },
+		{ -5E-6, +5E-6 },
+		{ +100E-6, +110E-6 },
+		{ +300E-6, +310E-6 },
 	};
 
 	// prepare t-histograms
@@ -226,18 +226,18 @@ int main(int argc, char **argv)
 	}
 
 	// prepare th_y vs. th_x histograms
-	TH2D *h_th_x_th_y_true = new TH2D("h_th_x_th_y_true", ";#theta_{x};#theta_{y}", 200, -400E-6, +400E-6, 1200, -150E-6, +150E-6);
-	TH2D *h_th_x_th_y_re = new TH2D("h_th_x_th_y_re", ";#theta_{x};#theta_{y}", 200, -400E-6, +400E-6, 1200, -150E-6, +150E-6);
-	TH2D *h_th_x_th_y_re_cut_corr = new TH2D("h_th_x_th_y_re_cut_corr", ";#theta_{x};#theta_{y}", 200, -400E-6, +400E-6, 1200, -150E-6, +150E-6);
+	TH2D *h_th_x_th_y_true = new TH2D("h_th_x_th_y_true", ";#theta_{x};#theta_{y}", 200, -600E-6, +600E-6, 1200, -600E-6, +600E-6);
+	TH2D *h_th_x_th_y_re = new TH2D("h_th_x_th_y_re", ";#theta_{x};#theta_{y}", 200, -600E-6, +600E-6, 1200, -600E-6, +600E-6);
+	TH2D *h_th_x_th_y_re_cut_corr = new TH2D("h_th_x_th_y_re_cut_corr", ";#theta_{x};#theta_{y}", 200, -600E-6, +600E-6, 1200, -600E-6, +600E-6);
 
 	// prepare th_y histograms
 	vector<TH1D *> v_h_th_y_re, v_h_th_y_re_cut, v_h_th_y_re_cut_corr;
 	for (unsigned int i = 0; i < th_x_ranges.size(); ++i)
 	{
-		const double th_y_min = 30E-6, th_y_max = 140E-6;
-		v_h_th_y_re.push_back(new TH1D("", "#theta_{y}", 340, th_y_min, th_y_max));
-		v_h_th_y_re_cut.push_back(new TH1D("", "#theta_{y}", 340, th_y_min, th_y_max));
-		v_h_th_y_re_cut_corr.push_back(new TH1D("", "#theta_{y}", 340, th_y_min, th_y_max));
+		const double th_y_min = 150E-6, th_y_max = 600E-6;
+		v_h_th_y_re.push_back(new TH1D("", "#theta_{y}", 90, th_y_min, th_y_max));
+		v_h_th_y_re_cut.push_back(new TH1D("", "#theta_{y}", 90, th_y_min, th_y_max));
+		v_h_th_y_re_cut_corr.push_back(new TH1D("", "#theta_{y}", 90, th_y_min, th_y_max));
 	}
 
 	// prepare histograms for smearing control
@@ -260,9 +260,9 @@ int main(int argc, char **argv)
 
 		Kinematics k_tr;
 
-		double u = gRandom->Rndm();
+		const double u = gRandom->Rndm();
 		k_tr.t = - log(1. - ga * u) / be;
-		double w = s_dsdt->Eval(k_tr.t) / exp(-be * k_tr.t);
+		const double w = s_dsdt->Eval(k_tr.t) / exp(-be * k_tr.t);
 
 		if (k_tr.t < 1E-6 || w < 0.)
 			continue;
@@ -466,7 +466,7 @@ int main(int argc, char **argv)
 		const double th_x_ref = (th_x_ranges[i].first + th_x_ranges[i].second) / 2.;
 
 		TGraph *g_acc_smear_vs_th_y = new TGraph();
-		for (double th_y = 30E-6; th_y <= 140E-6; )
+		for (double th_y = 150E-6; th_y <= 600E-6; )
 		{
 			const double vtx_y_L = 0;
 			const double vtx_y_R = 0;
@@ -474,11 +474,11 @@ int main(int argc, char **argv)
 			const int idx = g_acc_smear_vs_th_y->GetN();
 			g_acc_smear_vs_th_y->SetPoint(idx, th_y, acc);
 
-			double step = 5E-6;
-			if (30E-6 < th_y && th_y < 50E-6)
-				step = 1E-6;
-			if (110E-6 < th_y && th_y < 130E-6)
-				step = 1E-6;
+			double step = 10E-6;
+			if (200E-6 < th_y && th_y < 300E-6)
+				step = 2E-6;
+			if (450E-6 < th_y && th_y < 600E-6)
+				step = 2E-6;
 
 			th_y += step;
 		}

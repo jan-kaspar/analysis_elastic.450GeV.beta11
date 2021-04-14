@@ -16,9 +16,8 @@ void RunOne()
 {
 	// run sampling
 	vector<double> th_x_values = {
+		-500E-6,
 		0E-6,
-		+100E-6,
-		+200E-6,
 		+300E-6,
 	};
 
@@ -36,7 +35,7 @@ void RunOne()
 		g_without_app->SetName(buf);
 		g_without_app->SetTitle(";th_y");
 
-		for (double th_y_abs = 20E-6; th_y_abs <= 80E-6; th_y_abs += 0.1E-6)
+		for (double th_y_abs = 150E-6; th_y_abs <= 300E-6; th_y_abs += 1E-6)
 		{
 			double th_y = cfg.th_y_sign * th_y_abs;
 
@@ -78,7 +77,7 @@ void RunOne()
 	TGraph *g_A_t_without_app = new TGraph();
 	g_A_t_without_app->SetName("g_A_t_without_app");
 
-	for (double t = 0.; t <= 0.05; t += 0.0001)
+	for (double t = 0.; t <= 0.10; t += 0.0001)
 	{
 		Kinematics k;
 		k.th = sqrt(t) / env.p;

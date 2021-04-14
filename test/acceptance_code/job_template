@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # define directories
-job_dir="/afs/cern.ch/work/j/jkaspar/work/analyses/elastic/450GeV/beta100/4rp/test/acceptance_code"
+job_dir="$BASE_DIR/test/acceptance_code"
 
 # run the process
 cd "$job_dir"
