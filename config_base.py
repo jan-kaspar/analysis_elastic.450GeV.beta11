@@ -3,14 +3,104 @@ import math
 
 #----------------------------------------------------------------------------------------------------
 
-def FiducialCut(points, slope_def = 0):
+def FiducialCut(points, slope_pos_def = 0, slope_neg_def = 0):
   c = cms.VPSet()
   for p in points:
-    slope = slope_def
+    slope_pos = slope_pos_def
+    slope_neg = slope_neg_def
     if len(p) > 2:
-      slope = p[2]
-    c.append(cms.PSet(x=cms.double(p[0]), y=cms.double(p[1]), slope=cms.double(slope)))
+      slope_pos = p[2]
+      slope_neg = p[3]
+    c.append(cms.PSet(x=cms.double(p[0]), y=cms.double(p[1]), slope_pos=cms.double(slope_pos), slope_neg=cms.double(slope_neg)))
   return c
+
+#----------------------------------------------------------------------------------------------------
+
+def Contour(fc):
+  output = []
+  for p in fc:
+    output.append([p.x.pythonValue(), p.y.pythonValue(), p.slope_pos.pythonValue(), p.slope_neg.pythonValue()])
+  return output
+
+#----------------------------------------------------------------------------------------------------
+
+def Shrink(points, sigma_x = 25E-6, sigma_y = 25E-6, th_x_low = -300E-6, th_x_high = +300E-6, th_y_low = 300E-6, th_y_high = 400E-6):
+  output = []
+  for p in points:
+    x = p[0]
+    y = p[1]
+
+    if (x < th_x_low):
+      x += sigma_x
+
+    if (x > th_x_high):
+      x -= sigma_x
+
+    if (y < th_y_low):
+      y += sigma_y
+
+    if (y > th_y_high):
+      y -= sigma_y
+
+    pc = p[:]  # trick to make a copy
+    pc[0] = x
+    pc[1] = y
+
+    output.append(pc)
+
+  return output
+
+#----------------------------------------------------------------------------------------------------
+
+def CutContour(points, x1, y1, x2, y2):
+  dx = x2 - x1
+  dy = y2 - y1
+
+  nx = -dy
+  ny = dx
+
+  output = []
+
+  for i in range(len(points)):
+    j = (i + 1) % len(points)
+
+    pi_x = points[i][0]
+    pi_y = points[i][1]
+
+    pj_x = points[j][0]
+    pj_y = points[j][1]
+
+    pi_proj = (pi_x - x1) * nx + (pi_y - y1) * ny
+    pj_proj = (pj_x - x1) * nx + (pj_y - y1) * ny
+
+    pi_in = (pi_proj >= 0)
+    pj_in = (pj_proj >= 0)
+
+    if (pi_in and pj_in):
+      output.append(points[j])
+
+    if ((pi_in and (not pj_in)) or ((not pi_in) and pj_in)):
+      # calculate intersection
+      d2x = pj_x - pi_x
+      d2y = pj_y - pi_y
+
+      de_a_x = pi_x - x1
+      de_a_y = pi_y - y1
+
+      det = - dx * d2y + d2x * dy
+
+      la1 = (-d2y * de_a_x + d2x * de_a_y) / det
+
+      c_x = x1 + la1 * dx
+      c_y = y1 + la1 * dy
+
+      if not pi_in:
+        output.append([c_x, c_y])
+        output.append(points[j])
+      else:
+        output.append([c_x, c_y])
+
+  return output
 
 #----------------------------------------------------------------------------------------------------
 
@@ -149,6 +239,9 @@ cfg.anal.si_th_x_2arm_unc = -999.
 
 #----------------------------------------------------------------------------------------------------
 
+contour_45b_56t_L = [[-200e-6, 550e-6, 0, 0], [-500e-6, 500e-6, 0, 0], [-560e-6, 220e-6], [-400e-6, 170e-6], [+200e-6, 170e-6], [+440e-6, 260e-6], [+370e-6, 500e-6, 0, 0], [+340e-6, 550e-6, 0, 0]]
+contour_45b_56t_R = CutContour(contour_45b_56t_L, -1, 200E-6, +1, 200E-6)
+
 cfg_45b_56t = cfg.clone(
   anal = dict(
     cut1_a = 1., cut1_si = 55E-6,
@@ -163,10 +256,11 @@ cfg_45b_56t = cfg.clone(
 	cut9_a = -0.499, cut9_si = 0.22,
 	cut10_a = -0.564, cut10_si = 0.26,
 
-    # TODO: jsut test
-    fc_L = FiducialCut([[-200e-6, 550e-6], [-500e-6, 500e-6], [-560e-6, 220e-6], [-400e-6, 170e-6], [+200e-6, 170e-6], [+440e-6, 260e-6], [+340e-6, 550e-6]], -145E-6),
-    fc_R = FiducialCut([[-200e-6, 550e-6], [-500e-6, 500e-6], [-560e-6, 220e-6], [-400e-6, 200e-6], [+200e-6, 200e-6], [+440e-6, 260e-6], [+340e-6, 550e-6]], +164E-6),
-    fc_G = FiducialCut([[-200e-6, 540e-6], [-480e-6, 495e-6], [-540e-6, 225e-6], [-400e-6, 210e-6], [+200e-6, 210e-6], [+410e-6, 260e-6], [+320e-6, 540e-6]])
+    # TODO: adjust
+    fc_L = FiducialCut(contour_45b_56t_L, -145E-6, -145E-6),
+    fc_R = FiducialCut(contour_45b_56t_R, +164E-6, +164E-6),
+    #fc_G = FiducialCut(Shrink(contour_45b_56t_R), +164E-6, -145E-6)
+    fc_G = FiducialCut(Shrink(contour_45b_56t_R), 0E-6, 0E-6)
   )
 )
 
@@ -186,6 +280,7 @@ cfg_45t_56b = cfg.clone(
 	cut9_a = -0.491, cut9_si = 0.22,
 	cut10_a = -0.541, cut10_si = 0.26,
 
+    # TODO: add slopes, adjust
     fc_L = FiducialCut([[-200e-6, 170e-6], [+400e-6, 170e-6], [+520e-6, 200e-6], [+400e-6, 480e-6], [-430e-6, 480e-6], [-550e-6, 400e-6], [-600e-6, 200e-6]]),
     fc_R = FiducialCut([[-200e-6, 170e-6], [+400e-6, 170e-6], [+520e-6, 200e-6], [+400e-6, 480e-6], [-430e-6, 480e-6], [-550e-6, 400e-6], [-600e-6, 200e-6]]),
     fc_G = FiducialCut([[-200e-6, 180e-6], [+400e-6, 180e-6], [+500e-6, 205e-6], [+380e-6, 470e-6], [-420e-6, 470e-6], [-530e-6, 400e-6], [-580e-6, 210e-6]])
