@@ -5,20 +5,25 @@
 
 //----------------------------------------------------------------------------------------------------
 
-void AcceptanceCalculator::Init(double _th_y_sign, const Analysis &_anal)
-{
-	th_y_sign = _th_y_sign;
-	anal = _anal;
+using std::make_unique;
 
-	gaussianOptimisation = true;
+void AcceptanceCalculator::Init(double _th_y_sign, const Analysis &_anal) {
+  th_y_sign = _th_y_sign;
+  anal = _anal;
 
-	integ_workspace_size_d_x = 1000;
-	integ_workspace_d_x = gsl_integration_workspace_alloc(integ_workspace_size_d_x);
+  gaussianOptimisation = true;
+  useSampledPhiFactor = false;
 
-	integ_workspace_size_d_y = 1000;
-	integ_workspace_d_y = gsl_integration_workspace_alloc(integ_workspace_size_d_y);
+  integ_workspace_size_d_x = 1000;
+  integ_workspace_d_x = gsl_integration_workspace_alloc(integ_workspace_size_d_x);
 
-	debug = false;
+  integ_workspace_size_d_y = 1000;
+  integ_workspace_d_y = gsl_integration_workspace_alloc(integ_workspace_size_d_y);
+
+  integ_workspace_size_vtx_y = 1000;
+  integ_workspace_vtx_y = gsl_integration_workspace_alloc(integ_workspace_size_vtx_y);
+
+  debug = false;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -141,14 +146,48 @@ bool AcceptanceCalculator::PhiComponentCut(double th_x, double th_y, double vtx_
 
 //----------------------------------------------------------------------------------------------------
 
-double AcceptanceCalculator::PhiFactor(double th, double vtx_y) const
+double AcceptanceCalculator::IntegOverVtxY(double x, double *par, const void* obj)
 {
+	// decode input
+	const AcceptanceCalculator *ac = (AcceptanceCalculator *) obj;
+
+	const double vtx_y = x;
+	const double th = par[0];
+	const double si_vtx_y = par[1];
+
+	// weight
+	const double w = exp(- vtx_y*vtx_y / 2. / si_vtx_y/si_vtx_y) / sqrt(2.*M_PI) / si_vtx_y;
+
 	// calculate arc-length in within acceptance
 	double phiSum = 0.;
-	for (const auto &segment : anal.fc_G.GetIntersectionPhis(th, vtx_y))
+	for (const auto &segment : ac->anal.fc_G.GetIntersectionPhis(th, vtx_y))
 		phiSum += segment.second - segment.first;
 
-	return 2. * M_PI / phiSum;
+	return w * phiSum;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+double AcceptanceCalculator::PhiFraction(double th) const
+{
+	const double si = anal.si_vtx_y;
+
+	double par[2] = { th, si };
+
+	const double result = RealIntegrate(AcceptanceCalculator::IntegOverVtxY, par, this, -6.*si, +6.*si, 0.0001, 0.,
+		integ_workspace_size_vtx_y, integ_workspace_vtx_y, "AcceptanceCalculator::PhiFactor") / 2. / M_PI;
+
+	return result;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+double AcceptanceCalculator::PhiFactor(double th) const
+{
+	if (useSampledPhiFactor)
+		return 1. / s_phiFraction->Eval(th);
+	else
+		return 1. / PhiFraction(th);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -172,7 +211,31 @@ bool AcceptanceCalculator::Calculate(const Kinematics &k, double &phi_corr, doub
 
 	// ----- phi component, correction -----
 
-	phi_corr = PhiFactor(k.th, k.vtx_y);
+	phi_corr = PhiFactor(k.th);
 
 	return false;
+}
+
+//----------------------------------------------------------------------------------------------------
+
+void AcceptanceCalculator::SamplePhiFactor()
+{
+	vector<double> x, y;
+
+	for (double th = 200E-6; th < 700E-6; )
+	{
+		x.push_back(th);
+		y.push_back(PhiFraction(th));
+
+		double dth = 1E-6;
+
+		if (th < 250E-6 || (th > 520E-6 && th < 530E-6) || th > 650E-6)
+			dth = 0.1E-6;
+		
+		th += dth;
+	}
+
+    s_phiFraction = make_unique<TSpline3>("", x.data(), y.data(), x.size());
+
+	useSampledPhiFactor = true;
 }
