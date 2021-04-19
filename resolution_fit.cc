@@ -152,9 +152,14 @@ int main(int argc, const char **argv)
 	TProfile *p_diffRL_th_y_vs_time = (TProfile *) f_in->Get("time dependences/p_diffRL_th_y_vs_time");
 	TGraphErrors *gRMS_diffRL_th_y_vs_time = (TGraphErrors *) f_in->Get("time dependences/gRMS_diffRL_th_y_vs_time");
 
-	if (!g_run_boundaries || !p_diffRL_th_x_vs_time || !gRMS_diffRL_th_x_vs_time || !p_diffRL_th_y_vs_time || !gRMS_diffRL_th_y_vs_time)
+	TProfile *p_vtx_y_vs_time = (TProfile *) f_in->Get("time dependences/p_vtx_y_vs_time");
+	TGraphErrors *gRMS_vtx_y_vs_time = (TGraphErrors *) f_in->Get("time dependences/gRMS_vtx_y_vs_time");
+
+	if (!g_run_boundaries || !p_diffRL_th_x_vs_time || !gRMS_diffRL_th_x_vs_time || !p_diffRL_th_y_vs_time || !gRMS_diffRL_th_y_vs_time
+		|| !p_vtx_y_vs_time || !gRMS_vtx_y_vs_time)
 	{
-		printf("ERROR: input not found (%p, %p, %p, %p, %p)\n", g_run_boundaries, p_diffRL_th_x_vs_time, gRMS_diffRL_th_x_vs_time, p_diffRL_th_y_vs_time, gRMS_diffRL_th_y_vs_time);
+		printf("ERROR: input not found (%p, %p, %p, %p, %p, %p, %p)\n", g_run_boundaries, p_diffRL_th_x_vs_time, gRMS_diffRL_th_x_vs_time,
+			p_diffRL_th_y_vs_time, gRMS_diffRL_th_y_vs_time, p_vtx_y_vs_time, gRMS_vtx_y_vs_time);
 		return 1;
 	}
 	
@@ -169,6 +174,10 @@ int main(int argc, const char **argv)
 	printf("\n\n---------- d_y ----------\n");
 	gDirectory = f_out->mkdir("d_y");
 	RunOneFit(g_run_boundaries, p_diffRL_th_y_vs_time, gRMS_diffRL_th_y_vs_time, 1E-6);
+
+	printf("\n\n---------- vtx_y ----------\n");
+	gDirectory = f_out->mkdir("vtx_y");
+	RunOneFit(g_run_boundaries, p_vtx_y_vs_time, gRMS_vtx_y_vs_time, 10E-3);
 
 	// clean up
 	delete f_out;

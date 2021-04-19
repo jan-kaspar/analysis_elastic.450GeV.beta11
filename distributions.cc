@@ -625,6 +625,7 @@ int main(int argc, const char **argv)
 	// get time-dependent resolution
 	TGraph *g_d_x_RMS = nullptr;
 	TGraph *g_d_y_RMS = nullptr;
+	TGraph *g_vtx_y_RMS = nullptr;
 	if (anal.use_resolution_fits)
 	{
 		string path = inputDir + "/resolution_fit_" + cfg.diagonal_str + ".root";
@@ -634,8 +635,9 @@ int main(int argc, const char **argv)
 
 		g_d_x_RMS = (TGraph *) f_res->Get("d_x/g_fits");
 		g_d_y_RMS = (TGraph *) f_res->Get("d_y/g_fits");
+		g_vtx_y_RMS = (TGraph *) f_res->Get("vtx_y/g_fits");
 
-		printf("\n>> using time-dependent resolutions: %p, %p\n", g_d_x_RMS, g_d_y_RMS);
+		printf("\n>> using time-dependent resolutions: %p, %p, %p\n", g_d_x_RMS, g_d_y_RMS, g_vtx_y_RMS);
 	}
 
 	// get th*_x and th*_y dependent efficiency correction
@@ -1749,6 +1751,7 @@ int main(int argc, const char **argv)
 		{
 			anal.si_th_x_LRdiff = accCalc.anal.si_th_x_LRdiff = g_d_x_RMS->Eval(ev.timestamp);
 			anal.si_th_y_LRdiff = accCalc.anal.si_th_y_LRdiff = g_d_y_RMS->Eval(ev.timestamp);
+			anal.si_vtx_y = accCalc.anal.si_vtx_y = g_vtx_y_RMS->Eval(ev.timestamp);
 		}
 
 		p_input_beam_div_x_vs_time->Fill(ev.timestamp, anal.si_th_x_1arm_L);
