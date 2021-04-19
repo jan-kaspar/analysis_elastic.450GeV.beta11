@@ -1,3 +1,4 @@
+#include <TRandom.h>
 #include "classes/common_init.hh"
 #include "classes/common_algorithms.hh"
 #include "classes/AcceptanceCalculator.hh"
@@ -70,7 +71,7 @@ int main(int argc, char **argv)
 
 	bool md_correlation = true;
 
-	double t_max_full = 0.045;
+	double t_max_full = 0.12;
 
 	string outputFileName = "validation_with_mc.root";
 
@@ -165,6 +166,7 @@ int main(int argc, char **argv)
 	// initialise acceptance calculation
 	AcceptanceCalculator accCalc;
 	accCalc.Init(cfg.th_y_sign, anal_nom);
+	accCalc.SamplePhiFactor();
 
 	// load simuluation model
 	TFile *f_dsdt = TFile::Open("/afs/cern.ch/work/j/jkaspar/work/analyses/elastic/450GeV/beta100/4rp/fits_for_corr/fit.root");
@@ -241,10 +243,18 @@ int main(int argc, char **argv)
 	}
 
 	// prepare histograms for smearing control
-	TH2D *h_th_x_d_vs_th_x_m_full = new TH2D("h_th_x_d_vs_th_x_m_full", ";th_x_m;th_x_d", 100, -100E-6, +100E-6, 100, -100E-6, +100E-6);
-	TH2D *h_th_x_d_vs_th_x_m_acc = new TH2D("h_th_x_d_vs_th_x_m_acc", ";th_x_m;th_x_d", 100, -100E-6, +100E-6, 100, -100E-6, +100E-6);
-	TH2D *h_th_y_d_vs_th_y_m_full = new TH2D("h_th_y_d_vs_th_y_m_full", ";th_y_m;th_y_d", 100, -30E-6, +30E-6, 100, -30E-6, +30E-6);
-	TH2D *h_th_y_d_vs_th_y_m_acc = new TH2D("h_th_y_d_vs_th_y_m_acc", ";th_y_m;th_y_d", 100, -30E-6, +30E-6, 100, -30E-6, +30E-6);
+	TH2D *h_th_x_d_vs_th_x_m_full = new TH2D("h_th_x_d_vs_th_x_m_full", ";th_x_m;th_x_d", 100, -150E-6, +150E-6, 100, -200E-6, +200E-6);
+	TH2D *h_th_x_d_vs_th_x_m_acc = new TH2D("h_th_x_d_vs_th_x_m_acc", ";th_x_m;th_x_d", 100, -150E-6, +150E-6, 100, -200E-6, +200E-6);
+	TH2D *h_th_y_d_vs_th_y_m_full = new TH2D("h_th_y_d_vs_th_y_m_full", ";th_y_m;th_y_d", 100, -150E-6, +150E-6, 100, -200E-6, +200E-6);
+	TH2D *h_th_y_d_vs_th_y_m_acc = new TH2D("h_th_y_d_vs_th_y_m_acc", ";th_y_m;th_y_d", 100, -150E-6, +150E-6, 100, -200E-6, +200E-6);
+
+	// prepare vertex histograms
+	TH1D *h_vtx_y = new TH1D("h_vtx_y", ";vtx_y", 100, -1., +1.);
+	TH1D *h_vtx_y_diffRL = new TH1D("h_vtx_y_diffRL", "vtx_y_R - vtx_y_L", 100, -1.5, +1.5);
+	TH2D *h2_vtx_y_diffRL_vs_vtx_y = new TH2D("h2_vtx_y_diffRL_vs_vtx_y", ";vtx_y;vtx_y_R - vtx_y_L", 100, -1., +1., 100, -1.5, +1.5);
+
+	TH2D *h2_vtx_y_vs_th_y_no_acc = new TH2D("h2_vtx_y_vs_th_y_no_acc", ";th_y_L;vtx_y_L", 100, -600E-6, +600E-6, 100, -1., +1.);
+	TH2D *h2_vtx_y_vs_th_y_acc = new TH2D("h2_vtx_y_vs_th_y_acc", ";th_y_L;vtx_y_L", 100, -600E-6, +600E-6, 100, -1., +1.);
 
 	// simulation loop
 	for (unsigned long ev = 0; ev < N_ev; ev++)
@@ -270,6 +280,8 @@ int main(int argc, char **argv)
 		k_tr.phi = cfg.th_y_sign * gRandom->Rndm() * 2. * M_PI;
 
 		k_tr.TPhiToThetas(env_nom);	// calculates th, th_x, th_y from t and phi
+
+		k_tr.vtx_y = gRandom->Gaus() * anal.si_vtx_y;
 
 		if (debug)
 		{
@@ -300,6 +312,8 @@ int main(int argc, char **argv)
 		const double &m_y = sv_y(0);
 		const double &d_y = sv_y(1);
 
+		const double d_vtx_y = gRandom->Gaus() * anal.si_vtx_y_LRdiff;
+
 		k_re.th_x_L = k_tr.th_x_L + m_x - d_x/2.;
 		k_re.th_x_R = k_tr.th_x_R + m_x + d_x/2.;
                                     
@@ -309,17 +323,19 @@ int main(int argc, char **argv)
 		k_re.th_x = (k_re.th_x_L + k_re.th_x_R) / 2.;
 		k_re.th_y = (k_re.th_y_L + k_re.th_y_R) / 2.;
 
+		k_re.vtx_y = k_tr.vtx_y;
+		k_re.vtx_y_L = k_tr.vtx_y - d_vtx_y/2.;
+		k_re.vtx_y_R = k_tr.vtx_y + d_vtx_y/2.;
+
 		k_re.ThetasToTPhi(env_nom);	 // calculates th and t from th_x and th_y
 
 		// ----- acceptance correction -----
-
-		// TODO: make sure that vtx_y is generated correctly
 
 		const bool skip_smear = accCalc.SmearingComponentCut(k_re.th_x_L, k_re.th_x_R, k_re.th_y_L, k_re.th_y_R, k_re.vtx_y_L, k_re.vtx_y_R);
 		const double corr_smear = 1. / accCalc.SmearingFactor(k_re.th_x, k_re.th_y, k_re.vtx_y_L, k_re.vtx_y_R);
 
 		const bool skip_phi = accCalc.PhiComponentCut(k_re.th_x, k_re.th_y, k_re.vtx_y);
-		const double corr_phi = accCalc.PhiFactor(k_re.th, k_re.vtx_y);
+		const double corr_phi = accCalc.PhiFactor(k_re.th);
 
 		const bool skip = (skip_smear || skip_phi);
 
@@ -342,6 +358,12 @@ int main(int argc, char **argv)
 		h_th_x_d_vs_th_x_m_full->Fill(m_x, d_x);
 		h_th_y_d_vs_th_y_m_full->Fill(m_y, d_y);
 
+		h_vtx_y->Fill(k_re.vtx_y);
+		h_vtx_y_diffRL->Fill(k_re.vtx_y_R - k_re.vtx_y_L);
+		h2_vtx_y_diffRL_vs_vtx_y->Fill(k_re.vtx_y, k_re.vtx_y_R - k_re.vtx_y_L);
+
+		h2_vtx_y_vs_th_y_no_acc->Fill(k_re.th_y, k_re.vtx_y);
+
 		if (!skip_phi)
 		{
 			for (unsigned int bi = 0; bi < binnings.size(); ++bi)
@@ -361,6 +383,8 @@ int main(int argc, char **argv)
 
 			h_th_x_d_vs_th_x_m_acc->Fill(m_x, d_x);
 			h_th_y_d_vs_th_y_m_acc->Fill(m_y, d_y);
+
+			h2_vtx_y_vs_th_y_acc->Fill(k_re.th_y, k_re.vtx_y);
 		}
 		
 		for (unsigned int i = 0; i < th_x_ranges.size(); ++i)
@@ -428,6 +452,13 @@ int main(int argc, char **argv)
 	h_th_x_d_vs_th_x_m_acc->Write();
 	h_th_y_d_vs_th_y_m_full->Write();
 	h_th_y_d_vs_th_y_m_acc->Write();
+
+	h_vtx_y->Write();
+	h_vtx_y_diffRL->Write();
+	h2_vtx_y_diffRL_vs_vtx_y->Write();
+
+	h2_vtx_y_vs_th_y_no_acc->Write();
+	h2_vtx_y_vs_th_y_acc->Write();
 
 	TDirectory *d_th_ranges = f_out->mkdir("th_x_ranges");
 	

@@ -572,6 +572,7 @@ int main(int argc, const char **argv)
 	// initialise acceptance calculation
 	AcceptanceCalculator accCalc;
 	accCalc.Init(cfg.th_y_sign, anal);
+	accCalc.SamplePhiFactor();
 
 	// get input
 	TChain *ch_in = new TChain("distilled");
@@ -1112,6 +1113,8 @@ int main(int argc, const char **argv)
 	TProfile2D *p2_div_corr_vs_th_y_L_vtx_y_L = new TProfile2D("p2_div_corr_vs_th_y_L_vtx_y_L", ";#theta_{y};vtx_{y}^{L}", 100, -600E-6, +600E-6, 100, -1.2, +1.2);
 	TProfile2D *p2_div_corr_vs_th_y_R_vtx_y_R = new TProfile2D("p2_div_corr_vs_th_y_R_vtx_y_R", ";#theta_{y};vtx_{y}^{R}", 100, -600E-6, +600E-6, 100, -1.2, +1.2);
 	TProfile2D *p2_div_corr_vs_vtx_y_L_vtx_y_R = new TProfile2D("p2_div_corr_vs_vtx_y_L_vtx_y_R", ";vtx_{y}^{L};vtx_{y}^{R}", 100, -1.2, +1.2, 100, -1.2, +1.2);
+
+	TProfile *p_phi_corr_vs_th = new TProfile("p_phi_corr_vs_th", ";#theta", 1000., 0., 1000E-6);
 
 	TProfile2D *p2_phi_corr_vs_th_x_th_y = new TProfile2D("p2_phi_corr_vs_th_x_th_y", ";#theta_{x};#theta_{y}", 100, -700E-6, +700E-6, 100, -600E-6, +600E-6);
 	TProfile2D *p2_phi_corr_vs_th_y_vtx_y = new TProfile2D("p2_phi_corr_vs_th_y_vtx_y", ";#theta_{y};vtx_{y}", 100, -600E-6, +600E-6	, 100, -1.2, +1.2);
@@ -1783,6 +1786,8 @@ int main(int argc, const char **argv)
 		p2_div_corr_vs_th_y_L_vtx_y_L->Fill(k.th_y_L, k.vtx_y_L , div_corr);
 		p2_div_corr_vs_th_y_R_vtx_y_R->Fill(k.th_y_R, k.vtx_y_R , div_corr);
 		p2_div_corr_vs_vtx_y_L_vtx_y_R->Fill(k.vtx_y_L, k.vtx_y_R, div_corr);
+
+		p_phi_corr_vs_th->Fill(k.th, phi_corr);
 
 		p2_phi_corr_vs_th_x_th_y->Fill(k.th_x, k.th_y , phi_corr);
 		p2_phi_corr_vs_th_y_vtx_y->Fill(k.th_y, k.vtx_y , phi_corr);
@@ -2553,6 +2558,8 @@ int main(int argc, const char **argv)
 	p2_div_corr_vs_th_y_L_vtx_y_L->Write();
 	p2_div_corr_vs_th_y_R_vtx_y_R->Write();
 	p2_div_corr_vs_vtx_y_L_vtx_y_R->Write();
+
+	p_phi_corr_vs_th->Write();
 
 	p2_phi_corr_vs_th_x_th_y->Write();
 	p2_phi_corr_vs_th_y_vtx_y->Write();

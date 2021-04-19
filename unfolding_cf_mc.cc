@@ -231,7 +231,7 @@ int main(int argc, const char **argv)
 		bool skip = accCalc.PhiComponentCut(k_sm.th_x, k_sm.th_y, k_sm.vtx_y);
 		double phiFactor = 0.;
 		if (!skip)
-			phiFactor = accCalc.PhiFactor(k_sm.th, k_sm.vtx_y) / 2.;
+			phiFactor = accCalc.PhiFactor(k_sm.th) / 2.;
 
 		// calculate event weights
 		vector<double> ws;
