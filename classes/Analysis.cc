@@ -95,6 +95,9 @@ void Analysis::Load(const edm::ParameterSet &ps)
 	si_th_y_LRdiff = ps.getParameter<double>("si_th_y_LRdiff");
 	si_th_y_LRdiff_unc = ps.getParameter<double>("si_th_y_LRdiff_unc");
 
+	si_vtx_y = ps.getParameter<double>("si_vtx_y");
+	si_vtx_y_LRdiff = ps.getParameter<double>("si_vtx_y_LRdiff");
+
 	use_resolution_fits = ps.getParameter<bool>("use_resolution_fits");
 	use_3outof4_efficiency_fits = ps.getParameter<bool>("use_3outof4_efficiency_fits");
 	use_pileup_efficiency_fits = ps.getParameter<bool>("use_pileup_efficiency_fits");
@@ -213,6 +216,7 @@ void Analysis::Print() const
 	printf("si_th_y_1arm=%E, si_th_y_1arm_unc=%E\n", si_th_y_1arm, si_th_y_1arm_unc);
 	printf("si_th_y_2arm=%E, si_th_y_2arm_unc=%E\n", si_th_y_2arm, si_th_y_2arm_unc);
 	printf("si_th_y_LRDiff=%E, si_th_y_LRdiff_unc=%E\n", si_th_y_LRdiff, si_th_y_LRdiff_unc);
+	printf("si_vtx_y=%E, si_vtx_y_LRdiff=%E\n", si_vtx_y, si_vtx_y_LRdiff);
 	printf("use_resolution_fits = %i\n", use_resolution_fits);
 
 	printf("\n");

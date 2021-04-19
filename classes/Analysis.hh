@@ -82,7 +82,6 @@ struct Analysis
 	double si_th_y_LRdiff;
 	double si_th_y_LRdiff_unc;
 
-	// TODO: remove if unused
 	double si_vtx_y;
 	double si_vtx_y_LRdiff;
 
