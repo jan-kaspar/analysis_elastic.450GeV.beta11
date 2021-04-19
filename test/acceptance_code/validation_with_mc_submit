@@ -4,7 +4,7 @@ configs=()
 
 for t_max in "0.12"
 do
-	for corr_set in "corr" "uncorr"
+	for corr_set in "uncorr" #"corr"
 	do
 		configs+=("$t_max 1E7 $corr_set")
 	done
@@ -56,7 +56,7 @@ function SubmitOne()
 #----------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------------
 
-make -C ../../ -j8 || exit 1
+make -C ../../ -j8 "test/acceptance_code/validation_with_mc" || exit 1
 
 for config in "${configs[@]}"
 do
