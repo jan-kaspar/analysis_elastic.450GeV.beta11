@@ -5,4 +5,5 @@ simulations
 algorithm_test
 mc_resolution_details
 validation_gaussian_approx
+validation_phi_factor_sampling
 validation_with_mc

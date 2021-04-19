@@ -8,6 +8,8 @@ make -C ../.. -j8 || exit 1
 
 ./validation_gaussian_approx &> "validation_gaussian_approx.log" &
 
+validation_phi_factor_sampling &> "validation_phi_factor_sampling.log" &
+
 ./validation_with_mc_submit
 
 wait
