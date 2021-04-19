@@ -177,6 +177,9 @@ cfg = cms.PSet(
     si_th_y_LRdiff = cms.double(0.),
     si_th_y_LRdiff_unc = cms.double(0.),
 
+    si_vtx_y = cms.double(0.),
+    si_vtx_y_LRdiff = cms.double(0.),
+
     use_resolution_fits = cms.bool(True),
 
     use_3outof4_efficiency_fits = cms.bool(True),
@@ -236,6 +239,9 @@ cfg.anal.si_th_x_LRdiff_unc = -999.
 
 cfg.anal.si_th_x_2arm = si_th_x_1arm / math.sqrt(2.)
 cfg.anal.si_th_x_2arm_unc = -999.
+
+cfg.anal.si_vtx_y = 0.186
+cfg.anal.si_vtx_y_LRdiff = 0.330
 
 #----------------------------------------------------------------------------------------------------
 
