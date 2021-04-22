@@ -10,7 +10,10 @@ function RunOne
 	
 	echo "* $fill"
 
-	./normalisation -input "../../data/fill$fill/Totem1" -print-details 0 -print-python 1 >> "../../data/fill$fill/config_common.py"
+	(
+		echo "#-------------------- automatically generated --------------------"
+		./normalisation -input "../../data/fill$fill/Totem1" -print-details 0 -print-python 1
+	) >> "../../data/fill$fill/config_common.py"
 }
 
 #----------------------------------------------------------------------------------------------------

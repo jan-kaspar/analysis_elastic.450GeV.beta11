@@ -252,7 +252,7 @@ void BuildThBinning()
 extern double GetNormalizationFactor(TH1D *h, bool print_details)
 {
 	// settings
-	const double t_min_goal = 3E-4, t_max_goal = 7E-4;
+	const double t_min_goal = 0.015, t_max_goal = 0.045;
 
 	// determine limits
 	const int bi_min = h->GetXaxis()->FindBin(t_min_goal);
@@ -274,8 +274,9 @@ extern double GetNormalizationFactor(TH1D *h, bool print_details)
 	}
 
 	// reference cross-section
-	const double a_ref = 0.000260508;	// FIXME: update
-	const double si_ref = a_ref * (1./t_min - 1./t_max);
+	const double a_ref = 243.2;
+	const double b_ref = 16.;
+	const double si_ref = a_ref / b_ref * (exp(-b_ref * t_min) - exp(-b_ref * t_max));
 
 	return n_hist / si_ref;
 }
