@@ -8,6 +8,11 @@ def FiducialCut(points, slope_pos_def = 0, slope_neg_def = 0):
   for p in points:
     slope_pos = slope_pos_def
     slope_neg = slope_neg_def
+
+    if slope_pos * slope_neg < 0 and p[1] > 300E-6:
+      slope_pos = -slope_pos_def
+      slope_neg = -slope_neg_def
+
     if len(p) > 2:
       slope_pos = p[2]
       slope_neg = p[3]
@@ -245,7 +250,7 @@ cfg.anal.si_vtx_y_LRdiff = 0.330
 
 #----------------------------------------------------------------------------------------------------
 
-contour_45b_56t_L = [[-200e-6, 550e-6, 0, 0], [-500e-6, 500e-6, 0, 0], [-560e-6, 220e-6], [-400e-6, 170e-6], [+200e-6, 170e-6], [+440e-6, 260e-6], [+370e-6, 500e-6, 0, 0], [+340e-6, 550e-6, 0, 0]]
+contour_45b_56t_L = [[-200e-6, 550e-6], [-500e-6, 500e-6], [-560e-6, 220e-6], [-400e-6, 170e-6], [+200e-6, 170e-6], [+440e-6, 260e-6], [+370e-6, 500e-6], [+340e-6, 550e-6]]
 contour_45b_56t_R = CutContour(contour_45b_56t_L, -1, 200E-6, +1, 200E-6)
 
 cfg_45b_56t = cfg.clone(
@@ -262,15 +267,16 @@ cfg_45b_56t = cfg.clone(
 	cut9_a = -0.499, cut9_si = 0.22,
 	cut10_a = -0.564, cut10_si = 0.26,
 
-    # TODO: adjust
     fc_L = FiducialCut(contour_45b_56t_L, -145E-6, -145E-6),
     fc_R = FiducialCut(contour_45b_56t_R, +164E-6, +164E-6),
-    #fc_G = FiducialCut(Shrink(contour_45b_56t_R), +164E-6, -145E-6)
-    fc_G = FiducialCut(Shrink(contour_45b_56t_R), 0E-6, 0E-6)
+    fc_G = FiducialCut(Shrink(contour_45b_56t_R), +164E-6, -145E-6)
   )
 )
 
 #----------------------------------------------------------------------------------------------------
+
+contour_45t_56b_L = [[-200e-6, 170e-6], [+400e-6, 170e-6], [+520e-6, 200e-6], [+400e-6, 480e-6], [-430e-6, 480e-6], [-550e-6, 400e-6], [-600e-6, 200e-6]]
+contour_45t_56b_R = CutContour(contour_45t_56b_L, -1, 200E-6, +1, 200E-6)
 
 cfg_45t_56b = cfg.clone(
   anal = dict(
@@ -286,10 +292,9 @@ cfg_45t_56b = cfg.clone(
 	cut9_a = -0.491, cut9_si = 0.22,
 	cut10_a = -0.541, cut10_si = 0.26,
 
-    # TODO: add slopes, adjust
-    fc_L = FiducialCut([[-200e-6, 170e-6], [+400e-6, 170e-6], [+520e-6, 200e-6], [+400e-6, 480e-6], [-430e-6, 480e-6], [-550e-6, 400e-6], [-600e-6, 200e-6]]),
-    fc_R = FiducialCut([[-200e-6, 170e-6], [+400e-6, 170e-6], [+520e-6, 200e-6], [+400e-6, 480e-6], [-430e-6, 480e-6], [-550e-6, 400e-6], [-600e-6, 200e-6]]),
-    fc_G = FiducialCut([[-200e-6, 180e-6], [+400e-6, 180e-6], [+500e-6, 205e-6], [+380e-6, 470e-6], [-420e-6, 470e-6], [-530e-6, 400e-6], [-580e-6, 210e-6]])
+    fc_L = FiducialCut(contour_45t_56b_L, +145E-6, +145E-6),
+    fc_R = FiducialCut(contour_45t_56b_R, -164E-6, -164E-6),
+    fc_G = FiducialCut(Shrink(contour_45t_56b_R), +164E-6, -145E-6)
   )
 )
 
