@@ -1,0 +1,19 @@
+#!/bin/bash
+
+make -C ../.. -j8 || exit 1
+
+#----------------------------------------------------------------------------------------------------
+
+function RunOne
+{
+	local fill="$1"
+	
+	echo "* $fill"
+
+	./normalisation -input "../../data/fill$fill/Totem1" -print-details 0 -print-python 1 >> "../../data/fill$fill/config_common.py"
+}
+
+#----------------------------------------------------------------------------------------------------
+
+RunOne "7301"
+RunOne "7302"
