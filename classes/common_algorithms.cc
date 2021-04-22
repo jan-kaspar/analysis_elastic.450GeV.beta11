@@ -246,3 +246,36 @@ void BuildThBinning()
 	printf("\n2D coarse, th_x: %i, %p\n", th_x_binning_n_2d_coarse, th_x_binning_edges_2d_coarse);
 	printf("\n2D coarse, th_y: %i, %p\n", th_y_binning_n_2d_coarse, th_y_binning_edges_2d_coarse);
 }
+
+//----------------------------------------------------------------------------------------------------
+
+extern double GetNormalizationFactor(TH1D *h, bool print_details)
+{
+	// settings
+	const double t_min_goal = 3E-4, t_max_goal = 7E-4;
+
+	// determine limits
+	const int bi_min = h->GetXaxis()->FindBin(t_min_goal);
+	const int bi_max = h->GetXaxis()->FindBin(t_max_goal);
+
+	const double t_min = h->GetXaxis()->GetBinLowEdge(bi_min);
+	const double t_max = h->GetXaxis()->GetBinLowEdge(bi_max) + h->GetXaxis()->GetBinWidth(bi_max);
+
+	if (print_details)
+		printf("    summing from bin %i (left edge %.1E) to bin %i (right edge %.1E)\n", bi_min, t_min, bi_max, t_max);
+
+	// sum bin content
+	double n_hist = 0.;
+	for (int bi = bi_min; bi <= bi_max; ++bi)
+	{
+		n_hist += h->GetBinContent(bi) * h->GetBinWidth(bi);
+
+		//printf("%i, %.2E, %.2E\n", bi, h->GetBinContent(bi), h->GetBinWidth(bi));
+	}
+
+	// reference cross-section
+	const double a_ref = 0.000260508;	// FIXME: update
+	const double si_ref = a_ref * (1./t_min - 1./t_max);
+
+	return n_hist / si_ref;
+}

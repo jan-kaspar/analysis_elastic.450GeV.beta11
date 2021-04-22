@@ -8,6 +8,8 @@ class Kinematics;
 
 #include <string>
 
+class TH1D;
+
 //----------------------------------------------------------------------------------------------------
 
 extern Kinematics DoReconstruction(const HitData &h, const Environment &env);
@@ -27,5 +29,9 @@ extern int th_x_binning_n_2d, th_y_binning_n_2d;
 extern int th_x_binning_n_2d_coarse, th_y_binning_n_2d_coarse;
 
 extern void BuildThBinning();
+
+//----------------------------------------------------------------------------------------------------
+
+extern double GetNormalizationFactor(TH1D *h, bool print_details = false);
 
 #endif
