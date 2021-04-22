@@ -82,3 +82,7 @@ for c in [cfg_45b_56b, cfg_45t_56b]:
   c.anal.cut10_c = +0.017
 
   c.anal.L_int = 1
+
+#-------------------- automatically generated --------------------
+cfg_45b_56t.anal.L_int = 533523.3
+cfg_45t_56b.anal.L_int = 553574.9
