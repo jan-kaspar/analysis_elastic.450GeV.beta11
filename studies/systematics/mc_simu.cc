@@ -168,6 +168,7 @@ int main(int argc, const char **argv)
 	// initialise acceptance calculation
 	AcceptanceCalculator accCalc;
 	accCalc.Init(cfg.th_y_sign, anal_rec);
+	accCalc.SamplePhiFactor();
 
 	// build generating matrices for d and m
 	TMatrixDSym m_cov_dx_mx(2);

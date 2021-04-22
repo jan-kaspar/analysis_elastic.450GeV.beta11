@@ -96,7 +96,7 @@ const TGraph* RegularizeGraph(const TGraph *g_in, const string &label)
 
 	TGraph *g = new TGraph(*g_in);
 
-	const double t_max_fit = 0.0015;
+	const double t_max_fit = 0.015;
 
 	printf(">> RegularizeGraph: %s\n", label.c_str());
 	printf("    idx_min = %i, idx_max = %i\n", idx_min, idx_max);
@@ -318,7 +318,7 @@ int main(int argc, const char **argv)
 	string dir_ni = "data-ni";
 
 	t_min = 1E-2;
-	t_max = 8E-2;
+	t_max = 8.5E-2;
 
 	string outputFile = "matrix.root";
 

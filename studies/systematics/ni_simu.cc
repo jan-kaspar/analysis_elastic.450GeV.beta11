@@ -475,7 +475,7 @@ int main(int argc, const char **argv)
 	TGraph *g_dsdt_true = new TGraph(); g_dsdt_true->SetName("g_dsdt_true"); g_dsdt_true->SetLineColor(1);
 	TGraph *g_dsdt_reco = new TGraph(); g_dsdt_reco->SetName("g_dsdt_reco"); g_dsdt_reco->SetLineColor(4);
 
-	for (double t = 1E-2; t <= 10E-2;)
+	for (double t = 1.1E-2; t <= 8.8E-2;)
 	{
 		const double v_true = dist_t_true(t);
 		const double v_reco = dist_t_reco(t);
@@ -488,6 +488,7 @@ int main(int argc, const char **argv)
 
 		// advance t
 		double dt = 1E-3;
+		if (t < 2E-2) dt = 0.5E-3;
 		t += dt;
 	}
 
