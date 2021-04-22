@@ -123,7 +123,7 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 		const double v = 20E-6 / sqrt(2);
 
 		// sigma of the TB correlated, LR anti-symmetric mode
-		const double v_LR_asym = 20E-6 / sqrt(2);
+		const double v_LR_asym = 4E-6;
 
 		// sigma for the TB uncorrelated modes (L, R) = (+1, +1) or (+1, -1)
 		const double v_TB_uncorr = 10E-6 / sqrt(2.);
