@@ -2,11 +2,15 @@
 
 cwd=`pwd -P`
 
-for f_ref in ../../beta100/4rp/*.{cc,h}
-#for f_ref in ../../beta100/4rp/plots/*/*.asy
+ref_dir="../../beta100/4rp"
+
+for f_ref in $ref_dir/{*.cc,make_synchronisation_links,run} $ref_dir/classes/*.{cc,hh} $ref_dir/test/{compare.cc,run_test}
+#for f_ref in $ref_dir/4rp/plots/*/*.asy
 do
 	f_loc=${f_ref##*4rp/}
+
 	f_lnk=${f_loc/./.HighBeta.}
+	if [ "$f_lnk" == "$f_loc" ]; then f_lnk="$f_loc.HighBeta"; fi
 
 	cmp --silent "$f_ref" "$f_loc"
 	identical="$?"
