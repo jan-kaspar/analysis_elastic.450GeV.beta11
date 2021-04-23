@@ -256,7 +256,7 @@ extern double GetNormalizationFactor(const TObject *obj, bool print_details)
 	// range
 	const double t_min_goal = 0.015, t_max_goal = 0.045;
 
-	// reference cross-section
+	// reference cross-section ( a * exp(-b * t) )
 	const double a_ref = 243.2;
 	const double b_ref = 16.;
 
