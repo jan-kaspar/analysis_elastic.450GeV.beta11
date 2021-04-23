@@ -8,7 +8,9 @@
 #include <deque>
 
 #include <TFile.h>
+#include <TObject.h>
 #include <TH1D.h>
+#include <TGraph.h>
 
 using namespace std;
 
@@ -249,34 +251,64 @@ void BuildThBinning()
 
 //----------------------------------------------------------------------------------------------------
 
-extern double GetNormalizationFactor(TH1D *h, bool print_details)
+extern double GetNormalizationFactor(const TObject *obj, bool print_details)
 {
-	// settings
+	// range
 	const double t_min_goal = 0.015, t_max_goal = 0.045;
-
-	// determine limits
-	const int bi_min = h->GetXaxis()->FindBin(t_min_goal);
-	const int bi_max = h->GetXaxis()->FindBin(t_max_goal);
-
-	const double t_min = h->GetXaxis()->GetBinLowEdge(bi_min);
-	const double t_max = h->GetXaxis()->GetBinLowEdge(bi_max) + h->GetXaxis()->GetBinWidth(bi_max);
-
-	if (print_details)
-		printf("    summing from bin %i (left edge %.1E) to bin %i (right edge %.1E)\n", bi_min, t_min, bi_max, t_max);
-
-	// sum bin content
-	double n_hist = 0.;
-	for (int bi = bi_min; bi <= bi_max; ++bi)
-	{
-		n_hist += h->GetBinContent(bi) * h->GetBinWidth(bi);
-
-		//printf("%i, %.2E, %.2E\n", bi, h->GetBinContent(bi), h->GetBinWidth(bi));
-	}
 
 	// reference cross-section
 	const double a_ref = 243.2;
 	const double b_ref = 16.;
-	const double si_ref = a_ref / b_ref * (exp(-b_ref * t_min) - exp(-b_ref * t_max));
 
-	return n_hist / si_ref;
+	if (obj->InheritsFrom("TH1D"))
+	{
+		const TH1D *h = (TH1D *) obj;
+
+		// determine limits
+		const int bi_min = h->GetXaxis()->FindBin(t_min_goal);
+		const int bi_max = h->GetXaxis()->FindBin(t_max_goal);
+
+		const double t_min = h->GetXaxis()->GetBinLowEdge(bi_min);
+		const double t_max = h->GetXaxis()->GetBinLowEdge(bi_max) + h->GetXaxis()->GetBinWidth(bi_max);
+
+		if (print_details)
+			printf("    summing from bin %i (left edge %.1E) to bin %i (right edge %.1E)\n", bi_min, t_min, bi_max, t_max);
+
+		// sum bin content
+		double n_hist = 0.;
+		for (int bi = bi_min; bi <= bi_max; ++bi)
+		{
+			n_hist += h->GetBinContent(bi) * h->GetBinWidth(bi);
+
+			//printf("%i, %.2E, %.2E\n", bi, h->GetBinContent(bi), h->GetBinWidth(bi));
+		}
+
+		const double si_ref = a_ref / b_ref * (exp(-b_ref * t_min) - exp(-b_ref * t_max));
+
+		return n_hist / si_ref;
+	}
+
+	if (obj->InheritsFrom("TGraph"))
+	{
+		const TGraph *g = (TGraph *) obj;
+
+		double s_gra = 0., s_ref = 0.;
+		for (int i = 0; i < g->GetN(); ++i)
+		{
+			const double x = g->GetX()[i];
+			const double y = g->GetY()[i];
+
+			if (x < t_min_goal || x > t_max_goal)
+				continue;
+
+			const double y_ref = a_ref * exp(-b_ref * x);
+
+			s_gra += y;
+			s_ref += y_ref;
+		}
+
+		return (s_ref > 0) ? s_gra / s_ref : 0.;
+	}
+
+	return 0;
 }

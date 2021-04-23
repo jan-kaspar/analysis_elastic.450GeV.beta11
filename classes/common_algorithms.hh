@@ -8,7 +8,7 @@ class Kinematics;
 
 #include <string>
 
-class TH1D;
+class TObject;
 
 //----------------------------------------------------------------------------------------------------
 
@@ -32,6 +32,6 @@ extern void BuildThBinning();
 
 //----------------------------------------------------------------------------------------------------
 
-extern double GetNormalizationFactor(TH1D *h, bool print_details = false);
+extern double GetNormalizationFactor(const TObject *obj, bool print_details = false);
 
 #endif
