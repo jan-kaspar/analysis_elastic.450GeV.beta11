@@ -1,4 +1,5 @@
 #include "classes/command_line_tools.hh"
+#include "classes/common_algorithms.hh"
 
 #include "TFile.h"
 #include "TH1D.h"
@@ -39,53 +40,9 @@ TH1D* GetHistogram(const string &dir, const string &model, const string &scenari
 
 //----------------------------------------------------------------------------------------------------
 
-/// To be kept synchronised with function "ProcessOne" in "../normalisation/normalisation.cc"
-double GetNormalisation(TH1D * /*h*/)
+double GetNormalisation(TH1D *h)
 {
-	return 1;
-
-	// TODO: update
-	/*
-	// settings
-	double t_fit_min = 0.01, t_fit_max = 0.05;
-	double t_sum_min = 0.01, t_sum_max = 0.5;
-
-	double si_el_ref = 31.0;	// mb
-
-	// determine limits
-	int bi_fit_min = h->GetXaxis()->FindBin(t_fit_min);
-	int bi_sum_min = h->GetXaxis()->FindBin(t_sum_min);
-	int bi_sum_max = h->GetXaxis()->FindBin(t_sum_max);
-	double t_sum_integrate_border = h->GetXaxis()->GetBinLowEdge(bi_sum_min);
-
-	// fit
-	//printf("        fit from %.4f to %.4f\n", t_fit_min, t_fit_max);
-
-	TF1 *ff = new TF1("ff", "[0] * exp(-[1]*x)");
-
-	ff->SetParameters(h->GetBinContent(bi_fit_min), 20.);
-	h->Fit(ff, "Q", "", t_fit_min, t_fit_max);
-
-	// calculate integral components
-	//printf("        integrating fit from 0 to %.4f\n", t_sum_integrate_border);
-	double c_extr = ff->Integral(0., t_sum_integrate_border);
-
-	delete ff;
-
-	//printf("        summing from bin %i (left edge %.4f) to bin %i (right edge %.4f)\n",
-	//	bi_sum_min, h->GetBinLowEdge(bi_sum_min),
-	//	bi_sum_max, h->GetBinLowEdge(bi_sum_max) + h->GetBinWidth(bi_sum_max));
-
-	double c_hist = 0;
-	for (int bi = bi_fit_min; bi <= bi_sum_max; ++bi)
-	{
-		c_hist += h->GetBinContent(bi) * h->GetBinWidth(bi);
-	}
-
-	double c_full = c_extr + c_hist;
-
-	return si_el_ref / c_full;
-	*/
+	return 1. / GetNormalizationFactor(h);
 }
 
 //----------------------------------------------------------------------------------------------------
