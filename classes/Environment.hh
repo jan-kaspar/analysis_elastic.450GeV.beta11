@@ -35,12 +35,14 @@ struct Environment
 	double si_de_P_L, si_de_P_R;	// mm
 
 	// optics
-	bool use_matched_optics;
+	string optics_version;
 	double v_x_L_1_F, v_x_L_2_F, v_x_R_1_F, v_x_R_2_F;	// 1
 	double v_y_L_1_F, v_y_L_2_F, v_y_R_1_F, v_y_R_2_F;	// 1
 	double L_x_L_1_F, L_x_L_2_F, L_x_R_1_F, L_x_R_2_F;	// mm
 	double L_y_L_1_F, L_y_L_2_F, L_y_R_1_F, L_y_R_2_F;	// mm
 	double D_x_L_1_F, D_x_L_2_F, D_x_R_1_F, D_x_R_2_F;	// mm
+
+	static constexpr int n_optical_functions = 16;
 
 	// optics perturbation covariance matrices
 	// order of elements:
@@ -64,12 +66,10 @@ struct Environment
 	double de_x_R_F, de_y_R_F, tilt_R_F;
 	*/
 
-	Environment() : opt_cov(16), opt_per_gen(16, 16)
-	{
-	}
+	Environment();
 
-	void InitNominal();
-	void UseMatchedOptics();
+	void Init();
+	void InitOptics();
 
 	void Load(const edm::ParameterSet &ps);
 
@@ -79,7 +79,7 @@ struct Environment
 
 	void ApplyRandomOpticsPerturbations()
 	{
-		TVectorD de(16);
+		TVectorD de(n_optical_functions);
 		ApplyRandomOpticsPerturbations(de);
 	}
 

@@ -54,6 +54,14 @@ void FiducialCut::ApplyCDTransform(double C, double D)
 
 //----------------------------------------------------------------------------------------------------
 
+void FiducialCut::Scale(double x, double y)
+{
+	for (auto &p : points)
+		p.ApplyScale(x, y);
+}
+
+//----------------------------------------------------------------------------------------------------
+
 bool FiducialCut::Satisfied(double th_x, double th_y, double vtx_y) const
 {
 	unsigned int n_le = 0, n_gr = 0;

@@ -14,7 +14,7 @@ using namespace std;
 int main()
 {
 	Environment env;
-	env.InitNominal();
+	env.Init();
 
 	InitElements();
 

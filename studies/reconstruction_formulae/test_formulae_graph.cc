@@ -134,8 +134,7 @@ int main()
 	TFile *f_out = new TFile("test_formulae_graph.root", "recreate");
 
 	// nominal environment
-	env_nom.InitNominal();
-	env_nom.UseMatchedOptics();
+	env_nom.Init();
 
 	env_nom.Print();
 

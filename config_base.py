@@ -121,7 +121,7 @@ cfg = cms.PSet(
   timber_dir = cms.string(""),
 
   env = cms.PSet(
-    use_matched_optics = cms.bool(True)
+    optics_version = cms.string("v3")
   ),
 
   anal = cms.PSet(

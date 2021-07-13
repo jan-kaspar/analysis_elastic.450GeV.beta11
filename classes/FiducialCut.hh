@@ -9,7 +9,6 @@ namespace edm
 #include <vector>
 #include <set>
 #include <tuple>
-#include <cstdio>
 
 using namespace std;
 
@@ -40,6 +39,8 @@ struct FiducialCut
 				x += C * y_orig;
 				y += D * x_orig;
 			}
+
+			void ApplyScale(double sx, double sy) { x *= sx; y *= sy; }
 	};
 
 	vector<Point> points;
@@ -62,6 +63,8 @@ struct FiducialCut
 	void Shift(double x, double y);
 
 	void ApplyCDTransform(double C, double D);
+
+	void Scale(double x, double y);
 
 	bool Satisfied(double th_x, double th_y, double vtx_y) const;
 
