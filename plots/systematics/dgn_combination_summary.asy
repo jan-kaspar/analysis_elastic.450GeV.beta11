@@ -4,6 +4,7 @@ import common_code;
 include "../common.asy";
 
 AddAllModes();
+FilterModes("sc");
 
 string f = topDir + "studies/systematics/matrix.root";
 

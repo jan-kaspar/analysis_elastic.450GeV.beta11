@@ -93,7 +93,6 @@ void AddAllModes()
 
 	//--------------------
 
-	/*
 	AddMode("\vbox{\hbox{$\th_{x,y}^*$ scaling}\hbox{mode 1}}", heavygreen,
 		"", "sc-thxy-mode1", 1,
 		"", "sc-thxy-mode1", 1
@@ -108,9 +107,15 @@ void AddAllModes()
 		"", "sc-thxy-mode3", 1,
 		"", "sc-thxy-mode3", 1
 	);
+
+	AddMode("\vbox{\hbox{$\th_{x,y}^*$ scaling}\hbox{mode 3}}", heavygreen,
+		"", "sc-thxy-mode4", 1,
+		"", "sc-thxy-mode4", 1
+	);
 	
 	//--------------------
 	
+	/*
 	AddMode("\vbox{\hbox{uncert.~of $\si(d_x)$}}", blue+dashed,
 		"", "dx-sigma", 1,
 		"", "dx-sigma", 1
