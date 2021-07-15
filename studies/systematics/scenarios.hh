@@ -216,18 +216,16 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 
 	// ---------- xy scaling (optics) ----------
 
-	// TODO: uncomment
-	/*
 	if (scenario.find("sc-thxy-mode") == 0)
 	{
 		const string mode = scenario.substr(12);
 
 		double val_L_x=0., val_L_y, val_R_x, val_R_y;
 
-		// TODO: update
-		if (mode == "1") { val_L_x = -1.608E-03; val_L_y = +1.473E-03; val_R_x = -1.630E-03; val_R_y = +1.477E-03; }
-		if (mode == "2") { val_L_x = -5.157E-04; val_L_y = +2.541E-05; val_R_x = +5.566E-04; val_R_y = +2.746E-05; }
-		if (mode == "3") { val_L_x = +3.617E-04; val_L_y = +3.625E-04; val_R_x = +3.006E-04; val_R_y = +3.641E-04; }
+		if (mode == "1") { val_L_x = -2.299E-02; val_R_x = -2.263E-02; val_L_y = +1.597E-02, val_R_y = +1.643E-02; }
+		if (mode == "2") { val_L_x = -2.472E-04; val_R_x = -1.030E-02; val_L_y = -1.726E-02, val_R_y = +2.250E-03; }
+		if (mode == "3") { val_L_x = +6.852E-03; val_R_x = +2.220E-03; val_L_y = +2.004E-04, val_R_y = +1.245E-02; }
+		if (mode == "4") { val_L_x = -3.455E-03; val_R_x = +3.269E-03; val_L_y = -1.725E-03, val_R_y = +1.346E-03; }
 
 		if (val_L_x != 0.)
 		{
@@ -236,20 +234,13 @@ int SetScenario(const string &scenario, Biases &biases, Environment & /*env_sim*
 			biases.L.sc_th_y = 1. + val_L_y;
 			biases.R.sc_th_y = 1. + val_R_y;
 
-			anal_rec.fc_L_l.th_x_m *= (1. + val_L_x); anal_rec.fc_L_h.th_x_m *= (1. + val_L_x);
-			anal_rec.fc_L_l.th_x_p *= (1. + val_L_x); anal_rec.fc_L_h.th_x_p *= (1. + val_L_x);
-
-			anal_rec.fc_R_l.th_x_m *= (1. + val_R_x); anal_rec.fc_R_h.th_x_m *= (1. + val_R_x);
-			anal_rec.fc_R_l.th_x_p *= (1. + val_R_x); anal_rec.fc_R_h.th_x_p *= (1. + val_R_x);
-
-			const double val_G_x = (val_L_x + val_R_x) / 2.;
-			anal_rec.fc_G_l.th_x_m *= (1. + val_G_x); anal_rec.fc_G_h.th_x_m *= (1. + val_G_x);
-			anal_rec.fc_G_l.th_x_p *= (1. + val_G_x); anal_rec.fc_G_h.th_x_p *= (1. + val_G_x);
+			anal_rec.fc_L.Scale(1. + val_L_x, 1. + val_L_y);
+			anal_rec.fc_R.Scale(1. + val_R_x, 1. + val_R_y);
+			anal_rec.fc_G.Scale(1. + (val_L_x + val_R_x)/2, 1. + (val_L_y + val_R_y)/2);
 
 			return 0;
 		}
 	}
-	*/
 
 	// ---------- acceptance correction ----------
 

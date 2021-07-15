@@ -15,7 +15,7 @@ int main()
 	if (Init("config.py", "45b_56t") != 0)
 		return 1;
 
-	const unsigned int n_events = 1000;
+	const unsigned int n_events = 1000000;
 
 	// central point
 	const double th_x_cen = 200E-6;
@@ -60,10 +60,10 @@ int main()
 	// print control results
 	printf("\n");
 	printf("* check of input\n");
-	printf("    RMS[L_x_L_1_F] = %.3f m\n", st_L_x_L_1_F.GetStdDev(0));
-	printf("    RMS[L_x_R_1_F] = %.3f m\n", st_L_x_R_1_F.GetStdDev(0));
-	printf("    RMS[L_y_L_1_F] = %.3f m\n", st_L_y_L_1_F.GetStdDev(0));
-	printf("    RMS[L_y_R_1_F] = %.3f m\n", st_L_y_R_1_F.GetStdDev(0));
+	printf("    RMS[L_x_L_1_F] = %.3f mm\n", st_L_x_L_1_F.GetStdDev(0));
+	printf("    RMS[L_x_R_1_F] = %.3f mm\n", st_L_x_R_1_F.GetStdDev(0));
+	printf("    RMS[L_y_L_1_F] = %.3f mm\n", st_L_y_L_1_F.GetStdDev(0));
+	printf("    RMS[L_y_R_1_F] = %.3f mm\n", st_L_y_R_1_F.GetStdDev(0));
 
 	//st.PrintMeanAndStdDev();
 	//st.PrintCovariance();

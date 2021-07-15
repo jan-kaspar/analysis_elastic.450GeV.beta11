@@ -379,11 +379,12 @@ int main(int argc, const char **argv)
 		Mode("tilt-thx-thy", Mode::sNI, Mode::coFull),
 		Mode("tilt-thx-thy-LRasym", Mode::sMC, Mode::coFull),
 
-		/*
 		Mode("sc-thxy-mode1", Mode::sNI, Mode::coFull),
 		Mode("sc-thxy-mode2", Mode::sNI, Mode::coFull),
 		Mode("sc-thxy-mode3", Mode::sNI, Mode::coFull),
+		Mode("sc-thxy-mode4", Mode::sNI, Mode::coFull),
 
+		/*
 		Mode("dx-sigma", Mode::sNI, Mode::coFull),
 		Mode("dy-sigma", Mode::sNI, Mode::coFull),
 		Mode("dx-non-gauss", Mode::sNI, Mode::coFull),
@@ -628,11 +629,12 @@ int main(int argc, const char **argv)
 		"tilt-thx-thy",
 		"tilt-thx-thy-LRasym",
 
-		/*
 		"sc-thxy-mode1",
 		"sc-thxy-mode2",
 		"sc-thxy-mode3",
+		"sc-thxy-mode4",
 
+		/*
 		"dx-sigma",
 		"dy-sigma",
 		"dx-non-gauss",

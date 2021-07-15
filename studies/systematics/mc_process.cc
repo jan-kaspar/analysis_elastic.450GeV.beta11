@@ -91,11 +91,12 @@ int main(int argc, const char **argv)
 		{ "tilt-thx-thy", Scenario::mDsdt },
 		{ "tilt-thx-thy-LRasym", Scenario::mDsdt },
 
-		/*
 		{ "sc-thxy-mode1", Scenario::mDsdt },
 		{ "sc-thxy-mode2", Scenario::mDsdt },
 		{ "sc-thxy-mode3", Scenario::mDsdt },
+		{ "sc-thxy-mode4", Scenario::mDsdt },
 
+		/*
 		{ "dx-sigma", Scenario::mDsdt },
 		{ "dy-sigma", Scenario::mDsdt },
 		{ "dx-non-gauss", Scenario::mDsdt },

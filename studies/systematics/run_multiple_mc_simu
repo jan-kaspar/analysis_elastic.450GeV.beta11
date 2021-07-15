@@ -23,10 +23,11 @@ configurations=(
 	"fit_1/tilt-thx-thy"
 	"fit_1/tilt-thx-thy-LRasym"
 
-#	"fit_1/sc-thxy-mode1"
-#	"fit_1/sc-thxy-mode2"
-#	"fit_1/sc-thxy-mode3"
-#
+	"fit_1/sc-thxy-mode1"
+	"fit_1/sc-thxy-mode2"
+	"fit_1/sc-thxy-mode3"
+	"fit_1/sc-thxy-mode4"
+
 #	"fit_1/dx-sigma"
 #	"fit_1/dy-sigma"
 #	"fit_1/dx-non-gauss"
