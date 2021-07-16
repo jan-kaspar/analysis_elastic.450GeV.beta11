@@ -17,6 +17,7 @@
 #include "TVectorD.h"
 #include "TMatrixDSymEigen.h"
 
+#include <cstdio>
 #include <vector>
 #include <string>
 
@@ -253,6 +254,9 @@ int main(int argc, const char **argv)
 		k_tr.th_x = k_tr.th_x_L = k_tr.th_x_R = k_tr.th * cos(k_tr.phi);
 		k_tr.th_y = k_tr.th_y_L = k_tr.th_y_R = k_tr.th * sin(k_tr.phi);
 
+		// TODO: should one add simulation of vertex?
+		k_tr.vtx_y = k_tr.vtx_y_L = k_tr.vtx_y_R = 0.;
+
 		for (unsigned int bi = 0; bi < binnings.size(); ++bi)
 			bh_t_tr[bi]->Fill(k_tr.t, w);
 
@@ -290,6 +294,8 @@ int main(int argc, const char **argv)
 		k_sm.th_y = (k_sm.th_y_L + k_sm.th_y_R) / 2.;
 		k_sm.th = sqrt(k_sm.th_x*k_sm.th_x + k_sm.th_y*k_sm.th_y);
 
+		k_sm.vtx_y = k_tr.vtx_y;
+
 		// ----- reconstruction bias -----
 
 		Kinematics k_re;
@@ -305,10 +311,14 @@ int main(int argc, const char **argv)
 		k_re.th = sqrt(k_re.th_x*k_re.th_x + k_re.th_y*k_re.th_y);
 		k_re.t = env_rec.p*env_rec.p * k_re.th*k_re.th;
 
+		k_re.vtx_y = k_sm.vtx_y;
+
 		// ----- fiducial cuts and acceptance correction -----
 
 		double phi_corr = 0., div_corr = 0.;
 		bool skip = accCalc.Calculate(k_re, phi_corr, div_corr);
+
+		printf("skip = %i, k_re.vtx_y = %.1E\n", skip, k_re.vtx_y);
 
 		// ----- inefficiency and its correction -----
 
